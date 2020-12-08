@@ -1,3 +1,7 @@
+#ifndef ROOM_H_INCLUDED
+#define ROOM_H_INCLUDED
+
+#include "account.h"
 #include "constant.h"
 
 typedef struct room {
@@ -6,24 +10,12 @@ typedef struct room {
   char ip[MAX];
 } Room;
 
-void joinRoom(Session *session, int roomID, char *buff);
-void sendToOtherUsers(Session session, char *buff);
+typedef struct session {
+  Account currentAccount;
+  Room room;
+} Session;
 
-void joinRoom(Session *session, int roomID, char *buff) {
-  (*session).room.id = roomID;
-}
+void joinRoom(int sessionID, char *body);
+void sendChatMessage(Session session, char *body);
 
-void sendToOtherUsers(Session session, char *buff) {
-  int socket;
-  char message[MAX];
-
-  for (int i = 0; i < MAX_CLIENTS; i++) {
-    if (sessions[i].room.id == session.room.id) {
-      socket = client_socket[i];
-      strcpy(message, session.currentAccount.username);
-      strcat(message, ": ");
-      strcat(message, buff);
-      sendData(socket, message);
-    }
-  }
-}
+#endif

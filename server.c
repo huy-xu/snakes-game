@@ -2,15 +2,21 @@
 #include <stdlib.h>
 #include <string.h>
 
-#include "list.h"
+// #include "list.h"
+#include "account.h"
+#include "constant.h"
+#include "message.h"
 #include "network.h"
+#include "room.h"
 
 // Initialise all client_socket[] to 0 so not checked
 int client_socket[MAX_CLIENTS] = {0};
+Session sessions[MAX_CLIENTS] = {{NULL, NULL}};
 
 int main(int argc, char *argv[]) {
   int master_socket, new_socket, activity, addrlen, max_sd, sd, i;
-  char buff[BUFF_SIZE + 1];
+  char request[BUFF_SIZE + 1];
+  Message message;
   struct sockaddr_in address;
   fd_set readfds;
 
@@ -80,8 +86,8 @@ int main(int argc, char *argv[]) {
         if (FD_ISSET(sd, &readfds)) {
           // Check if it was for closing , and also read the
           // incoming message
-          receiveData(sd, buff);
-          if (strcmp(buff, "") == 0) {
+          receiveData(sd, request);
+          if (strcmp(request, "") == 0) {
             // Somebody disconnected, get details and print
             getpeername(sd, (struct sockaddr *)&address, (socklen_t *)&addrlen);
             printf("Host disconnected IP: %s, PORT: %d\n",
@@ -91,8 +97,11 @@ int main(int argc, char *argv[]) {
             close(sd);
             client_socket[i] = 0;
           } else {
-            // sendData(sd, handleClient(i, &sessions[i], buff));
-            sendToOtherUsers(sessions[i], buff);
+            message = handleResquest(request);
+            if (strcmp(message.header, "joinRoom") == 0) {
+              joinRoom(i, message.body);
+            } else if (strcmp(message.header, "chat") == 0)
+              sendChatMessage(sessions[i], message.body);
           }
         }
       }
