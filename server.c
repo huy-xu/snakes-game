@@ -100,8 +100,9 @@ int main(int argc, char *argv[]) {
             message = handleResquest(request);
             if (strcmp(message.header, "joinRoom") == 0) {
               joinRoom(i, message.body);
-            } else if (strcmp(message.header, "chat") == 0)
-              sendChatMessage(sessions[i], message.body);
+            } else if (strcmp(message.header, "chat") == 0){
+                sendChatMessage(sessions[i], message.body);
+            }
           }
         }
       }

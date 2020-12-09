@@ -10,8 +10,9 @@ extern Session sessions[MAX_CLIENTS];
 
 char *listRoom(ListRoomPtr currentRoomPtr) {
   char list_room[MAX];
+  char str[MAX];
   while (currentRoomPtr != NULL) {
-    strcat(list_room, itoa(currentRoomPtr->room.id));
+    strcat(list_room, sprintf(str,"%d",currentRoomPtr->room.id));
     strcat(list_room, "-");
     currentRoomPtr = currentRoomPtr->nextPtr;
   }
@@ -53,15 +54,15 @@ ListRoomPtr findRoom(ListRoomPtr sPtr, int id) {
   }
 }
 
-void deleteRoom(ListRoomPtr *sPtr, Room room) {
-  ListRoomPtr *tmp = sPtr;
-  ListRoomPtr *delRoom = malloc(sizeof(ListRoom));
+void deleteRoom(ListRoomPtr sPtr, Room room) {
+  ListRoomPtr tmp = sPtr;
+  ListRoomPtr delRoom = malloc(sizeof(ListRoom));
   int id;
-  if (sPtr->room.id == room.id) {
+  if (tmp->room.id == room.id) {
     sPtr = sPtr->nextPtr;
     free(tmp);
   } else {
-    while (tmp->next->room.id != room.id) {
+    while (tmp->nextPtr->room.id != room.id) {
       tmp = tmp->nextPtr;
     }
     delRoom = tmp->nextPtr;

@@ -6,3 +6,6 @@ server: server.c
 
 client: client.c
 	$(CC) -w -pthread network.c client.c -o client
+
+clean: 
+	rm server client
