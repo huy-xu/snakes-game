@@ -15,7 +15,7 @@ typedef struct listRoom {
   struct listRoom *nextPtr;
 } ListRoom;
 typedef ListRoom *ListRoomPtr;
-ListRoomPtr rooms = NULL;
+//ListRoomPtr rooms = NULL;
 
 typedef struct session {
   Account currentAccount;
@@ -25,7 +25,7 @@ typedef struct session {
 char *listRoom(ListRoomPtr currentRoomPtr);
 void insertRoom(ListRoomPtr *sPtr, Room room);
 ListRoomPtr findRoom(ListRoomPtr sPtr, int id);
-void deleteRoom(ListRoomPtr *sPtr, Room room);
+void deleteRoom(ListRoomPtr sPtr, Room room);
 void joinRoom(int sessionID, char *body);
 void sendChatMessage(Session session, char *body);
 
