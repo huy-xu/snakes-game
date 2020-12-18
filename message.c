@@ -2,7 +2,7 @@
 
 #include <string.h>
 
-Message handleResquest(char *request) {
+Message handleRequest(char *request) {
   int i, j, k;
   Message message;
   char header[MAX], body[MAX];
@@ -20,6 +20,9 @@ Message handleResquest(char *request) {
       body[k] = request[i];
       k++;
     }
+  }
+  if (j != -1) {
+    header[j] = '\0';
   }
   body[k] = '\0';
 

@@ -6,6 +6,7 @@
 #include <sys/socket.h>
 #include <sys/types.h>
 #include <unistd.h>
+#include <string.h>
 
 int initClient(int port, char *ip) {
   int sock, count = 0;
@@ -110,8 +111,9 @@ int acceptConnection(int sock) {
   return new_socket;
 }
 
-int receiveData(int sock, char *buff) {
+char *receiveData(int sock, char *buff) {
   int recvBytes;
+  char response[MAX];
 
   recvBytes = recv(sock, buff, BUFF_SIZE - 1, 0);
   buff[recvBytes] = '\0';
@@ -119,8 +121,9 @@ int receiveData(int sock, char *buff) {
     perror("Recv failed");
     exit(0);
   }
+  strcpy(response, buff);
 
-  return recvBytes;
+  return response;
 }
 
 void sendData(int sock, char *buff) {

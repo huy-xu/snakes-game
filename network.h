@@ -13,7 +13,7 @@
 int initClient(int port, char *ip);
 int initServer(int port);
 int acceptConnection(int sock);
-int receiveData(int sock, char *buff);
+char *receiveData(int sock, char *buff);
 void sendData(int sock, char *buff);
 
 #endif

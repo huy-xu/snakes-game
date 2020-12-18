@@ -1,5 +1,6 @@
 #include "room.h"
 
+#include <pthread.h>
 #include <stdlib.h>
 
 #include "network.h"
@@ -12,7 +13,7 @@ char *listRoom(ListRoomPtr currentRoomPtr) {
   char list_room[MAX];
   char str[MAX];
   while (currentRoomPtr != NULL) {
-    strcat(list_room, sprintf(str,"%d",currentRoomPtr->room.id));
+    strcat(list_room, sprintf(str, "%d", currentRoomPtr->room.id));
     strcat(list_room, "-");
     currentRoomPtr = currentRoomPtr->nextPtr;
   }
@@ -86,13 +87,46 @@ void sendChatMessage(Session session, char *body) {
   int socket;
   char response[MAX];
 
+  strcpy(response, session.currentAccount.username);
+  strcat(response, ": ");
+  strcat(response, body);
+
   for (int i = 0; i < MAX_CLIENTS; i++) {
     if (sessions[i].room.id == session.room.id) {
       socket = client_socket[i];
-      strcpy(response, session.currentAccount.username);
-      strcat(response, ": ");
-      strcat(response, body);
       sendData(socket, response);
     }
   }
+}
+
+void startGame(Session session) {
+  int socket;
+  pthread_t thread_game;
+  char startGame[MAX] = "./startGame ";
+  char response[MAX] = "success-";
+
+  strcat(startGame, session.room.port);
+
+  pthread_create(&thread_game, NULL, &handleStartGame, (void *)startGame);
+
+  strcat(response, session.room.ip);
+  strcat(response, "-");
+  strcat(response, session.room.port);
+
+  for (int i = 0; i < MAX_CLIENTS; i++) {
+    if (sessions[i].room.id == session.room.id) {
+      socket = client_socket[i];
+      sendData(socket, response);
+    }
+  }
+}
+
+void *handleStartGame(void *arg) {
+  pthread_detach(pthread_self());
+  char startGame[MAX];
+
+  strcpy(startGame, (char *)arg);
+  printf("%s\n", startGame);
+
+  system(startGame);
 }

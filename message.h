@@ -8,6 +8,6 @@ typedef struct message {
   char body[MAX];
 } Message;
 
-Message handleResquest(char *request);
+Message handleRequest(char *request);
 
 #endif
