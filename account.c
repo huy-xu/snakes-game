@@ -138,69 +138,89 @@ void signIn(int sessionID, char *body) {
   sendData(client_socket[sessionID], response);
 }
 
-// char *changePassword(int sessionID, char *newPass) {
-//   strcpy((*session).currentAccount->acc.password, newPass);
-//   writeData("account.txt", accounts);
+void changePassword(int sessionID, char *body) {
+  char *argv[2];
+  char newPass[MAX], confirmPass[MAX];
+  char response[MAX];
+  splitBody(argv,body);
+  strcpy(newPass,argv[0]);
+  strcpy(confirmPass,argv[1]);
+  if(strcmp(newPass,confirmPass)!=0){
+    strcpy(response,"error-change_password_fail");
+    sendData(client_socket[sessionID],response);
+  } else{
+    strcpy(sessions[sessionID].currentAccount.password, newPass);
+    writeData("account.txt", accounts);
+    strcpy(response,"success-change_password_success");
+    sendData(client_socket[sessionID],response);
+  }
+}
 
-//   return "success-Change pass success";
-// }
+void signOut(int sessionID) {
+  char response[MAX];
+  strcpy(response,"success_bye");
+  strcat(response,sessions[sessionID].currentAccount.username);
+  strcpy(sessions[sessionID].currentAccount.username,"#");
+  sessions[sessionID].room.id = -1;
+  sendData(client_socket[sessionID],response); 
+}
 
-// void signOut(int sessionID) {
-//   sessions[sessionID] = 
-// }
-
-// char *signUp(ListAccountPtr *sPtr, char *user, char *pass, char *confirmPass)
-// {
-//   Account acc;
-//   char response[MAX];
-//   if (findAccount(*sPtr, user) != NULL) {
-//     return "error-Account have been existed"
-//   } else {
-//     if (strcmp(pass, confirmPass) != 0) {
-//       return "error-confirmPass wrong"
-//     } else {
-//       strcpy(acc.username, user);
-//       strcpy(acc.password, pass);
-//       acc.scores = 0;
-//       insertAccount(sPtr, acc);
-//       writeData("account.txt", *sPtr);
-//       strcpy(response, "success-");
-//       strcat(response, user);
-//     }
-//   }
-
-//   char *showRank(Account arr[20], int top) {
-//     // output : listRank-top5-hiep:5-huy:5-tan:3
-//     char response[50];
-//     int count = 0;
-//     Account acc;
-//     Account tmp;
-//     int i, j;
-//     FILE *file;
-//     file = fopen("account.txt", "r");
-//     while (!feof(file)) {
-//       fscanf(file, "%s %s %d\n", acc.username, acc.password, &(acc.scores));
-//       arr[count] = acc;
-//       count++;
-//     }
-//     for (i = 0; i < count; i++) {
-//       for (j = count - 1; j > i; j--) {
-//         if (arr[j].scores > arr[j - 1].scores) {
-//           tmp = arr[j];
-//           arr[j] = arr[j - 1];
-//           arr[j - 1] = tmp;
-//         }
-//       }
-//     }
-//     char str[5];
-//     strcpy(response, "listRank-top");
-//     strcat(response, sprintf(str, "%d", top));
-//     for (i = 0; i < top; i++) {
-//       strcat(response, sprintf(str, "-%s:%d", arr[i].username,
-//       arr[i].scores));
-//     }
-//     fclose(file);
-//   }
-
-//   return response;
-// }
+void signUp(int sessionID, ListAccountPtr *sPtr, char *body){
+  Account acc;
+  char *argv[3];
+  char user[MAX],pass[MAX],confirmPass[MAX];
+  char response[MAX];
+  splitBody(argv,body);
+  strcpy(user,argv[0]);
+  strcpy(pass,argv[1]);
+  strcpy(confirmPass,argv[2]);
+  if (findAccount(*sPtr, user) != NULL) {
+    return "error-Account have been existed";
+  } else {
+    if (strcmp(pass, confirmPass) != 0) {
+      return "error-confirmPass wrong";
+    } else {
+      strcpy(acc.username, user);
+      strcpy(acc.password, pass);
+      acc.scores = 0;
+      insertAccount(sPtr, acc);
+      writeData("account.txt", *sPtr);
+      strcpy(response, "success-");
+      strcat(response, user);
+    }
+}
+}
+void showRank(int sessionID, char *body) {
+    // output : listRank-top5-hiep:5-huy:5-tan:3
+    Account arr[20];
+    char response[MAX];
+    int top = atoi(body);
+    int count = 0;
+    Account acc;
+    Account tmp;
+    int i, j;
+    FILE *file;
+    file = fopen("account.txt", "r");
+    while (!feof(file)) {
+      fscanf(file, "%s %s %d\n", acc.username, acc.password, &(acc.scores));
+      arr[count] = acc;
+      count++;
+    }
+    for (i = 0; i < count; i++) {
+      for (j = count - 1; j > i; j--) {
+        if (arr[j].scores > arr[j - 1].scores) {
+          tmp = arr[j];
+          arr[j] = arr[j - 1];
+          arr[j - 1] = tmp;
+        }
+      }
+    }
+    char str[5];
+    strcpy(response, "listRank-top");
+    strcat(response, sprintf(str, "%d", top));
+    for (i = 0; i < top; i++) {
+      strcat(response, sprintf(str, "-%s:%d", arr[i].username,arr[i].scores));
+    }
+    fclose(file);
+    sendData(client_socket[sessionID],response);
+  }
