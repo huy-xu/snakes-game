@@ -1,49 +1,49 @@
-// #include "account.h"
+#include "account.h"
 
-// ListNodePtr readData(char *fileName) {
-//   FILE *file;
-//   Account acc;
-//   ListNodePtr sPtr = NULL;
+ListNodePtr readData(char *fileName) {
+  FILE *file;
+  Account acc;
+  ListNodePtr sPtr = NULL;
 
-//   file = fopen(fileName, "r");
+  file = fopen(fileName, "r");
 
-//   while (!feof(file)) {
-//     fscanf(file, "%s %s %d\n", acc.username, acc.password, &(acc.scores));
-//     insertLast(&sPtr, acc);
-//   }
+  while (!feof(file)) {
+    fscanf(file, "%s %s %d\n", acc.username, acc.password, &(acc.scores));
+    insertLast(&sPtr, acc);
+  }
 
-//   fclose(file);
+  fclose(file);
 
-//   return sPtr;
-// }
+  return sPtr;
+}
 
-// void writeData(char *fileName, ListNodePtr sPtr) {
-//   FILE *file;
-//   Account acc;
-//   ListNodePtr currentPtr = sPtr;
+void writeData(char *fileName, ListNodePtr sPtr) {
+  FILE *file;
+  Account acc;
+  ListNodePtr currentPtr = sPtr;
 
-//   file = fopen(fileName, "w");
+  file = fopen(fileName, "w");
 
-//   while (currentPtr != NULL) {
-//     acc = currentPtr->acc;
-//     fprintf(file, "%s %s %d\n", acc.username, acc.password, acc.scores);
-//     currentPtr = currentPtr->nextPtr;
-//   }
+  while (currentPtr != NULL) {
+    acc = currentPtr->acc;
+    fprintf(file, "%s %s %d\n", acc.username, acc.password, acc.scores);
+    currentPtr = currentPtr->nextPtr;
+  }
 
-//   fclose(file);
-// }
+  fclose(file);
+}
 
-// bool isValid(char *str) {
-//   for (int i = 0; i < strlen(str); i++) {
-//     if (!((str[i] >= '0' && str[i] <= '9') ||
-//           (str[i] >= 'A' && str[i] <= 'Z') ||
-//           (str[i] >= 'a' && str[i] <= 'z'))) {
-//       return false;
-//     }
-//   }
+bool isValid(char *str) {
+  for (int i = 0; i < strlen(str); i++) {
+    if (!((str[i] >= '0' && str[i] <= '9') ||
+          (str[i] >= 'A' && str[i] <= 'Z') ||
+          (str[i] >= 'a' && str[i] <= 'z'))) {
+      return false;
+    }
+  }
 
-//   return true;
-// }
+  return true;
+}
 
 // void blockAccount(char *username) {
 //   ListNodePtr currentPtr = findNode(accounts, username);
@@ -54,123 +54,116 @@
 //   }
 // }
 
-// bool isAuthenticated(char *username, char *password) {
-//   ListNodePtr currentPtr = findNode(accounts, username);
+bool isAuthenticated(char *username, char *password) {
+  ListNodePtr currentPtr = findNode(accounts, username);
 
-//   if (currentPtr != NULL) {
-//     if (strcmp(currentPtr->acc.password, password) == 0) {
-//       return true;
-//     }
-//   }
+  if (currentPtr != NULL) {
+    if (strcmp(currentPtr->acc.password, password) == 0) {
+      return true;
+    }
+  }
 
-//   return false;
-// }
+  return false;
+}
 
-// char *signIn(Session *session, char *user, char *pass) {
-//   if (strcmp((*session).currentUser, user) != 0) {
-//     strcpy((*session).currentUser, user);
-//     (*session).count = 0;
-//   }
-//   if (!isAuthenticated(user, pass)) {
-//     (*session).count++;
-//     if ((*session).count >= 3) {
-//       blockAccount(user);
-//       return "Account is blocked";
-//     }
-//     return "Not OK";
-//   }
-//   (*session).count = 0;
-//   (*session).currentAccount = findNode(accounts, user);
+char *signIn(Session *session, char *user, char *pass) {
+  char result[20];
+  if (strcmp((*session).currentUser, user) != 0) {
+    strcpy((*session).currentUser, user);
+  }
+  if (!isAuthenticated(user, pass)) {
+    return "error-input wrong";
+  }
+  (*session).currentAccount = findNode(accounts, user);
+  strcpy(result,"success-");
+  strcat(result,user);
+  return result;
+}
 
-//   if ((*session).currentAccount->acc.scores != 1) {
-//     (*session).currentAccount = NULL;
-//     strcpy((*session).currentUser, "#");
-//     return "Account is not ready";
-//   }
+char *changePassword(Session *session, char *newPass) {
 
-//   return "OK";
-// }
+  strcpy((*session).currentAccount->acc.password, newPass);
+  writeData("account.txt", accounts);
 
-// char *changePassword(Session *session, char *newPass) {
-//   int i, j, k;
-//   char *encodeNum = malloc(strlen(newPass) + 1);
-//   char *encodeChar = malloc(strlen(newPass) + 1);
+  return "success-Change pass success";
+}
 
-//   strcpy((*session).currentAccount->acc.password, newPass);
-//   writeData("account.txt", accounts);
+char *signOut(Session *session) {
+  char *response = malloc(strlen("bye ") +
+                          strlen((*session).currentAccount->acc.username) +
+                          1);
 
-//   for (i = 0, j = 0, k = 0; i < strlen(newPass); i++) {
-//     if (newPass[i] >= '0' && newPass[i] <= '9') {
-//       encodeNum[j] = newPass[i];
-//       j++;
-//     } else {
-//       encodeChar[k] = newPass[i];
-//       k++;
-//     }
-//   }
-//   encodeNum[j] = '\0';
-//   encodeChar[k] = '\0';
+  strcpy(response, "bye ");
+  strcat(response, (*session).currentAccount->acc.username);
+  (*session).currentAccount = NULL;
+  strcpy((*session).currentUser, "#");
 
-//   strcat(encodeNum, encodeChar);
+  return response;
+}
 
-//   return encodeNum;
-// }
+void insertLast(ListNodePtr *sPtr, Account acc) {
+  ListNodePtr newPtr, currentPtr, prevPtr;
 
-// char *signOut(Session *session) {
-//   char *response = malloc(strlen("Goodbye ") +
-//                           strlen((*session).currentAccount->acc.username) +
-//                           1);
+  newPtr = malloc(sizeof(ListNode));
+  newPtr->acc = acc;
+  newPtr->nextPtr = NULL;
 
-//   strcpy(response, "Goodbye ");
-//   strcat(response, (*session).currentAccount->acc.username);
-//   (*session).currentAccount = NULL;
-//   strcpy((*session).currentUser, "#");
+  currentPtr = *sPtr;
+  prevPtr = NULL;
 
-//   return response;
-// }
+  while (currentPtr != NULL) {
+    prevPtr = currentPtr;
+    currentPtr = currentPtr->nextPtr;
+  }
 
-// void insertLast(ListNodePtr *sPtr, Account acc) {
-//   ListNodePtr newPtr, currentPtr, prevPtr;
+  if (prevPtr == NULL) {
+    newPtr->nextPtr = *sPtr;
+    *sPtr = newPtr;
+  } else {
+    prevPtr->nextPtr = newPtr;
+    newPtr->nextPtr = currentPtr;
+  }
+}
 
-//   newPtr = malloc(sizeof(ListNode));
-//   newPtr->acc = acc;
-//   newPtr->nextPtr = NULL;
+void printNode(Account acc) {
+  printf("%s %s %d\n", acc.username, acc.password, acc.scores);
+}
 
-//   currentPtr = *sPtr;
-//   prevPtr = NULL;
+void printList(ListNodePtr currentPtr) {
+  while (currentPtr != NULL) {
+    printNode(currentPtr->acc);
+    currentPtr = currentPtr->nextPtr;
+  }
+}
 
-//   while (currentPtr != NULL) {
-//     prevPtr = currentPtr;
-//     currentPtr = currentPtr->nextPtr;
-//   }
+ListNodePtr findNode(ListNodePtr sPtr, char *username) {
+  if (sPtr == NULL) {
+    return NULL;
+  }
+  if (strcmp(sPtr->acc.username, username) == 0) {
+    return sPtr;
+  } else {
+    findNode(sPtr->nextPtr, username);
+  }
+}
+char *signUp(ListNodePtr *sPtr,char *user,char *pass, char *confirmPass){
+  Account acc;
+  char result[20];
+  if (findNode(*sPtr,user)!=NULL){
+    return "error-Account have been existed"
+  }else{
+    if(strcmp(pass,confirmPass)!=0){
+      return "error-confirmPass wrong"
+    }else{
+      strcpy(acc.username,user);
+      strcpy(acc.password,pass);
+      acc.scores=0;
+      insertLast(sPtr,acc);
+      writeData("account.txt",*sPtr);
+      strcpy(result,"success-");
+      strcat(result,user);
+    }
+  }
 
-//   if (prevPtr == NULL) {
-//     newPtr->nextPtr = *sPtr;
-//     *sPtr = newPtr;
-//   } else {
-//     prevPtr->nextPtr = newPtr;
-//     newPtr->nextPtr = currentPtr;
-//   }
-// }
-
-// void printNode(Account acc) {
-//   printf("%s %s %d\n", acc.username, acc.password, acc.scores);
-// }
-
-// void printList(ListNodePtr currentPtr) {
-//   while (currentPtr != NULL) {
-//     printNode(currentPtr->acc);
-//     currentPtr = currentPtr->nextPtr;
-//   }
-// }
-
-// ListNodePtr findNode(ListNodePtr sPtr, char *username) {
-//   if (sPtr == NULL) {
-//     return NULL;
-//   }
-//   if (strcmp(sPtr->acc.username, username) == 0) {
-//     return sPtr;
-//   } else {
-//     findNode(sPtr->nextPtr, username);
-//   }
-// }
+  return result;
+}

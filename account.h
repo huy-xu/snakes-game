@@ -17,19 +17,19 @@ typedef struct listNode {
 } ListNode;
 typedef ListNode *ListNodePtr;
 
-// ListNodePtr accounts = NULL;
+ListNodePtr accounts = NULL;
 
-// ListNodePtr readData(char *fileName);
-// void writeData(char *fileName, ListNodePtr sPtr);
-// bool isValid(char *str);
-// void blockAccount(char *username);
-// bool isAuthenticated(char *username, char *password);
-// char *signIn(Session *session, char *user, char *pass);
-// char *changePassword(Session *session, char *newPass);
-// char *signOut(Session *session);
-// void insertLast(ListNodePtr *sPtr, Account acc);
-// void printNode(Account acc);
-// void printList(ListNodePtr currentPtr);
-// ListNodePtr findNode(ListNodePtr sPtr, char *username);
-
+ListNodePtr readData(char *fileName);
+void writeData(char *fileName, ListNodePtr sPtr);
+bool isValid(char *str);
+//void blockAccount(char *username);
+bool isAuthenticated(char *username, char *password);
+char *signIn(Session *session, char *user, char *pass);
+char *changePassword(Session *session, char *newPass);
+char *signOut(Session *session);
+void insertLast(ListNodePtr *sPtr, Account acc);
+void printNode(Account acc);
+void printList(ListNodePtr currentPtr);
+ListNodePtr findNode(ListNodePtr sPtr, char *username);
+char *signUp(ListNodePtr *sPtr,char *user,char *pass, char *confirmPass);
 #endif
