@@ -32,4 +32,5 @@ void printNode(Account acc);
 void printList(ListNodePtr currentPtr);
 ListNodePtr findNode(ListNodePtr sPtr, char *username);
 char *signUp(ListNodePtr *sPtr,char *user,char *pass, char *confirmPass);
+char *showRank(Account arr[20],int top);
 #endif

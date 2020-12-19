@@ -165,5 +165,37 @@ char *signUp(ListNodePtr *sPtr,char *user,char *pass, char *confirmPass){
     }
   }
 
+  char *showRank(Account arr[20],int top){
+    // output : listRank-top5-hiep:5-huy:5-tan:3
+    char result[50];
+    int count=0;
+    Account acc;
+    Account tmp;
+    int i,j;
+    FILE *file;
+    file = fopen("account.txt","r");
+    while (!feof(file)) {
+    fscanf(file, "%s %s %d\n", acc.username, acc.password, &(acc.scores));
+    arr[count]=acc;
+    count++;
+    }
+    for(i=0;i<count;i++){
+      for(j=count-1;j>i;j--){
+        if (arr[j].scores>arr[j-1].scores){
+          tmp = arr[j];
+          arr[j] = arr[j-1];
+          arr[j-1] = tmp;
+        }
+      }
+    }
+    char str[5];
+    strcpy(result,"listRank-top");
+    strcat(result,sprintf(str,"%d",top));
+    for(i=0;i<top;i++){
+      strcat(result,sprintf(str,"-%s:%d",arr[i].username,arr[i].scores));
+    }
+    fclose(file);
+  }
+
   return result;
 }
