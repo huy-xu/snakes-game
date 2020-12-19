@@ -11,26 +11,26 @@ typedef struct account {
   int scores;
 } Account;
 
-typedef struct listNode {
+typedef struct listAccount {
   Account acc;
-  struct listNode *nextPtr;
-} ListNode;
-typedef ListNode *ListNodePtr;
+  struct listAccount *nextPtr;
+} ListAccount;
+typedef ListAccount *ListAccountPtr;
 
-ListNodePtr accounts = NULL;
+ListAccountPtr readData(char *fileName);
+void writeData(char *fileName, ListAccountPtr sPtr);
 
-ListNodePtr readData(char *fileName);
-void writeData(char *fileName, ListNodePtr sPtr);
+void insertAccount(ListAccountPtr *sPtr, Account acc);
+void printAccount(Account acc);
+void printListAccount(ListAccountPtr currentPtr);
+ListAccountPtr findAccount(ListAccountPtr sPtr, char *username);
+
 bool isValid(char *str);
-//void blockAccount(char *username);
 bool isAuthenticated(char *username, char *password);
-char *signIn(Session *session, char *user, char *pass);
-char *changePassword(Session *session, char *newPass);
-char *signOut(Session *session);
-void insertLast(ListNodePtr *sPtr, Account acc);
-void printNode(Account acc);
-void printList(ListNodePtr currentPtr);
-ListNodePtr findNode(ListNodePtr sPtr, char *username);
-char *signUp(ListNodePtr *sPtr,char *user,char *pass, char *confirmPass);
-char *showRank(Account arr[20],int top);
+void signIn(int sessionID, char *body);
+void changePassword(int sessionID, char *body);
+void signOut(int sessionID);
+void signUp(int sessionID, ListAccountPtr *sPtr, char *body);
+void showRank(Account arr[20], int top);
+
 #endif

@@ -9,5 +9,6 @@ typedef struct message {
 } Message;
 
 Message handleRequest(char *request);
+void splitBody(char **argv, char *body);
 
 #endif

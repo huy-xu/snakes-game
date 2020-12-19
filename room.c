@@ -5,7 +5,6 @@
 
 #include "network.h"
 
-// Initialise all client_socket[] to 0 so not checked
 extern int client_socket[MAX_CLIENTS];
 extern Session sessions[MAX_CLIENTS];
 

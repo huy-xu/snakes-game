@@ -2,7 +2,6 @@
 #include <stdlib.h>
 #include <string.h>
 
-// #include "list.h"
 #include "account.h"
 #include "constant.h"
 #include "message.h"
@@ -12,6 +11,7 @@
 // Initialise all client_socket[] to 0 so not checked
 int client_socket[MAX_CLIENTS] = {0};
 Session sessions[MAX_CLIENTS] = {{NULL, NULL}};
+extern ListAccountPtr accounts;
 
 int main(int argc, char *argv[]) {
   int master_socket, new_socket, activity, addrlen, max_sd, sd, i;
@@ -30,9 +30,9 @@ int main(int argc, char *argv[]) {
     strcpy(sessions[0].room.port, "9001");
 
     strcpy(sessions[1].currentAccount.username, "Hiep");
-    sessions[1].room.id = 1;
+    sessions[1].room.id = 2;
     strcpy(sessions[1].room.ip, "0.0.0.0");
-    strcpy(sessions[1].room.port, "9001");
+    strcpy(sessions[1].room.port, "9002");
 
     // strcpy(sessions[2].currentAccount.username, "Nam");
     // sessions[2].room.id = 2;
@@ -43,9 +43,9 @@ int main(int argc, char *argv[]) {
     // strcpy(sessions[4].currentAccount.username, "Tan");
     // sessions[4].room.id = 2;
 
-    master_socket = initServer(atoi(argv[1]));
+    accounts = readData("account.txt");
 
-    // accounts = readData("account.txt");
+    master_socket = initServer(atoi(argv[1]));
 
     while (true) {
       // Clear the socket set
@@ -98,7 +98,7 @@ int main(int argc, char *argv[]) {
           // Check if it was for closing , and also read the
           // incoming message
           receiveData(sd, request);
-          if (strcmp(request, "") == 0) {
+          if (strcmp(request, "signOut") == 0) {
             // Somebody disconnected, get details and print
             getpeername(sd, (struct sockaddr *)&address, (socklen_t *)&addrlen);
             printf("Host disconnected IP: %s, PORT: %d\n",
@@ -109,7 +109,9 @@ int main(int argc, char *argv[]) {
             client_socket[i] = 0;
           } else {
             message = handleRequest(request);
-            if (strcmp(message.header, "joinRoom") == 0) {
+            if (strcmp(message.header, "signIn") == 0) {
+              signIn(i, message.body);
+            } else if (strcmp(message.header, "joinRoom") == 0) {
               joinRoom(i, message.body);
             } else if (strcmp(message.header, "chat") == 0) {
               sendChatMessage(sessions[i], message.body);

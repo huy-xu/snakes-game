@@ -31,3 +31,13 @@ Message handleRequest(char *request) {
 
   return message;
 }
+
+void splitBody(char **argv, char *body) {
+  int i = 0;
+  char *token = strtok(body, "-");
+
+  while (token != NULL) {
+    argv[i++] = token;
+    token = strtok(NULL, "-");
+  }
+}
