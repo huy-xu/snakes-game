@@ -31,7 +31,7 @@ void createRoom(int sessionID);
 int numOfPlayers(char players[MAX_PLAYERS][MAX]);
 void joinRoom(int sessionID, char *body);
 void exitRoom(int sessionID);
-void sendChatMessage(Session session, char *body);
+void sendChatMessage(int sessionID, char *body);
 void startGame(int sessionID);
 void *handleStartGame(void *arg);
 

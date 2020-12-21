@@ -139,18 +139,14 @@ void joinRoom(int sessionID, char *body) {
   sendData(client_socket[sessionID], response);
 }
 
-void sendChatMessage(Session session, char *body) {
-  int socket;
+void sendChatMessage(int sessionID, char *body) {
   char response[MAX];
 
-  strcpy(response, session.currentAccount.username);
-  strcat(response, ": ");
-  strcat(response, body);
+  sprintf(response, "%s: %s", session.currentAccount.username, body);
 
   for (int i = 0; i < MAX_CLIENTS; i++) {
-    if (sessions[i].room.id == session.room.id) {
-      socket = client_socket[i];
-      sendData(socket, response);
+    if (sessions[i].room.id == sessions[sessionID].room.id) {
+      sendData(client_socket[i], response);
     }
   }
 }
