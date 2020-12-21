@@ -12,6 +12,7 @@
 int client_socket[MAX_CLIENTS] = {0};
 Session sessions[MAX_CLIENTS] = {{NULL, NULL}};
 ListAccountPtr accounts;
+ListRoomPtr rooms;
 
 int main(int argc, char *argv[]) {
   int master_socket, new_socket, activity, addrlen, max_sd, sd, i;
@@ -23,26 +24,6 @@ int main(int argc, char *argv[]) {
   if (argc != 2) {
     puts("Wrong parameter");
   } else {
-    // Test data
-    strcpy(sessions[0].currentAccount.username, "Xu");
-    sessions[0].room.id = 1;
-    strcpy(sessions[0].room.ip, "0.0.0.0");
-    strcpy(sessions[0].room.port, "9001");
-
-    strcpy(sessions[1].currentAccount.username, "Hiep");
-    sessions[1].room.id = 2;
-    strcpy(sessions[1].room.ip, "0.0.0.0");
-    strcpy(sessions[1].room.port, "9002");
-
-    // strcpy(sessions[2].currentAccount.username, "Nam");
-    // sessions[2].room.id = 2;
-
-    // strcpy(sessions[3].currentAccount.username, "Moon");
-    // sessions[3].room.id = 2;
-
-    // strcpy(sessions[4].currentAccount.username, "Tan");
-    // sessions[4].room.id = 2;
-
     master_socket = initServer(atoi(argv[1]));
 
     while (true) {

@@ -7,6 +7,8 @@
 
 extern int client_socket[MAX_CLIENTS];
 extern Session sessions[MAX_CLIENTS];
+extern ListRoomPtr rooms;
+int ID = 0;
 
 char *listRoom(ListRoomPtr currentRoomPtr) {
   char list_room[MAX];
@@ -52,6 +54,29 @@ ListRoomPtr findRoom(ListRoomPtr sPtr, int id) {
   } else {
     findRoom(sPtr->nextPtr, id);
   }
+}
+
+void showRoom(int sessionID) {}
+
+void createRoom(int sessionID) {
+  Room newRoom;
+  char response[MAX];
+
+  ID += 1;
+  newRoom.id = ID;
+  sprintf(newRoom.ip, "%s%d", DEFAULT_IP, ID);
+  sprintf(newRoom.port, "%s%d", DEFAULT_PORT, ID);
+  for (int i = 0; i <= MAX_PLAYERS; i++) {
+    strcpy(newRoom.players[i], "#");
+  }
+
+  strcpy(newRoom.players[0], sessions[sessionID].currentAccount.username);
+
+  insertRoom(&rooms, newRoom);
+  sessions[sessionID].room = newRoom;
+
+  sprintf(response, "success-%d", newRoom.id);
+  sendData(client_socket[sessionID], response);
 }
 
 void deleteRoom(ListRoomPtr sPtr, Room room) {

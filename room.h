@@ -8,6 +8,7 @@ typedef struct room {
   int id;
   char port[MAX];
   char ip[MAX];
+  char players[MAX_PLAYERS][MAX];
 } Room;
 
 typedef struct listRoom {
@@ -15,7 +16,6 @@ typedef struct listRoom {
   struct listRoom *nextPtr;
 } ListRoom;
 typedef ListRoom *ListRoomPtr;
-//ListRoomPtr rooms = NULL;
 
 typedef struct session {
   Account currentAccount;
@@ -27,7 +27,10 @@ void insertRoom(ListRoomPtr *sPtr, Room room);
 ListRoomPtr findRoom(ListRoomPtr sPtr, int id);
 void deleteRoom(ListRoomPtr sPtr, Room room);
 
+void showRoom(int sessionID);
+void createRoom(int sessionID);
 void joinRoom(int sessionID, char *body);
+void exitRoom(int sessionID);
 void sendChatMessage(Session session, char *body);
 void startGame(Session session);
 void *handleStartGame(void *arg);
