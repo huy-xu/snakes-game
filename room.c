@@ -57,7 +57,18 @@ ListRoomPtr findRoom(ListRoomPtr sPtr, int id) {
   }
 }
 
-void showRoom(int sessionID) {}
+void showRoom(int sessionID) {
+  char temp[MAX];
+  char response[MAX] = "success";
+  ListRoomPtr currentRoomPtr = rooms;
+
+  while (currentRoomPtr != NULL) {
+    sprintf(temp, "-%d:%d", currentRoomPtr->room.id, numOfPlayers(currentRoomPtr->room.players));
+    strcat(response, temp);
+  }
+
+  sendData(client_socket[sessionID], response);
+}
 
 void createRoom(int sessionID) {
   Room newRoom;
@@ -82,7 +93,7 @@ void createRoom(int sessionID) {
 void deleteRoom(ListRoomPtr sPtr, Room room) {
   ListRoomPtr tmp = sPtr;
   ListRoomPtr delRoom = malloc(sizeof(ListRoom));
-  int id;
+  
   if (tmp->room.id == room.id) {
     sPtr = sPtr->nextPtr;
     free(tmp);
@@ -117,9 +128,11 @@ void joinRoom(int sessionID, char *body) {
 
   if (currentRoom == NULL) {
     strcpy(response, "error-Room not found");
+    sendData(client_socket[sessionID], response);
   } else {
     if ((total = numOfPlayers(currentRoom->room.players)) == 4) {
       strcpy(response, "error-Room is full");
+      sendData(client_socket[sessionID], response);
     } else {
       strcpy(currentRoom->room.players[total],
              sessions[sessionID].currentAccount.username);
@@ -131,18 +144,22 @@ void joinRoom(int sessionID, char *body) {
         if (strcmp(currentRoom->room.players[i], "#") != 0) {
           strcat(response, "-");
           strcat(response, currentRoom->room.players[i]);
-        } 
+        }
+      }
+
+      for (int i = 0; i < MAX_CLIENTS; i++) {
+        if (sessions[i].room.id == sessions[sessionID].room.id) {
+          sendData(client_socket[i], response);
+        }
       }
     }
   }
-
-  sendData(client_socket[sessionID], response);
 }
 
 void sendChatMessage(int sessionID, char *body) {
   char response[MAX];
 
-  sprintf(response, "%s: %s", session.currentAccount.username, body);
+  sprintf(response, "%s: %s", sessions[sessionID].currentAccount.username, body);
 
   for (int i = 0; i < MAX_CLIENTS; i++) {
     if (sessions[i].room.id == sessions[sessionID].room.id) {

@@ -94,12 +94,14 @@ int main(int argc, char *argv[]) {
             } else if (strcmp(message.header, "signUp") == 0) {
               accounts = readData("account.txt");
               signUp(i, message.body);
+            } else if (strcmp(message.header, "showRoom") == 0) {
+              showRoom(i);
             } else if (strcmp(message.header, "createRoom") == 0) {
               createRoom(i);
             } else if (strcmp(message.header, "joinRoom") == 0) {
               joinRoom(i, message.body);
             } else if (strcmp(message.header, "chat") == 0) {
-              sendChatMessage(sessions[i], message.body);
+              sendChatMessage(i, message.body);
             } else if (strcmp(message.header, "startGame") == 0) {
               startGame(i);
             }
