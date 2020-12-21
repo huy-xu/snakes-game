@@ -11,8 +11,8 @@
 // Initialise all client_socket[] to 0 so not checked
 int client_socket[MAX_CLIENTS] = {0};
 Session sessions[MAX_CLIENTS] = {{NULL, NULL}};
-ListAccountPtr accounts;
-ListRoomPtr rooms;
+ListAccountPtr accounts = NULL;
+ListRoomPtr rooms = NULL;
 
 int main(int argc, char *argv[]) {
   int master_socket, new_socket, activity, addrlen, max_sd, sd, i;
@@ -94,6 +94,8 @@ int main(int argc, char *argv[]) {
             } else if (strcmp(message.header, "signUp") == 0) {
               accounts = readData("account.txt");
               signUp(i, message.body);
+            } else if (strcmp(message.header, "createRoom") == 0) {
+              createRoom(i);
             } else if (strcmp(message.header, "joinRoom") == 0) {
               joinRoom(i, message.body);
             } else if (strcmp(message.header, "chat") == 0) {

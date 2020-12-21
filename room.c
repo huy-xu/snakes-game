@@ -2,6 +2,7 @@
 
 #include <pthread.h>
 #include <stdlib.h>
+#include <string.h>
 
 #include "network.h"
 
@@ -66,7 +67,7 @@ void createRoom(int sessionID) {
   newRoom.id = ID;
   sprintf(newRoom.ip, "%s%d", DEFAULT_IP, ID);
   sprintf(newRoom.port, "%s%d", DEFAULT_PORT, ID);
-  for (int i = 0; i <= MAX_PLAYERS; i++) {
+  for (int i = 0; i < MAX_PLAYERS; i++) {
     strcpy(newRoom.players[i], "#");
   }
 
@@ -97,12 +98,44 @@ void deleteRoom(ListRoomPtr sPtr, Room room) {
   }
 }
 
-void joinRoom(int sessionID, char *body) {
-  char response[MAX] = "Joined Room ";
-  int roomID = atoi(body);
+int numOfPlayers(char players[MAX_PLAYERS][MAX]) {
+  int total = 0;
 
-  sessions[sessionID].room.id = roomID;
-  strcat(response, body);
+  for (int i = 0; i < MAX_PLAYERS; i++) {
+    if (strcmp(players[i], "#") != 0) {
+      total += 1;
+    }
+  }
+
+  return total;
+}
+
+void joinRoom(int sessionID, char *body) {
+  char response[MAX];
+  int total;
+  int roomID = atoi(body);
+  ListRoomPtr currentRoom = findRoom(rooms, roomID);
+
+  if (currentRoom == NULL) {
+    strcpy(response, "error-Room not found");
+  } else {
+    if ((total = numOfPlayers(currentRoom->room.players)) == 4) {
+      strcpy(response, "error-Room is full");
+    } else {
+      strcpy(currentRoom->room.players[total],
+             sessions[sessionID].currentAccount.username);
+      sessions[sessionID].room = currentRoom->room;
+
+      strcpy(response, "success");
+
+      for (int i = 0; i < MAX_PLAYERS; i++) {
+        if (strcmp(currentRoom->room.players[i], "#") != 0) {
+          strcat(response, "-");
+          strcat(response, currentRoom->room.players[i]);
+        } 
+      }
+    }
+  }
 
   sendData(client_socket[sessionID], response);
 }
@@ -127,7 +160,7 @@ void startGame(Session session) {
   int socket;
   pthread_t thread_game;
   char startGame[MAX] = "./startGame ";
-  char response[MAX] = "success-";
+  char response[MAX] = "startGame-";
 
   strcat(startGame, session.room.port);
 

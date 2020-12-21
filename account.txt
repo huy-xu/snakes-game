@@ -3,3 +3,4 @@ soict soict123 0
 huy 1 1
 a 1 1
 b 1 0
+c 1 0

@@ -10,7 +10,7 @@
 
 extern int client_socket[MAX_CLIENTS];
 extern Session sessions[MAX_CLIENTS];
-extern ListAccountPtr accounts = NULL;
+extern ListAccountPtr accounts;
 
 ListAccountPtr readData(char *fileName) {
   FILE *file;
