@@ -141,19 +141,22 @@ void changePassword(int sessionID, char *body) {
   char *argv[2];
   char newPass[MAX], confirmPass[MAX];
   char response[MAX];
-  splitBody(argv,body);
-  strcpy(newPass,argv[0]);
-  strcpy(confirmPass,argv[1]);
-  if(strcmp(newPass,confirmPass)!=0){
-    strcpy(response,"error-Confirm password did not matched");
-    sendData(client_socket[sessionID],response);
-  } else{
-    ListAccountPtr current = findAccount(accounts,sessions[sessionID].currentAccount.username);
-    strcpy(current->acc.password,newPass);
+
+  splitBody(argv, body);
+  strcpy(newPass, argv[0]);
+  strcpy(confirmPass, argv[1]);
+
+  if (strcmp(newPass, confirmPass) != 0) {
+    strcpy(response, "error-Confirm password did not matched");
+  } else {
+    ListAccountPtr current =
+        findAccount(accounts, sessions[sessionID].currentAccount.username);
+    strcpy(current->acc.password, newPass);
     writeData("account.txt", accounts);
-    strcpy(response,"success-Change password successfully");
-    sendData(client_socket[sessionID],response);
+    strcpy(response, "success-Change password successfully");
   }
+
+  sendData(client_socket[sessionID], response);
 }
 
 void signUp(int sessionID, char *body) {
@@ -186,40 +189,41 @@ void signUp(int sessionID, char *body) {
 }
 
 void showRank(int sessionID) {
-    // output : listRank-top5-hiep:5-huy:5-tan:3
-    Account arr[20];
-    char response[MAX];
-    int count = 0;
-    Account acc;
-    Account tmp;
-    int i, j;
-    FILE *file;
-    file = fopen("account.txt", "r");
-    while (!feof(file)) {
-      fscanf(file, "%s %s %d\n", acc.username, acc.password, &(acc.scores));
-      arr[count] = acc;
-      count++;
-    }
-    for (i = 0; i < count; i++) {
-      for (j = count - 1; j > i; j--) {
-        if (arr[j].scores > arr[j - 1].scores) {
-          tmp = arr[j];
-          arr[j] = arr[j - 1];
-          arr[j - 1] = tmp;
-        }
-      }
-    }
-    char str[5];
-    strcpy(response, "listRank");
-    for (i = 0; i < 10; i++) {
-      strcat(response, sprintf(str, "-%s:%d", arr[i].username,arr[i].scores));
-    }
-    ListAccountPtr current = findAccount(accounts,sessions[sessionID].currentAccount.username);
-    for (i =0;i<count;i++){
-      if (strcmp(arr[i].username, current->acc.username)==0){
-        strcat(response,sprintf(str,"-%s:%d",arr[i].username,arr[i].scores));
-      }
-    }
-    fclose(file);
-    sendData(client_socket[sessionID],response);
+  // output : listRank-top5-hiep:5-huy:5-tan:3
+  Account arr[20];
+  char response[MAX];
+  int count = 0;
+  Account acc;
+  Account tmp;
+  int i, j;
+  FILE *file;
+  file = fopen("account.txt", "r");
+  while (!feof(file)) {
+    fscanf(file, "%s %s %d\n", acc.username, acc.password, &(acc.scores));
+    arr[count] = acc;
+    count++;
   }
+  for (i = 0; i < count; i++) {
+    for (j = count - 1; j > i; j--) {
+      if (arr[j].scores > arr[j - 1].scores) {
+        tmp = arr[j];
+        arr[j] = arr[j - 1];
+        arr[j - 1] = tmp;
+      }
+    }
+  }
+  char str[5];
+  strcpy(response, "listRank");
+  for (i = 0; i < 10; i++) {
+    strcat(response, sprintf(str, "-%s:%d", arr[i].username, arr[i].scores));
+  }
+  ListAccountPtr current =
+      findAccount(accounts, sessions[sessionID].currentAccount.username);
+  for (i = 0; i < count; i++) {
+    if (strcmp(arr[i].username, current->acc.username) == 0) {
+      strcat(response, sprintf(str, "-%s:%d", arr[i].username, arr[i].scores));
+    }
+  }
+  fclose(file);
+  sendData(client_socket[sessionID], response);
+}

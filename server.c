@@ -94,6 +94,8 @@ int main(int argc, char *argv[]) {
             } else if (strcmp(message.header, "signUp") == 0) {
               accounts = readData("account.txt");
               signUp(i, message.body);
+            } else if (strcmp(message.header, "changePassword") == 0) {
+              changePassword(i, message.body);
             } else if (strcmp(message.header, "showRoom") == 0) {
               showRoom(i);
             } else if (strcmp(message.header, "createRoom") == 0) {
