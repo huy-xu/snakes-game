@@ -150,7 +150,7 @@ void changePassword(int sessionID, char *body) {
     sendData(client_socket[sessionID],response);
   } else{
     ListAccountPtr current = findAccount(accounts,sessions[sessionID].currentAccount.username);
-    strcpy(current.acc.password,newPass);
+    strcpy(current->acc.password,newPass);
     writeData("account.txt", accounts);
     strcpy(response,"success-Change password successfully");
     sendData(client_socket[sessionID],response);
@@ -226,7 +226,7 @@ void showRank(int sessionID) {
     }
     ListAccountPtr current = findAccount(accounts,sessions[sessionID].currentAccount.username);
     for (i =0;i<count;i++){
-      if (strcmp(arr[i].username, current.acc.username)==0){
+      if (strcmp(arr[i].username, current->acc.username)==0){
         strcat(response,sprintf(str,"-%s:%d",arr[i].username,arr[i].scores));
       }
     }
