@@ -102,6 +102,8 @@ int main(int argc, char *argv[]) {
               createRoom(i);
             } else if (strcmp(message.header, "joinRoom") == 0) {
               joinRoom(i, message.body);
+            } else if (strcmp(message.header, "leaveRoom") == 0) {
+              leaveRoom(i);
             } else if (strcmp(message.header, "chat") == 0) {
               sendChatMessage(i, message.body);
             } else if (strcmp(message.header, "startGame") == 0) {
