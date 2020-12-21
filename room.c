@@ -65,6 +65,7 @@ void showRoom(int sessionID) {
   while (currentRoomPtr != NULL) {
     sprintf(temp, "-%d:%d", currentRoomPtr->room.id, numOfPlayers(currentRoomPtr->room.players));
     strcat(response, temp);
+    currentRoomPtr = currentRoomPtr->nextPtr;
   }
 
   sendData(client_socket[sessionID], response);
