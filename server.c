@@ -101,7 +101,7 @@ int main(int argc, char *argv[]) {
             } else if (strcmp(message.header, "chat") == 0) {
               sendChatMessage(sessions[i], message.body);
             } else if (strcmp(message.header, "startGame") == 0) {
-              startGame(sessions[i]);
+              startGame(i);
             }
           }
         }

@@ -7,7 +7,6 @@
 typedef struct room {
   int id;
   char port[MAX];
-  char ip[MAX];
   char players[MAX_PLAYERS][MAX];
 } Room;
 
@@ -33,7 +32,7 @@ int numOfPlayers(char players[MAX_PLAYERS][MAX]);
 void joinRoom(int sessionID, char *body);
 void exitRoom(int sessionID);
 void sendChatMessage(Session session, char *body);
-void startGame(Session session);
+void startGame(int sessionID);
 void *handleStartGame(void *arg);
 
 #endif

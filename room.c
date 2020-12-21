@@ -65,7 +65,6 @@ void createRoom(int sessionID) {
 
   ID += 1;
   newRoom.id = ID;
-  sprintf(newRoom.ip, "%s%d", DEFAULT_IP, ID);
   sprintf(newRoom.port, "%s%d", DEFAULT_PORT, ID);
   for (int i = 0; i < MAX_PLAYERS; i++) {
     strcpy(newRoom.players[i], "#");
@@ -156,22 +155,19 @@ void sendChatMessage(Session session, char *body) {
   }
 }
 
-void startGame(Session session) {
+void startGame(int sessionID) {
   int socket;
   pthread_t thread_game;
-  char startGame[MAX] = "./startGame ";
-  char response[MAX] = "startGame-";
+  char startGame[MAX];
+  char response[MAX];
 
-  strcat(startGame, session.room.port);
-
+  sprintf(startGame, "./startGame %s", sessions[sessionID].room.port);
   pthread_create(&thread_game, NULL, &handleStartGame, (void *)startGame);
 
-  strcat(response, session.room.ip);
-  strcat(response, "-");
-  strcat(response, session.room.port);
+  sprintf(response, "startGame-%s", sessions[sessionID].room.port);
 
   for (int i = 0; i < MAX_CLIENTS; i++) {
-    if (sessions[i].room.id == session.room.id) {
+    if (sessions[i].room.id == sessions[sessionID].room.id) {
       socket = client_socket[i];
       sendData(socket, response);
     }

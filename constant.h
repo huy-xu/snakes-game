@@ -6,7 +6,7 @@
 #define MAX_CLIENTS 5
 #define MAX_ROOMS 5
 #define MAX_PLAYERS 4
-#define DEFAULT_IP "0.0.0."
+#define SERVER_IP "192.168.43.23"
 #define DEFAULT_PORT "900"
 
 #endif
