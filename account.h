@@ -31,6 +31,6 @@ void signIn(int sessionID, char *body);
 void changePassword(int sessionID, char *body);
 void signOut(int sessionID);
 void signUp(int sessionID, ListAccountPtr *sPtr, char *body);
-void showRank(Account arr[20], int top);
+void showRank(int sessionID,char *body);
 
 #endif
