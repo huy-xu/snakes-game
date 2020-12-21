@@ -189,7 +189,6 @@ void signUp(int sessionID, char *body) {
 }
 
 void showRank(int sessionID) {
-  // output : listRank-top5-hiep:5-huy:5-tan:3
   Account arr[20];
   char response[MAX];
   int count = 0;

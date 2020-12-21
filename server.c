@@ -96,6 +96,8 @@ int main(int argc, char *argv[]) {
               signUp(i, message.body);
             } else if (strcmp(message.header, "changePassword") == 0) {
               changePassword(i, message.body);
+            } else if (strcmp(message.header, "showRank") == 0) {
+              showRank(i);
             } else if (strcmp(message.header, "showRoom") == 0) {
               showRoom(i);
             } else if (strcmp(message.header, "createRoom") == 0) {
