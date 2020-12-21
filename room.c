@@ -137,7 +137,7 @@ void joinRoom(int sessionID, char *body) {
              sessions[sessionID].currentAccount.username);
       sessions[sessionID].room = currentRoom->room;
 
-      strcpy(response, "success");
+      strcpy(response, "joinedRoom");
 
       for (int i = 0; i < MAX_PLAYERS; i++) {
         if (strcmp(currentRoom->room.players[i], "#") != 0) {
