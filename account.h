@@ -30,6 +30,6 @@ bool isAuthenticated(char *username, char *password);
 void signIn(int sessionID, char *body);
 void changePassword(int sessionID, char *body);
 void signUp(int sessionID, char *body);
-void showRank(int sessionID,char *body);
+void showRank(int sessionID);
 
 #endif

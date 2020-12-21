@@ -145,12 +145,13 @@ void changePassword(int sessionID, char *body) {
   strcpy(newPass,argv[0]);
   strcpy(confirmPass,argv[1]);
   if(strcmp(newPass,confirmPass)!=0){
-    strcpy(response,"error-change_password_fail");
+    strcpy(response,"error-Confirm password did not matched");
     sendData(client_socket[sessionID],response);
   } else{
-    strcpy(sessions[sessionID].currentAccount.password, newPass);
+    ListAccountPtr current = findAccount(accounts,sessions[sessionID].currentAccount.username);
+    strcpy(current->acc.password,newPass);
     writeData("account.txt", accounts);
-    strcpy(response,"success-change_password_success");
+    strcpy(response,"success-Change password successfully");
     sendData(client_socket[sessionID],response);
   }
 }
@@ -184,11 +185,10 @@ void signUp(int sessionID, char *body) {
   sendData(client_socket[sessionID], response);
 }
 
-void showRank(int sessionID, char *body) {
+void showRank(int sessionID) {
     // output : listRank-top5-hiep:5-huy:5-tan:3
     Account arr[20];
     char response[MAX];
-    int top = atoi(body);
     int count = 0;
     Account acc;
     Account tmp;
@@ -210,10 +210,15 @@ void showRank(int sessionID, char *body) {
       }
     }
     char str[5];
-    strcpy(response, "listRank-top");
-    strcat(response, sprintf(str, "%d", top));
-    for (i = 0; i < top; i++) {
+    strcpy(response, "listRank");
+    for (i = 0; i < 10; i++) {
       strcat(response, sprintf(str, "-%s:%d", arr[i].username,arr[i].scores));
+    }
+    ListAccountPtr current = findAccount(accounts,sessions[sessionID].currentAccount.username);
+    for (i =0;i<count;i++){
+      if (strcmp(arr[i].username, current->acc.username)==0){
+        strcat(response,sprintf(str,"-%s:%d",arr[i].username,arr[i].scores));
+      }
     }
     fclose(file);
     sendData(client_socket[sessionID],response);
