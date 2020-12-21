@@ -10,7 +10,7 @@
 
 extern int client_socket[MAX_CLIENTS];
 extern Session sessions[MAX_CLIENTS];
-ListAccountPtr accounts = NULL;
+extern ListAccountPtr accounts = NULL;
 
 ListAccountPtr readData(char *fileName) {
   FILE *file;
@@ -165,31 +165,35 @@ void signOut(int sessionID) {
   sendData(client_socket[sessionID],response); 
 }
 
-void signUp(int sessionID, ListAccountPtr *sPtr, char *body){
+void signUp(int sessionID, char *body) {
   Account acc;
   char *argv[3];
-  char user[MAX],pass[MAX],confirmPass[MAX];
+  char user[MAX], pass[MAX], confirmPass[MAX];
   char response[MAX];
-  splitBody(argv,body);
-  strcpy(user,argv[0]);
-  strcpy(pass,argv[1]);
-  strcpy(confirmPass,argv[2]);
-  if (findAccount(*sPtr, user) != NULL) {
-    return "error-Account have been existed";
+
+  splitBody(argv, body);
+  strcpy(user, argv[0]);
+  strcpy(pass, argv[1]);
+  strcpy(confirmPass, argv[2]);
+
+  if (findAccount(accounts, user) != NULL) {
+    strcpy(response, "error-Username have been existed");
   } else {
     if (strcmp(pass, confirmPass) != 0) {
-      return "error-confirmPass wrong";
+      strcpy(response, "error-Confirm password did not matched");
     } else {
       strcpy(acc.username, user);
       strcpy(acc.password, pass);
       acc.scores = 0;
-      insertAccount(sPtr, acc);
-      writeData("account.txt", *sPtr);
-      strcpy(response, "success-");
-      strcat(response, user);
+      insertAccount(&accounts, acc);
+      writeData("account.txt", accounts);
+      strcpy(response, "success-Sign up successfully");
     }
+  }
+
+  sendData(client_socket[sessionID], response);
 }
-}
+
 void showRank(int sessionID, char *body) {
     // output : listRank-top5-hiep:5-huy:5-tan:3
     Account arr[20];
