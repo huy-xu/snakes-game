@@ -125,15 +125,14 @@ void signIn(int sessionID, char *body) {
   strcpy(pass, argv[1]);
 
   if (!isAuthenticated(user, pass)) {
-    strcpy(response, "error-Invalid Username or Password");
-    sendData(client_socket[sessionID], response);
-    return;
+    strcpy(response, "error-Wrong Username or Password");
+  } else {
+    sessions[sessionID].currentAccount = findAccount(accounts, user)->acc;
+    sessions[sessionID].room.id = -1;
+    sprintf(response, "success-%s-%d",
+            sessions[sessionID].currentAccount.username,
+            sessions[sessionID].currentAccount.scores);
   }
-
-  sessions[sessionID].currentAccount = findAccount(accounts, user)->acc;
-  sessions[sessionID].room.id = -1;
-  strcpy(response, "success-");
-  strcat(response, user);
 
   sendData(client_socket[sessionID], response);
 }
@@ -154,15 +153,6 @@ void changePassword(int sessionID, char *body) {
     strcpy(response,"success-change_password_success");
     sendData(client_socket[sessionID],response);
   }
-}
-
-void signOut(int sessionID) {
-  char response[MAX];
-  strcpy(response,"success_bye");
-  strcat(response,sessions[sessionID].currentAccount.username);
-  strcpy(sessions[sessionID].currentAccount.username,"#");
-  sessions[sessionID].room.id = -1;
-  sendData(client_socket[sessionID],response); 
 }
 
 void signUp(int sessionID, char *body) {
