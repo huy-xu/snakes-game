@@ -190,7 +190,7 @@ void signUp(int sessionID, char *body) {
 
 void showRank(int sessionID) {
   Account arr[20];
-  char response[MAX];
+  char response[200];
   int count = 0;
   Account acc;
   Account tmp;
@@ -213,14 +213,17 @@ void showRank(int sessionID) {
   }
   char str[5];
   strcpy(response, "listRank");
-  for (i = 0; i < 10; i++) {
-    strcat(response, sprintf(str, "-%s:%d", arr[i].username, arr[i].scores));
-  }
+  sendData(client_socket[sessionID], response);
+   for (i = 0; i < 5; i++) {
+     sprintf(response, "%s:%d-", arr[i].username, arr[i].scores);
+     sendData(client_socket[sessionID], response);
+   }
+
   ListAccountPtr current =
       findAccount(accounts, sessions[sessionID].currentAccount.username);
   for (i = 0; i < count; i++) {
     if (strcmp(arr[i].username, current->acc.username) == 0) {
-      strcat(response, sprintf(str, "-%s:%d", arr[i].username, arr[i].scores));
+      sprintf(response, "%s:%d", arr[i].username, arr[i].scores);
     }
   }
   fclose(file);
