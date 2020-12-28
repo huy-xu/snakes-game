@@ -3,7 +3,7 @@ CFLAGS=-Wall
 LFLAGS=-lncurses -lpthread
 GTKLIB=`pkg-config --cflags --libs gtk+-3.0`
 
-all: server client clientJoinGame startGame ClientGUI
+all: server client clientJoinGame startGame
 
 server: src/server/server.c
 	$(CC) -w -pthread src/server/server.c src/server/account.c src/server/message.c src/server/room.c src/server/network.c -o server

@@ -11,8 +11,14 @@ typedef struct account {
 } Account;
 
 void signIn(char *user, char *pass);
-void changePassword();
-void signUp();
+void changePassword(char *newPass,char *reNewPass);
+void signUp(char *user, char *pass, char *confirmPass);
 void showRank();
-
+void signOut();
+void createRoom();
+void leaveRoom();
+void showRoom();
+void joinRoom(char *roomID);
+void chatRoom(char *message);
+void startGame();
 #endif
