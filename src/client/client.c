@@ -4,6 +4,7 @@
 #include <string.h>
 
 #include "network.h"
+#include "request.h"
 
 void *send_message();
 void *receive_message();

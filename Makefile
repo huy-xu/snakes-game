@@ -1,23 +1,27 @@
 CC = gcc
 CFLAGS=-Wall
 LFLAGS=-lncurses -lpthread
+GTKLIB=`pkg-config --cflags --libs gtk+-3.0`
 
-all: server client clientJoinGame startGame
+all: server client clientJoinGame startGame ClientGUI
 
-server: server.c
-	$(CC) -w -pthread server.c account.c message.c room.c network.c -o server
+server: src/server/server.c
+	$(CC) -w -pthread src/server/server.c src/server/account.c src/server/message.c src/server/room.c src/server/network.c -o server
 
-client: client.c
-	$(CC) -w -pthread network.c client.c -o client
+client: src/client/client.c
+	$(CC) -w -pthread src/client/network.c src/client/client.c -o client
 
-startGame: startGame.c
-	$(CC) $(CFLAGS) startGame.c -o startGame $(LFLAGS)
+startGame: src/server/startGame.c
+	$(CC) $(CFLAGS) src/server/startGame.c -o startGame $(LFLAGS)
 
-clientJoinGame: clientJoinGame.c
-	$(CC) $(CFLAGS) clientJoinGame.c -o clientJoinGame $(LFLAGS)
+clientJoinGame: src/client/clientJoinGame.c
+	$(CC) $(CFLAGS) src/client/clientJoinGame.c -o clientJoinGame $(LFLAGS)
+
+ClientGUI.o: src/ClientGUI.c
+	$(CC) -c $(CCFLAGS) src/ClientGUI.c $(GTKLIB) -o ClientGUI.o
 
 clean: 
-	rm server client
+	rm server client clientJoinGame startGame
 
 build: 
 	make clean && make all
