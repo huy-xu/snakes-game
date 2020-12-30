@@ -4,13 +4,13 @@
 #include <string.h>
 
 #include "network.h"
-#include "../server/message.h"
+#include "message.h"
 void *send_message();
 void *receive_message();
 
 int sockfd;
 char buff[BUFF_SIZE + 1] = "#";
-Message *message;
+
 int main(int argc, char *argv[]) {
   pthread_t thread_send, thread_recv;
 
@@ -33,19 +33,19 @@ int main(int argc, char *argv[]) {
 }
 
 void *send_message() {
-  while(1){
-    gets(buff);
-    if(strlen(buff)==0) break;
-  }
-  printf("%s",buff);
-  //*message = handleRequest(buff);
-  //printf("%s",message->body);
-  sendData(sockfd,buff);
+  Message *msg = (Message*) malloc(sizeof(Message));
+  msg->code= LOGIN;
+  //setMessageResponse(msg);
+  strcpy(msg->body,"a-2"); 
+  //sendData(sockfd,msg);
+  send(sockfd, msg,sizeof(Message), 0);
+  printf("%s",msg->body);
 }
 
 void *receive_message() {
+  Message *message = (Message *) malloc(sizeof(Message));
   while (1) {
     receiveData(sockfd, message);
-    printf("%s\n", message->mess);
+    printf("%s",message->body);
   }
 }

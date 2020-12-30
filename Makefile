@@ -5,17 +5,17 @@ GTKLIB=`pkg-config --cflags --libs gtk+-3.0`
 
 all: server client clientJoinGame startGame
 
-server: src/server/server.c
-	$(CC) -w -pthread src/server/server.c src/server/account.c src/server/message.c src/server/room.c src/server/network.c -o server
+server: src/server.c
+	$(CC) -w -pthread src/server.c src/account.c src/message.c src/room.c src/network.c -o server
 
-client: src/client/client.c
-	$(CC) -w -pthread src/client/network.c src/server/message.c src/client/client.c -o client
+client: src/client.c
+	$(CC) -w -pthread src/network.c src/message.c src/client.c -o client
 
-startGame: src/server/startGame.c
-	$(CC) $(CFLAGS) src/server/startGame.c -o startGame $(LFLAGS)
+startGame: src/startGame.c
+	$(CC) $(CFLAGS) src/startGame.c -o startGame $(LFLAGS)
 
-clientJoinGame: src/client/clientJoinGame.c
-	$(CC) $(CFLAGS) src/client/clientJoinGame.c -o clientJoinGame $(LFLAGS)
+clientJoinGame: src/clientJoinGame.c
+	$(CC) $(CFLAGS) src/clientJoinGame.c -o clientJoinGame $(LFLAGS)
 
 ClientGUI.o: src/ClientGUI.c
 	$(CC) -c $(CCFLAGS) src/ClientGUI.c $(GTKLIB) -o ClientGUI.o

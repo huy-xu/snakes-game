@@ -118,7 +118,7 @@ bool isAuthenticated(char *username, char *password) {
 void signIn(int sessionID, char *body) {
   char *argv[2];
   char user[MAX], pass[MAX];
-  Message *response;
+  Message *response=(Message*)malloc(sizeof(Message));
 
   splitBody(argv, body);
   strcpy(user, argv[0]);

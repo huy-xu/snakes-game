@@ -77,6 +77,7 @@ int main(int argc, char *argv[]) {
           // Check if it was for closing , and also read the
           // incoming message
           receiveData(sd, request);
+          printf("%s",request);
           if (strcmp(request, "signOut") == 0) {
             // Somebody disconnected, get details and print
             getpeername(sd, (struct sockaddr *)&address, (socklen_t *)&addrlen);

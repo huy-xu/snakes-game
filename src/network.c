@@ -7,7 +7,7 @@
 #include <sys/types.h>
 #include <unistd.h>
 #include <string.h>
-
+#include "message.h"
 int initClient(int port, char *ip) {
   int sock, count = 0;
   struct sockaddr_in server;
@@ -111,10 +111,9 @@ int acceptConnection(int sock) {
   return new_socket;
 }
 
-int receiveData(int sock, Message *buff) {
+int receiveData(int sock, Message *msg) {
   int recvBytes;
-
-  recvBytes = recv(sock, buff,sizeof(Message), 0);
+  recvBytes = recv(sock, msg,sizeof(Message), 0);
   if (recvBytes < 0) {
     perror("Recv failed");
     exit(0);
@@ -122,8 +121,8 @@ int receiveData(int sock, Message *buff) {
   return recvBytes;
 }
 
-void sendData(int sock, char *buff) {
-  if (send(sock, buff, BUFF_SIZE-1, 0) < 0) {
+void sendData(int sock, Message *msg) {
+  if (send(sock, msg,sizeof(Message), 0) < 0) {
     perror("Send failed");
     exit(0);
   }
