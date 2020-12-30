@@ -4,10 +4,11 @@
 #include "constant.h"
 
 typedef struct message {
-  char header[MAX];
-  char body[MAX];
+  OPCODE code;   // opcode
+  char mess[MAX];  // message
+  char body[MAX];  // save data field
 } Message;
-
+void setMessageResponse(Message *message);
 Message handleRequest(char *request);
 void splitBody(char **argv, char *body);
 

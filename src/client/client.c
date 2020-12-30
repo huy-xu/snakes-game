@@ -4,14 +4,13 @@
 #include <string.h>
 
 #include "network.h"
-#include "request.h"
-
+#include "../server/message.h"
 void *send_message();
 void *receive_message();
 
 int sockfd;
 char buff[BUFF_SIZE + 1] = "#";
-
+Message *message;
 int main(int argc, char *argv[]) {
   pthread_t thread_send, thread_recv;
 
@@ -21,6 +20,7 @@ int main(int argc, char *argv[]) {
     sockfd = initClient(atoi(argv[2]), argv[1]);
 
     // Communicate with server
+    //pthread_create(&thread_send, NULL, &send_message, NULL);
     pthread_create(&thread_send, NULL, &send_message, NULL);
     pthread_create(&thread_recv, NULL, &receive_message, NULL);
 
@@ -33,19 +33,19 @@ int main(int argc, char *argv[]) {
 }
 
 void *send_message() {
-  while (1) {
+  while(1){
     gets(buff);
-    if (strlen(buff) == 0) {
-      break;
-    }
-
-    sendData(sockfd, buff);
+    if(strlen(buff)==0) break;
   }
+  printf("%s",buff);
+  //*message = handleRequest(buff);
+  //printf("%s",message->body);
+  sendData(sockfd,buff);
 }
 
 void *receive_message() {
   while (1) {
-    receiveData(sockfd, buff);
-    printf("%s\n", buff);
+    receiveData(sockfd, message);
+    printf("%s\n", message->mess);
   }
 }

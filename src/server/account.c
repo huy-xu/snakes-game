@@ -118,18 +118,21 @@ bool isAuthenticated(char *username, char *password) {
 void signIn(int sessionID, char *body) {
   char *argv[2];
   char user[MAX], pass[MAX];
-  char response[MAX];
+  Message *response;
 
   splitBody(argv, body);
   strcpy(user, argv[0]);
   strcpy(pass, argv[1]);
 
   if (!isAuthenticated(user, pass)) {
-    strcpy(response, "error-Wrong Username or Password");
+    response->code = SIGNIN_FAIL;
+    setMessageResponse(response);
   } else {
     sessions[sessionID].currentAccount = findAccount(accounts, user)->acc;
     sessions[sessionID].room.id = -1;
-    sprintf(response, "success-%s-%d",
+    response->code = SIGNIN_SUCCESS;
+    setMessageResponse(response);
+    sprintf(response->body, "%s-%d",
             sessions[sessionID].currentAccount.username,
             sessions[sessionID].currentAccount.scores);
   }
@@ -140,22 +143,23 @@ void signIn(int sessionID, char *body) {
 void changePassword(int sessionID, char *body) {
   char *argv[2];
   char newPass[MAX], confirmPass[MAX];
-  char response[MAX];
+  Message *response;
 
   splitBody(argv, body);
   strcpy(newPass, argv[0]);
   strcpy(confirmPass, argv[1]);
 
   if (strcmp(newPass, confirmPass) != 0) {
-    strcpy(response, "error-Confirm password did not matched");
+    response->code = CHANGE_PASSWORD_FAIL;
+    setMessageResponse(response);
   } else {
     ListAccountPtr current =
         findAccount(accounts, sessions[sessionID].currentAccount.username);
     strcpy(current->acc.password, newPass);
     writeData("account.txt", accounts);
-    strcpy(response, "success-Change password successfully");
+    response->code = CHANGE_PASSWORD_SUCCESS;
+    setMessageResponse(response);
   }
-
   sendData(client_socket[sessionID], response);
 }
 
@@ -163,7 +167,7 @@ void signUp(int sessionID, char *body) {
   Account acc;
   char *argv[3];
   char user[MAX], pass[MAX], confirmPass[MAX];
-  char response[MAX];
+  Message *response;
 
   splitBody(argv, body);
   strcpy(user, argv[0]);
@@ -171,26 +175,28 @@ void signUp(int sessionID, char *body) {
   strcpy(confirmPass, argv[2]);
 
   if (findAccount(accounts, user) != NULL) {
-    strcpy(response, "error-Username have been existed");
+    response->code = ACCOUNT_EXISTED;
+    setMessageResponse(response);
   } else {
     if (strcmp(pass, confirmPass) != 0) {
-      strcpy(response, "error-Confirm password did not matched");
+      response->code = PASS_NOT_MATCH;
+      setMessageResponse(response);
     } else {
       strcpy(acc.username, user);
       strcpy(acc.password, pass);
       acc.scores = 0;
       insertAccount(&accounts, acc);
       writeData("account.txt", accounts);
-      strcpy(response, "success-Sign up successfully");
+      response->code = REGISTER_SUCCESS;
+      setMessageResponse(response);
     }
   }
-
   sendData(client_socket[sessionID], response);
 }
 
 void showRank(int sessionID) {
   Account arr[20];
-  char response[MAX] = "listRank-";
+  Message *response;
   int count = 0;
   Account acc;
   Account tmp;
@@ -212,10 +218,11 @@ void showRank(int sessionID) {
     }
   }
   char str[MAX];
-
+  response->code = SHOW_RANK_SUCCESS;
+  setMessageResponse(response);
   for (i = 0; i < 5; i++) {
     sprintf(str, "%s:%d-", arr[i].username, arr[i].scores);
-    strcat(response, str);
+    strcat(response->body, str);
   }
 
   ListAccountPtr current =
@@ -223,7 +230,7 @@ void showRank(int sessionID) {
   for (i = 0; i < count; i++) {
     if (strcmp(arr[i].username, current->acc.username) == 0) {
       sprintf(str, "%s:%d", arr[i].username, arr[i].scores);
-      strcat(response, str);
+      strcat(response->body, str);
     }
   }
   fclose(file);

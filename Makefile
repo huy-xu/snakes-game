@@ -9,7 +9,7 @@ server: src/server/server.c
 	$(CC) -w -pthread src/server/server.c src/server/account.c src/server/message.c src/server/room.c src/server/network.c -o server
 
 client: src/client/client.c
-	$(CC) -w -pthread src/client/network.c src/client/client.c -o client
+	$(CC) -w -pthread src/client/network.c src/server/message.c src/client/client.c -o client
 
 startGame: src/server/startGame.c
 	$(CC) $(CFLAGS) src/server/startGame.c -o startGame $(LFLAGS)
