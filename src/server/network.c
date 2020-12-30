@@ -111,9 +111,9 @@ int acceptConnection(int sock) {
   return new_socket;
 }
 
-int receiveData(int sock, Message *buff) {
+int receiveData(int sock, char *buff) {
   int recvBytes;
-  recvBytes = recv(sock, buff, sizeof(Message), 0);
+  recvBytes = recv(sock, buff, BUFF_SIZE-1, 0);
   if (recvBytes < 0) {
     perror("Recv failed");
     exit(0);

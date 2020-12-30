@@ -100,7 +100,38 @@ int main(int argc, char *argv[]) {
                 signIn(i,message.body);
                 break;
               }
-              
+              case CHANGE_PASSWORD:{
+                changePassword(i,message.body);
+                break;
+              }
+              case SHOW_RANK:{
+                showRank(i);
+                break;
+              }
+              case SHOW_ROOM:{
+                showRoom(i);
+                break;
+              }
+              case CREATE_ROOM:{
+                createRoom(i);
+                break;
+              }
+              case JOIN_ROOM:{
+                joinRoom(i,message.body);
+                break;
+              } 
+              case LEAVE_ROOM:{
+                leaveRoom(i);
+                break;
+              }
+              case CHAT:{
+                sendChatMessage(i,message.body);
+                break;
+              }
+              case START_GAME:{
+                startGame(i);
+                break;
+              }
             }
             // if (strcmp(message.header, "signIn") == 0) {
             //   accounts = readData("account.txt");

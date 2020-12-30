@@ -5,7 +5,7 @@
 #include <string.h>
 
 #include "network.h"
-
+#include "message.h"
 extern int client_socket[MAX_CLIENTS];
 extern Session sessions[MAX_CLIENTS];
 extern ListRoomPtr rooms;
@@ -48,13 +48,14 @@ ListRoomPtr findRoom(ListRoomPtr sPtr, int id) {
 
 void showRoom(int sessionID) {
   char temp[MAX];
-  char response[MAX] = "success";
+  Message *response;
   ListRoomPtr currentRoomPtr = rooms;
-
+  response->code = SHOW_ROOM_SUCCESS;
+  setMessageResponse(response);
   while (currentRoomPtr != NULL) {
     sprintf(temp, "-%d:%d", currentRoomPtr->room.id,
             numOfPlayers(currentRoomPtr->room.players));
-    strcat(response, temp);
+    strcat(response->body, temp);
     currentRoomPtr = currentRoomPtr->nextPtr;
   }
 
@@ -63,7 +64,7 @@ void showRoom(int sessionID) {
 
 void createRoom(int sessionID) {
   Room newRoom;
-  char response[MAX];
+  Message *response;
 
   ID += 1;
   newRoom.id = ID;
@@ -76,8 +77,9 @@ void createRoom(int sessionID) {
 
   insertRoom(&rooms, newRoom);
   sessions[sessionID].room = newRoom;
-
-  sprintf(response, "success-%d", newRoom.id);
+  response->code = CREATE_ROOM_SUCCESS;
+  setMessageResponse(response);
+  sprintf(response->body, "%d", newRoom.id);
   sendData(client_socket[sessionID], response);
 }
 
@@ -120,29 +122,31 @@ int numOfPlayers(char players[MAX_PLAYERS][MAX]) {
 }
 
 void joinRoom(int sessionID, char *body) {
-  char response[MAX];
+  Message *response;
   int total;
   int roomID = atoi(body);
   ListRoomPtr currentRoom = findRoom(rooms, roomID);
 
   if (currentRoom == NULL) {
-    strcpy(response, "error-Room not found");
+    response->code = JOIN_ROOM_FAIL;
+    setMessageResponse(response);
     sendData(client_socket[sessionID], response);
   } else {
     if ((total = numOfPlayers(currentRoom->room.players)) == 4) {
-      strcpy(response, "error-Room is full");
+      response->code= JOIN_ROOM_FAIL;
+      setMessageResponse(response);
       sendData(client_socket[sessionID], response);
     } else {
       strcpy(currentRoom->room.players[total],
              sessions[sessionID].currentAccount.username);
       sessions[sessionID].room = currentRoom->room;
 
-      strcpy(response, "joinedRoom");
+      response->code = JOIN_ROOM_SUCCESS;
 
       for (int i = 0; i < MAX_PLAYERS; i++) {
         if (strcmp(currentRoom->room.players[i], "#") != 0) {
-          strcat(response, "-");
-          strcat(response, currentRoom->room.players[i]);
+          strcat(response->body, "-");
+          strcat(response->body, currentRoom->room.players[i]);
         }
       }
 
@@ -156,7 +160,7 @@ void joinRoom(int sessionID, char *body) {
 }
 
 void leaveRoom(int sessionID) {
-  char response[MAX];
+  Message *response;
   int roomID = sessions[sessionID].room.id;
   ListRoomPtr currentRoomPtr = findRoom(rooms, sessions[sessionID].room.id);
 
@@ -168,7 +172,9 @@ void leaveRoom(int sessionID) {
     }
   }
   sessions[sessionID].room.id = -1;
-  sprintf(response, "leftRoom-%s", sessions[sessionID].currentAccount.username);
+  response->code = LEAVE_ROOM_SUCCESS;
+  setMessageResponse(response);
+  sprintf(response->body, "%s", sessions[sessionID].currentAccount.username);
 
   if (numOfPlayers(currentRoomPtr->room.players) == 0) {
     deleteRoom(&rooms, currentRoomPtr->room);
@@ -180,14 +186,14 @@ void leaveRoom(int sessionID) {
     }
   }
 
-  strcpy(response, "success");
   sendData(client_socket[sessionID], response);
 }
 
 void sendChatMessage(int sessionID, char *body) {
-  char response[MAX];
-
-  sprintf(response, "%s: %s", sessions[sessionID].currentAccount.username,
+  Message *response;
+  response->code = CHAT_SUCCESS;
+  setMessageResponse(response);
+  sprintf(response->body, "%s: %s", sessions[sessionID].currentAccount.username,
           body);
 
   for (int i = 0; i < MAX_CLIENTS; i++) {
@@ -201,12 +207,13 @@ void startGame(int sessionID) {
   int socket;
   pthread_t thread_game;
   char startGame[MAX];
-  char response[MAX];
+  Message *response;
 
   sprintf(startGame, "./startGame %s", sessions[sessionID].room.port);
   pthread_create(&thread_game, NULL, &handleStartGame, (void *)startGame);
-
-  sprintf(response, "startGame-%s", sessions[sessionID].room.port);
+  response->code= START_GAME_SUCCESS;
+  setMessageResponse(response);
+  sprintf(response->body, "startGame-%s", sessions[sessionID].room.port);
 
   for (int i = 0; i < MAX_CLIENTS; i++) {
     if (sessions[i].room.id == sessions[sessionID].room.id) {
