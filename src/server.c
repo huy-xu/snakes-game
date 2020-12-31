@@ -77,41 +77,42 @@ int main(int argc, char *argv[]) {
           // Check if it was for closing , and also read the
           // incoming message
           receiveData(sd, request);
-          if (strcmp(request, "signOut") == 0) {
-            // Somebody disconnected, get details and print
-            getpeername(sd, (struct sockaddr *)&address, (socklen_t *)&addrlen);
-            printf("Host disconnected IP: %s, PORT: %d\n",
-                   inet_ntoa(address.sin_addr), ntohs(address.sin_port));
+          printf("%s\n", request);
+          // if (strcmp(request, "signOut") == 0) {
+          //   // Somebody disconnected, get details and print
+          //   getpeername(sd, (struct sockaddr *)&address, (socklen_t *)&addrlen);
+          //   printf("Host disconnected IP: %s, PORT: %d\n",
+          //          inet_ntoa(address.sin_addr), ntohs(address.sin_port));
 
-            // Close the socket and mark as 0 in list for reuse
-            close(sd);
-            client_socket[i] = 0;
-          } else {
-            message = handleRequest(request);
-            if (strcmp(message.header, "signIn") == 0) {
-              accounts = readData("account.txt");
-              signIn(i, message.body);
-            } else if (strcmp(message.header, "signUp") == 0) {
-              accounts = readData("account.txt");
-              signUp(i, message.body);
-            } else if (strcmp(message.header, "changePassword") == 0) {
-              changePassword(i, message.body);
-            } else if (strcmp(message.header, "showRank") == 0) {
-              showRank(i);
-            } else if (strcmp(message.header, "showRoom") == 0) {
-              showRoom(i);
-            } else if (strcmp(message.header, "createRoom") == 0) {
-              createRoom(i);
-            } else if (strcmp(message.header, "joinRoom") == 0) {
-              joinRoom(i, message.body);
-            } else if (strcmp(message.header, "leaveRoom") == 0) {
-              leaveRoom(i);
-            } else if (strcmp(message.header, "chat") == 0) {
-              sendChatMessage(i, message.body);
-            } else if (strcmp(message.header, "startGame") == 0) {
-              startGame(i);
-            }
-          }
+          //   // Close the socket and mark as 0 in list for reuse
+          //   close(sd);
+          //   client_socket[i] = 0;
+          // } else {
+          //   message = handleRequest(request);
+          //   if (strcmp(message.header, "signIn") == 0) {
+          //     accounts = readData("account.txt");
+          //     signIn(i, message.body);
+          //   } else if (strcmp(message.header, "signUp") == 0) {
+          //     accounts = readData("account.txt");
+          //     signUp(i, message.body);
+          //   } else if (strcmp(message.header, "changePassword") == 0) {
+          //     changePassword(i, message.body);
+          //   } else if (strcmp(message.header, "showRank") == 0) {
+          //     showRank(i);
+          //   } else if (strcmp(message.header, "showRoom") == 0) {
+          //     showRoom(i);
+          //   } else if (strcmp(message.header, "createRoom") == 0) {
+          //     createRoom(i);
+          //   } else if (strcmp(message.header, "joinRoom") == 0) {
+          //     joinRoom(i, message.body);
+          //   } else if (strcmp(message.header, "leaveRoom") == 0) {
+          //     leaveRoom(i);
+          //   } else if (strcmp(message.header, "chat") == 0) {
+          //     sendChatMessage(i, message.body);
+          //   } else if (strcmp(message.header, "startGame") == 0) {
+          //     startGame(i);
+          //   }
+          // }
         }
       }
     }

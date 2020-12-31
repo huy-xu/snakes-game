@@ -12,9 +12,13 @@
 // ID Window
 #define WINDOW_MAIN "window_main"
 
+// ID Stack
+#define STACK_CONTAINER "stack_container"
+#define STACK_MENU "stack_menu"
+
 // ID Container
 #define CONTAINER_MENU "container_menu"
-#define CONTAINER_LOG "container_menu_log"
+#define CONTAINER_MENU_LOG "container_menu_log"
 #define NUMBER_OF_CONTAINER 4
 
 // ID Entry
@@ -38,5 +42,6 @@ GtkBuilder *builder;
 GtkWidget *window;
 
 int gui(int serverfd);
+void *recv_handler(void *app_widget);
 
 #endif

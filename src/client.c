@@ -26,8 +26,6 @@ int main(int argc, char *argv[]) {
     // pthread_create(&thread_send, NULL, &send_message, NULL);
     // pthread_create(&thread_recv, NULL, &receive_message, NULL);
 
-    while (1)
-      ;
     close(sockfd);
   }
 

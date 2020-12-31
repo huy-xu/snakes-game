@@ -7,9 +7,6 @@
 #include <string.h>
 
 #include "network.h"
-#include "account.h"
-
-void *recv_handler(void *app_widget);
 
 int gui(int serverfd) {
   pthread_t tid;
@@ -57,7 +54,7 @@ void on_btn_menu_login_clicked(GtkButton *button, app_widgets *app_wdgts) {
   strcpy(password, gtk_entry_get_text(app_wdgts->w_entry_menu_log_pas));
   sprintf(request, "signIn-%s-%s", username, password);
   sendData(app_wdgts->serverfd, request);
-  
+
   return;
 }
 
@@ -70,7 +67,7 @@ void *recv_handler(void *app_widget) {
   // Response *res = (Response *)malloc(sizeof(Response));
 
   pthread_detach(pthread_self());
-  
+
   serverfd = widgets->serverfd;
 
   while (1) {
