@@ -16,8 +16,7 @@ ListRoomPtr rooms = NULL;
 
 int main(int argc, char *argv[]) {
   int master_socket, new_socket, activity, addrlen, max_sd, sd, i;
-  char request[BUFF_SIZE + 1];
-  Message message;
+  Message *message;
   struct sockaddr_in address;
   fd_set readfds;
 
@@ -76,9 +75,9 @@ int main(int argc, char *argv[]) {
         if (FD_ISSET(sd, &readfds)) {
           // Check if it was for closing , and also read the
           // incoming message
-          receiveData(sd, request);
-          printf("%s",request);
-          if (strcmp(request, "signOut") == 0) {
+          //int req= recv(sd,message,sizeof(Message),0);
+          //printf("%d",req);
+          if (message->code == LOGOUT) {
             // Somebody disconnected, get details and print
             getpeername(sd, (struct sockaddr *)&address, (socklen_t *)&addrlen);
             printf("Host disconnected IP: %s, PORT: %d\n",
@@ -88,75 +87,51 @@ int main(int argc, char *argv[]) {
             close(sd);
             client_socket[i] = 0;
           } else {
-            printf("%s",request);
-            message = handleRequest(request);
-            switch(message.code){
+            printf("%s\n",message->data);
+            switch(message->code){
               case REGISTER:{
                 accounts = readData("account.txt");
-                signUp(i,message.body);
+                signUp(i,message->data);
                 break;
               }
               case LOGIN:{
                 accounts = readData("account.txt");
-                signIn(i,message.body);
+                signIn(i,message->data);
                 break;
               }
-              case CHANGE_PASSWORD:{
-                changePassword(i,message.body);
-                break;
-              }
-              case SHOW_RANK:{
-                showRank(i);
-                break;
-              }
-              case SHOW_ROOM:{
-                showRoom(i);
-                break;
-              }
-              case CREATE_ROOM:{
-                createRoom(i);
-                break;
-              }
-              case JOIN_ROOM:{
-                joinRoom(i,message.body);
-                break;
-              } 
-              case LEAVE_ROOM:{
-                leaveRoom(i);
-                break;
-              }
-              case CHAT:{
-                sendChatMessage(i,message.body);
-                break;
-              }
-              case START_GAME:{
-                startGame(i);
-                break;
-              }
+              // case CHANGE_PASSWORD:{
+              //   changePassword(i,message->data);
+              //   break;
+              // }
+              // case SHOW_RANK:{
+              //   showRank(i);
+              //   break;
+              // }
+              // case SHOW_ROOM:{
+              //   showRoom(i);
+              //   break;
+              // }
+              // case CREATE_ROOM:{
+              //   createRoom(i);
+              //   break;
+              // }
+              // case JOIN_ROOM:{
+              //   joinRoom(i,message->data);
+              //   break;
+              // } 
+              // case LEAVE_ROOM:{
+              //   leaveRoom(i);
+              //   break;
+              // }
+              // case CHAT:{
+              //   sendChatMessage(i,message->data);
+              //   break;
+              // }
+              // case START_GAME:{
+              //   startGame(i);
+              //   break;
+              // }
             }
-            // if (strcmp(message.header, "signIn") == 0) {
-            //   accounts = readData("account.txt");
-            //   signIn(i, message.body);
-            // } else if (strcmp(message.header, "signUp") == 0) {
-            //   accounts = readData("account.txt");
-            //   signUp(i, message.body);
-            // } else if (strcmp(message.header, "changePassword") == 0) {
-            //   changePassword(i, message.body);
-            // } else if (strcmp(message.header, "showRank") == 0) {
-            //   showRank(i);
-            // } else if (strcmp(message.header, "showRoom") == 0) {
-            //   showRoom(i);
-            // } else if (strcmp(message.header, "createRoom") == 0) {
-            //   createRoom(i);
-            // } else if (strcmp(message.header, "joinRoom") == 0) {
-            //   joinRoom(i, message.body);
-            // } else if (strcmp(message.header, "leaveRoom") == 0) {
-            //   leaveRoom(i);
-            // } else if (strcmp(message.header, "chat") == 0) {
-            //   sendChatMessage(i, message.body);
-            // } else if (strcmp(message.header, "startGame") == 0) {
-            //   startGame(i);
-            // }
           }
         }
       }

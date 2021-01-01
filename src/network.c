@@ -113,7 +113,7 @@ int acceptConnection(int sock) {
 
 int receiveData(int sock, Message *msg) {
   int recvBytes;
-  recvBytes = recv(sock, msg,sizeof(Message), 0);
+  recvBytes = recv(sock,msg,sizeof(Message), 0);
   if (recvBytes < 0) {
     perror("Recv failed");
     exit(0);
@@ -122,7 +122,7 @@ int receiveData(int sock, Message *msg) {
 }
 
 void sendData(int sock, Message *msg) {
-  if (send(sock, msg,sizeof(Message), 0) < 0) {
+  if (send(sock,msg,sizeof(Message), 0) < 0) {
     perror("Send failed");
     exit(0);
   }

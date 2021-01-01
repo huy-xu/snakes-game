@@ -21,11 +21,12 @@ int main(int argc, char *argv[]) {
 
     // Communicate with server
     //pthread_create(&thread_send, NULL, &send_message, NULL);
-    pthread_create(&thread_send, NULL, &send_message, NULL);
-    pthread_create(&thread_recv, NULL, &receive_message, NULL);
-
-    while (strlen(buff) != 0)
-      ;
+    //pthread_create(&thread_recv, NULL, &receive_message, NULL);
+    Message *msg = (Message*) malloc(sizeof(Message));
+    msg->code= LOGIN;
+    strcpy(msg->data,"a-2");
+    //send(sockfd,msg,sizeof(Message),0);
+    printf("Hello %s",msg->data);
     close(sockfd);
   }
 
@@ -35,17 +36,17 @@ int main(int argc, char *argv[]) {
 void *send_message() {
   Message *msg = (Message*) malloc(sizeof(Message));
   msg->code= LOGIN;
-  //setMessageResponse(msg);
-  strcpy(msg->body,"a-2"); 
-  //sendData(sockfd,msg);
-  send(sockfd, msg,sizeof(Message), 0);
-  printf("%s",msg->body);
+  strcpy(msg->data,"a-2");
+  printf("%s",msg->data);
+  send(sockfd,msg,sizeof(Message),0);
 }
 
 void *receive_message() {
+  void *ptr;
   Message *message = (Message *) malloc(sizeof(Message));
   while (1) {
-    receiveData(sockfd, message);
-    printf("%s",message->body);
+    recv(sockfd,ptr,sizeof(Message),0);
+    message = (Message*)(ptr);
+    printf("%s\n",message->data);
   }
 }

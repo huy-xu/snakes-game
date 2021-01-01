@@ -126,42 +126,37 @@ void signIn(int sessionID, char *body) {
 
   if (!isAuthenticated(user, pass)) {
     response->code = SIGNIN_FAIL;
-    setMessageResponse(response);
   } else {
     sessions[sessionID].currentAccount = findAccount(accounts, user)->acc;
     sessions[sessionID].room.id = -1;
     response->code = SIGNIN_SUCCESS;
-    setMessageResponse(response);
-    sprintf(response->body, "%s-%d",
+    sprintf(response->data, "%s-%d",
             sessions[sessionID].currentAccount.username,
             sessions[sessionID].currentAccount.scores);
   }
-
   sendData(client_socket[sessionID], response);
 }
 
-void changePassword(int sessionID, char *body) {
-  char *argv[2];
-  char newPass[MAX], confirmPass[MAX];
-  Message *response;
+// void changePassword(int sessionID, char *body) {
+//   char *argv[2];
+//   char newPass[MAX], confirmPass[MAX];
+//   Message *response= (Message*)malloc(sizeof(Message));
 
-  splitBody(argv, body);
-  strcpy(newPass, argv[0]);
-  strcpy(confirmPass, argv[1]);
+//   splitBody(argv, body);
+//   strcpy(newPass, argv[0]);
+//   strcpy(confirmPass, argv[1]);
 
-  if (strcmp(newPass, confirmPass) != 0) {
-    response->code = CHANGE_PASSWORD_FAIL;
-    setMessageResponse(response);
-  } else {
-    ListAccountPtr current =
-        findAccount(accounts, sessions[sessionID].currentAccount.username);
-    strcpy(current->acc.password, newPass);
-    writeData("account.txt", accounts);
-    response->code = CHANGE_PASSWORD_SUCCESS;
-    setMessageResponse(response);
-  }
-  sendData(client_socket[sessionID], response);
-}
+//   if (strcmp(newPass, confirmPass) != 0) {
+//     response->code = CHANGE_PASSWORD_FAIL;
+//   } else {
+//     ListAccountPtr current =
+//         findAccount(accounts, sessions[sessionID].currentAccount.username);
+//     strcpy(current->acc.password, newPass);
+//     writeData("account.txt", accounts);
+//     response->code = CHANGE_PASSWORD_SUCCESS;
+//   }
+//   sendData(client_socket[sessionID], response);
+// }
 
 void signUp(int sessionID, char *body) {
   Account acc;
@@ -176,11 +171,9 @@ void signUp(int sessionID, char *body) {
 
   if (findAccount(accounts, user) != NULL) {
     response->code = ACCOUNT_EXISTED;
-    setMessageResponse(response);
   } else {
     if (strcmp(pass, confirmPass) != 0) {
       response->code = PASS_NOT_MATCH;
-      setMessageResponse(response);
     } else {
       strcpy(acc.username, user);
       strcpy(acc.password, pass);
@@ -188,51 +181,50 @@ void signUp(int sessionID, char *body) {
       insertAccount(&accounts, acc);
       writeData("account.txt", accounts);
       response->code = REGISTER_SUCCESS;
-      setMessageResponse(response);
     }
   }
   sendData(client_socket[sessionID], response);
 }
 
-void showRank(int sessionID) {
-  Account arr[20];
-  Message *response;
-  int count = 0;
-  Account acc;
-  Account tmp;
-  int i, j;
-  FILE *file;
-  file = fopen("account.txt", "r");
-  while (!feof(file)) {
-    fscanf(file, "%s %s %d\n", acc.username, acc.password, &(acc.scores));
-    arr[count] = acc;
-    count++;
-  }
-  for (i = 0; i < count; i++) {
-    for (j = count - 1; j > i; j--) {
-      if (arr[j].scores > arr[j - 1].scores) {
-        tmp = arr[j];
-        arr[j] = arr[j - 1];
-        arr[j - 1] = tmp;
-      }
-    }
-  }
-  char str[MAX];
-  response->code = SHOW_RANK_SUCCESS;
-  setMessageResponse(response);
-  for (i = 0; i < 5; i++) {
-    sprintf(str, "%s:%d-", arr[i].username, arr[i].scores);
-    strcat(response->body, str);
-  }
+// void showRank(int sessionID) {
+//   Account arr[20];
+//   Message *response;
+//   int count = 0;
+//   Account acc;
+//   Account tmp;
+//   int i, j;
+//   FILE *file;
+//   file = fopen("account.txt", "r");
+//   while (!feof(file)) {
+//     fscanf(file, "%s %s %d\n", acc.username, acc.password, &(acc.scores));
+//     arr[count] = acc;
+//     count++;
+//   }
+//   for (i = 0; i < count; i++) {
+//     for (j = count - 1; j > i; j--) {
+//       if (arr[j].scores > arr[j - 1].scores) {
+//         tmp = arr[j];
+//         arr[j] = arr[j - 1];
+//         arr[j - 1] = tmp;
+//       }
+//     }
+//   }
+//   char str[MAX];
+//   response->code = SHOW_RANK_SUCCESS;
+//   setMessageResponse(response);
+//   for (i = 0; i < 5; i++) {
+//     sprintf(str, "%s:%d-", arr[i].username, arr[i].scores);
+//     strcat(response->body, str);
+//   }
 
-  ListAccountPtr current =
-      findAccount(accounts, sessions[sessionID].currentAccount.username);
-  for (i = 0; i < count; i++) {
-    if (strcmp(arr[i].username, current->acc.username) == 0) {
-      sprintf(str, "%s:%d", arr[i].username, arr[i].scores);
-      strcat(response->body, str);
-    }
-  }
-  fclose(file);
-  sendData(client_socket[sessionID], response);
-}
+//   ListAccountPtr current =
+//       findAccount(accounts, sessions[sessionID].currentAccount.username);
+//   for (i = 0; i < count; i++) {
+//     if (strcmp(arr[i].username, current->acc.username) == 0) {
+//       sprintf(str, "%s:%d", arr[i].username, arr[i].scores);
+//       strcat(response->body, str);
+//     }
+//   }
+//   fclose(file);
+//   sendData(client_socket[sessionID], response);
+// }

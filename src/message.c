@@ -2,7 +2,7 @@
 
 #include <string.h>
 //set opcode
-void setMessageResponse(Message *message){
+/*void setMessageResponse(Message *message){
   switch(message->code){
     case SIGNIN_SUCCESS:
       strcpy(message->mess,"SignIn Successfully ");
@@ -50,89 +50,89 @@ void setMessageResponse(Message *message){
       strcpy(message->mess,"Chat successfully");
       break;
   }
-}
-Message handleRequest(char *request) {
-  int i, j, k;
-  Message message;
-  char header[MAX], body[MAX];
+}*/
+// Message handleRequest(char *request) {
+//   int i, j, k;
+//   Message *message = (Message*)malloc(sizeof(Message));
+//   char header[MAX], data[MAX];
 
-  for (i = 0, j = 0, k = 0; i <= strlen(request); i++) {
-    if (j >= 0) {
-      if (request[i] != '-') {
-        header[j] = request[i];
-        j++;
-      } else {
-        header[j] = '\0';
-        j = -1;
-      }
-    } else {
-      body[k] = request[i];
-      k++;
-    }
-  }
-  if (j != -1) {
-    header[j] = '\0';
-  }
-  body[k] = '\0';
-  if (strcmp(header,"REGISTER")==0){
-    message.code = REGISTER;
-  } else if(strcmp(header,"LOGIN")){
-    message.code= LOGIN;
-  } else if(strcmp(header,"LOGOUT")){
-    message.code= LOGOUT;
-  } else if(strcmp(header,"CREATE_ROOM")){
-    message.code= CREATE_ROOM;
-  } else if(strcmp(header,"JOIN_ROOM")){
-    message.code= JOIN_ROOM;
-  } else if(strcmp(header,"LEAVE_ROOM")){
-    message.code= LEAVE_ROOM;
-  } else if(strcmp(header,"START_GAME")){
-    message.code= START_GAME;
-  } else if(strcmp(header,"SHOW_ROOM")){
-    message.code= SHOW_ROOM;
-  } else if(strcmp(header,"CHAT")){
-    message.code= CHAT;
-  } else if(strcmp(header,"CHANGE_PASSWORD")){
-    message.code= CHANGE_PASSWORD;
-  } else if(strcmp(header,"SHOW_RANK")){
-    message.code= SHOW_RANK;
-  } else if(strcmp(header,"SIGNIN_SUCCESS")){
-    message.code= SIGNIN_SUCCESS;
-  } else if(strcmp(header,"SIGNIN_FAIL")){
-    message.code= SIGNIN_FAIL;
-  } else if(strcmp(header,"REGISTER_SUCCESS")){
-    message.code= REGISTER_SUCCESS;
-  } else if(strcmp(header,"ACCOUNT_EXISTED")){
-    message.code= ACCOUNT_EXISTED;
-  } else if(strcmp(header,"PASS_NOT_MATCH")){
-    message.code= PASS_NOT_MATCH;
-  } else if(strcmp(header,"CHANGE_PASSWORD_SUCCESS")){
-    message.code= CHANGE_PASSWORD_SUCCESS;
-  } else if(strcmp(header,"CHANGE_PASSWORD_FAIL")){
-    message.code= CHANGE_PASSWORD_FAIL;
-  } else if(strcmp(header,"LOGOUT_SUCCESS")){
-    message.code= LOGOUT_SUCCESS;
-  } else if(strcmp(header,"SHOW_RANK_SUCCESS")){
-    message.code= SHOW_RANK_SUCCESS;
-  } else if(strcmp(header,"CREATE_ROOM_SUCCESS")){
-    message.code= CREATE_ROOM_SUCCESS;
-  } else if(strcmp(header,"JOIN_ROOM_SUCCESS")){
-    message.code= JOIN_ROOM_SUCCESS;
-  } else if(strcmp(header,"JOIN_ROOM_FAIL")){
-    message.code= JOIN_ROOM_FAIL;
-  } else if(strcmp(header,"LEAVE_ROOM_SUCCESS")){
-    message.code= LEAVE_ROOM_SUCCESS;
-  } else if(strcmp(header,"START_GAME_SUCCESS")){
-    message.code= START_GAME_SUCCESS;
-  } else if(strcmp(header,"SHOW_ROOM_SUCCESS")){
-    message.code= SHOW_ROOM_SUCCESS;
-  } else if(strcmp(header,"CHAT_SUCCESS")){
-    message.code= CHAT_SUCCESS;
-  }
-  strcpy(message.body, body);
+//   for (i = 0, j = 0, k = 0; i <= strlen(request); i++) {
+//     if (j >= 0) {
+//       if (request[i] != '-') {
+//         header[j] = request[i];
+//         j++;
+//       } else {
+//         header[j] = '\0';
+//         j = -1;
+//       }
+//     } else {
+//       data[k] = request[i];
+//       k++;
+//     }
+//   }
+//   if (j != -1) {
+//     header[j] = '\0';
+//   }
+//   data[k] = '\0';
+//   if (strcmp(header,"REGISTER")==0){
+//     message->code = REGISTER;
+//   } else if(strcmp(header,"LOGIN")){
+//     message->code= LOGIN;
+//   } else if(strcmp(header,"LOGOUT")){
+//     message->code= LOGOUT;
+//   } else if(strcmp(header,"CREATE_ROOM")){
+//     message->code= CREATE_ROOM;
+//   } else if(strcmp(header,"JOIN_ROOM")){
+//     message->code= JOIN_ROOM;
+//   } else if(strcmp(header,"LEAVE_ROOM")){
+//     message->code= LEAVE_ROOM;
+//   } else if(strcmp(header,"START_GAME")){
+//     message->code= START_GAME;
+//   } else if(strcmp(header,"SHOW_ROOM")){
+//     message->code= SHOW_ROOM;
+//   } else if(strcmp(header,"CHAT")){
+//     message->code= CHAT;
+//   } else if(strcmp(header,"CHANGE_PASSWORD")){
+//     message->code= CHANGE_PASSWORD;
+//   } else if(strcmp(header,"SHOW_RANK")){
+//     message->code= SHOW_RANK;
+//   } else if(strcmp(header,"SIGNIN_SUCCESS")){
+//     message->code= SIGNIN_SUCCESS;
+//   } else if(strcmp(header,"SIGNIN_FAIL")){
+//     message->code= SIGNIN_FAIL;
+//   } else if(strcmp(header,"REGISTER_SUCCESS")){
+//     message->code= REGISTER_SUCCESS;
+//   } else if(strcmp(header,"ACCOUNT_EXISTED")){
+//     message->code= ACCOUNT_EXISTED;
+//   } else if(strcmp(header,"PASS_NOT_MATCH")){
+//     message->code= PASS_NOT_MATCH;
+//   } else if(strcmp(header,"CHANGE_PASSWORD_SUCCESS")){
+//     message->code= CHANGE_PASSWORD_SUCCESS;
+//   } else if(strcmp(header,"CHANGE_PASSWORD_FAIL")){
+//     message->code= CHANGE_PASSWORD_FAIL;
+//   } else if(strcmp(header,"LOGOUT_SUCCESS")){
+//     message->code= LOGOUT_SUCCESS;
+//   } else if(strcmp(header,"SHOW_RANK_SUCCESS")){
+//     message->code= SHOW_RANK_SUCCESS;
+//   } else if(strcmp(header,"CREATE_ROOM_SUCCESS")){
+//     message->code= CREATE_ROOM_SUCCESS;
+//   } else if(strcmp(header,"JOIN_ROOM_SUCCESS")){
+//     message->code= JOIN_ROOM_SUCCESS;
+//   } else if(strcmp(header,"JOIN_ROOM_FAIL")){
+//     message->code= JOIN_ROOM_FAIL;
+//   } else if(strcmp(header,"LEAVE_ROOM_SUCCESS")){
+//     message->code= LEAVE_ROOM_SUCCESS;
+//   } else if(strcmp(header,"START_GAME_SUCCESS")){
+//     message->code= START_GAME_SUCCESS;
+//   } else if(strcmp(header,"SHOW_ROOM_SUCCESS")){
+//     message->code= SHOW_ROOM_SUCCESS;
+//   } else if(strcmp(header,"CHAT_SUCCESS")){
+//     message->code= CHAT_SUCCESS;
+//   }
+//   strcpy(message->data, data);
 
-  return message;
-}
+//   return message;
+// }
 
 void splitBody(char **argv, char *body) {
   int i = 0;

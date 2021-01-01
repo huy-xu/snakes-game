@@ -5,8 +5,7 @@
 
 typedef struct message {
   OPCODE code;   // opcode
-  char mess[MAX];  // message
-  char body[MAX];  // save data field
+  char data[MAX];  // save data field
 } Message;
 void setMessageResponse(Message *message);
 Message handleRequest(char *request);
