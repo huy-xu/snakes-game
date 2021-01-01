@@ -27,9 +27,9 @@ ListAccountPtr findAccount(ListAccountPtr sPtr, char *username);
 
 bool isValid(char *str);
 bool isAuthenticated(char *username, char *password);
-void signIn(int sessionID, char *body);
-void changePassword(int sessionID, char *body);
-void signUp(int sessionID, char *body);
+void signIn(int sessionID, char *data);
+void changePassword(int sessionID, char *data);
+void signUp(int sessionID, char *data);
 void showRank(int sessionID);
 
 #endif

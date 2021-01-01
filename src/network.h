@@ -9,11 +9,12 @@
 #include <unistd.h>
 
 #include "constant.h"
+#include "message.h"
 
 int initClient(int port, char *ip);
 int initServer(int port);
 int acceptConnection(int sock);
-char *receiveData(int sock, char *buff);
-void sendData(int sock, char *buff);
+int receiveData(int sock, Message *msg);
+void sendData(int sock, Message *msg);
 
 #endif

@@ -16,8 +16,7 @@ ListRoomPtr rooms = NULL;
 
 int main(int argc, char *argv[]) {
   int master_socket, new_socket, activity, addrlen, max_sd, sd, i;
-  char request[BUFF_SIZE + 1];
-  Message message;
+  Message *request = (Message *)malloc(sizeof(Message));
   struct sockaddr_in address;
   fd_set readfds;
 
@@ -77,7 +76,7 @@ int main(int argc, char *argv[]) {
           // Check if it was for closing , and also read the
           // incoming message
           receiveData(sd, request);
-          printf("%s\n", request);
+          printf("Code: %d\nData: %s\n", request->code, request->data);
           // if (strcmp(request, "signOut") == 0) {
           //   // Somebody disconnected, get details and print
           //   getpeername(sd, (struct sockaddr *)&address, (socklen_t *)&addrlen);
