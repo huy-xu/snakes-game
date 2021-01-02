@@ -15,64 +15,75 @@ void signInReq(int serverfd, char *user, char *pass) {
   sprintf(request->data, "%s-%s", user, pass);
   sendData(serverfd, request);
 }
+// TODO
+ void changePasswordReq(int serverfd, char *newPass, char *reNewPass){
+   Message *request = (Message *)malloc(sizeof(Message));
 
-// TODO: sua lai theo format cua request.h
-// void changePassword(char *newPass, char *reNewPass) {
-//   char request[MAX];
-//   sprintf(request, "changePassword-%s-%s", newPass, reNewPass);
-//   sendData(sockfd, request);
-// }
+   request->code = CHANGE_PASSWORD;
+   sprintf(request->data,"%s-%s",newPass,reNewPass);
+   sendData(serverfd,request);
+ }
+ void signUpReq(int serverfd, char *user, char *pass, char *confirmPass){
+   Message *request = (Message *)malloc(sizeof(Message));
 
-// void signUp(char *user, char *pass, char *confirmPass) {
-//   char request[MAX];
-//   sprintf(request, "signUp-%s-%s-%s", user, pass, confirmPass);
-//   sendData(sockfd, request);
-// }
+   request->code = REGISTER;
+   sprintf(request->data,"%s-%s-%s",user,pass,confirmPass);
+   sendData(serverfd,request);
+ }
 
-// void showRank() {
-//   char request[MAX];
-//   sprintf(request, "showRank");
-//   sendData(sockfd, request);
-// }
+ void showRankReq(int serverfd){
+   Message *request = (Message *)malloc(sizeof(Message));
 
-// void signOut() {
-//   char request[MAX];
-//   sprintf(request, "signOut");
-//   sendData(sockfd, request);
-// }
+   request->code = SHOW_RANK;
+   strcpy(request->data,"#");
+   sendData(serverfd,request);
+ }
+ void signOutReq(int serverfd){
+   Message *request = (Message *)malloc(sizeof(Message));
 
-// void createRoom() {
-//   char request[MAX];
-//   sprintf(request, "createRoom");
-//   sendData(sockfd, request);
-// }
+   request->code = LOGOUT;
+   strcpy(request->data,"#");
+   sendData(serverfd,request);
+ }
+ void createRoomReq(int serverfd){
+   Message *request = (Message *)malloc(sizeof(Message));
 
-// void leaveRoom() {
-//   char request[MAX];
-//   sprintf(request, "leaveRoom");
-//   sendData(sockfd, request);
-// }
+   request->code = CREATE_ROOM;
+   strcpy(request->data,"#");
+   sendData(serverfd,request);
+ }
+ void leaveRoomReq(int serverfd){
+   Message *request = (Message *)malloc(sizeof(Message));
 
-// void showRoom() {
-//   char request[MAX];
-//   sprintf(request, "showRoom");
-//   sendData(sockfd, request);
-// }
+   request->code = LEAVE_ROOM;
+   strcpy(request->data,"#");
+   sendData(serverfd,request);
+ }
+ void showRoomReq(int serverfd){
+   Message *request = (Message *)malloc(sizeof(Message));
 
-// void joinRoom(char *roomID) {
-//   char request[MAX];
-//   sprintf(request, "joinRoom-%s", roomID);
-//   sendData(sockfd, request);
-// }
+   request->code = SHOW_ROOM;
+   strcpy(request->data,"#");
+   sendData(serverfd,request);
+ }
+ void joinRoomReq(int serverfd, char *roomID){
+   Message *request = (Message *)malloc(sizeof(Message));
 
-// void chatRoom(char *message) {
-//   char request[MAX];
-//   sprintf(request, "chat-%s", message);
-//   sendData(sockfd, request);
-// }
+   request->code = JOIN_ROOM;
+   strcpy(request->data,roomID);
+   sendData(serverfd,request);
+ }
+ void chatRoomReq(int serverfd, char *message){
+   Message *request = (Message *)malloc(sizeof(Message));
 
-// void startGame() {
-//   char request[MAX];
-//   sprintf(request, "startGame");
-//   sendData(sockfd, request);
-// }
+   request->code = CHAT;
+   strcpy(request->data,message);
+   sendData(serverfd,request);
+ }
+ void startGameReq(int serverfd){
+    Message *request = (Message *)malloc(sizeof(Message));
+
+   request->code = START_GAME;
+   strcpy(request->data,"#");
+   sendData(serverfd,request);
+ }

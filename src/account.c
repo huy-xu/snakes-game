@@ -119,7 +119,6 @@ void signIn(int sessionID, char *data) {
   char *argv[2];
   char user[MAX], pass[MAX];
   Message *response = (Message *)malloc(sizeof(Message));
-
   splitData(argv, data);
   strcpy(user, argv[0]);
   strcpy(pass, argv[1]);
@@ -134,7 +133,8 @@ void signIn(int sessionID, char *data) {
             sessions[sessionID].currentAccount.username,
             sessions[sessionID].currentAccount.scores);
   }
-  sendData(client_socket[sessionID], response);
+  printf("%d\t%s\n",response->code,response->data);
+  //sendData(client_socket[sessionID], response);
 }
 
 // void changePassword(int sessionID, char *data) {

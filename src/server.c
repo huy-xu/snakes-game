@@ -11,7 +11,7 @@
 // Initialise all client_socket[] to 0 so not checked
 int client_socket[MAX_CLIENTS] = {0};
 Session sessions[MAX_CLIENTS] = {{NULL, NULL}};
-ListAccountPtr accounts = NULL;
+ListAccountPtr accounts;
 ListRoomPtr rooms = NULL;
 
 int main(int argc, char *argv[]) {
@@ -71,12 +71,17 @@ int main(int argc, char *argv[]) {
       // Else its some IO operation on some other socket
       for (i = 0; i < MAX_CLIENTS; i++) {
         sd = client_socket[i];
-
         if (FD_ISSET(sd, &readfds)) {
           // Check if it was for closing , and also read the
           // incoming message
           receiveData(sd, request);
           printf("Code: %d\nData: %s\n", request->code, request->data);
+          switch(request->code){
+            case 1:{
+              signIn(sd,request->data);
+              break;
+            }
+          }
           // if (strcmp(request, "signOut") == 0) {
           //   // Somebody disconnected, get details and print
           //   getpeername(sd, (struct sockaddr *)&address, (socklen_t *)&addrlen);
