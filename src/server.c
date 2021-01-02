@@ -18,7 +18,6 @@ int main(int argc, char *argv[]) {
   int master_socket, new_socket, activity, addrlen, max_sd, sd, i;
   struct sockaddr_in address;
   fd_set readfds;
-  void *tmp;
   Message *request = (Message *)malloc(sizeof(Message));
 
   if (argc != 2) {
@@ -75,15 +74,13 @@ int main(int argc, char *argv[]) {
         if (FD_ISSET(sd, &readfds)) {
           // Check if it was for closing , and also read the
           // incoming message
-          // receiveData(sd, request);
-          receiveData(sd, tmp);
-          request = (Message *)tmp;
+          receiveData(sd, request);
           printf("Code: %d\nData: %s\n", request->code, request->data);
           if (request->code == SIGNIN) {
+            // accounts = readData("account.txt");
             signIn(i, request->data);
           }
-
-          // accounts = readData("account.txt");
+          
           // switch (code) {
           //   case SIGNIN:              
           //     signIn(i, data);

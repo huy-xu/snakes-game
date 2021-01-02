@@ -135,7 +135,7 @@ void signIn(int sessionID, char *data) {
             sessions[sessionID].currentAccount.scores);
   }
   printf("%d\t%s\n", response->code, response->data);
-  // sendData(client_socket[sessionID], response);
+  sendData(client_socket[sessionID], response);
 }
 
 // void changePassword(int sessionID, char *data) {

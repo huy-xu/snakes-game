@@ -62,7 +62,6 @@ int gui(int serverfd) {
 void *recv_handler(void *app_widget) {
   int serverfd;
   app_widgets *widgets = (app_widgets *)app_widget;
-  void *tmp;
   Message *response = (Message *)malloc(sizeof(Message));
 
   pthread_detach(pthread_self());
@@ -70,9 +69,8 @@ void *recv_handler(void *app_widget) {
   serverfd = widgets->serverfd;
 
   while (1) {
-    receiveData(widgets->serverfd, tmp);
-    response = (Message *)tmp;
-    printf("Server Code: %d\nServer Data: %s\n", response);
+    receiveData(widgets->serverfd, response);
+    printf("Server Code: %d\n", response->code);
     g_idle_add((GSourceFunc)handle_res, widgets);
   }
 
@@ -80,17 +78,22 @@ void *recv_handler(void *app_widget) {
 }
 
 gboolean handle_res(app_widgets *widgets) {
-  Message *response = widgets->msg;
+  Message *response = (Message *)malloc(sizeof(Message));
 
+  response = widgets->msg;
+
+  printf("%d\n", response->code);
   switch (response->code) {
     case SIGNIN_SUCCESS:
-      printf("%s\n", response->data);
+      printf("%d\n", response->code);
       break;
 
     default:
       printf("Did not handle\n");
       break;
   }
+
+  return FALSE;
 }
 
 // called when window is closed
