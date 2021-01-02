@@ -11,14 +11,15 @@
 // Initialise all client_socket[] to 0 so not checked
 int client_socket[MAX_CLIENTS] = {0};
 Session sessions[MAX_CLIENTS] = {{NULL, NULL}};
-ListAccountPtr accounts;
+ListAccountPtr accounts = NULL;
 ListRoomPtr rooms = NULL;
 
 int main(int argc, char *argv[]) {
   int master_socket, new_socket, activity, addrlen, max_sd, sd, i;
-  Message *request = (Message *)malloc(sizeof(Message));
   struct sockaddr_in address;
   fd_set readfds;
+  void *tmp;
+  Message *request = (Message *)malloc(sizeof(Message));
 
   if (argc != 2) {
     puts("Wrong parameter");
@@ -74,18 +75,39 @@ int main(int argc, char *argv[]) {
         if (FD_ISSET(sd, &readfds)) {
           // Check if it was for closing , and also read the
           // incoming message
-          receiveData(sd, request);
+          // receiveData(sd, request);
+          receiveData(sd, tmp);
+          request = (Message *)tmp;
           printf("Code: %d\nData: %s\n", request->code, request->data);
-          switch(request->code){
-            case 1:{
-              signIn(sd,request->data);
-              break;
-            }
+          if (request->code == SIGNIN) {
+            signIn(i, request->data);
           }
+
+          // accounts = readData("account.txt");
+          // switch (code) {
+          //   case SIGNIN:              
+          //     signIn(i, data);
+          //     break;
+
+          //   case SIGNOUT:
+          //     // Somebody disconnected, get details and print
+          //     getpeername(sd, (struct sockaddr *)&address,
+          //                 (socklen_t *)&addrlen);
+          //     printf("Host disconnected IP: %s, PORT: %d\n",
+          //            inet_ntoa(address.sin_addr), ntohs(address.sin_port));
+
+          //     // Close the socket and mark as 0 in list for reuse
+          //     close(sd);
+          //     client_socket[i] = 0;
+          //     break;
+
+          //   default:
+          //     break;
+          // }
           // if (strcmp(request, "signOut") == 0) {
           //   // Somebody disconnected, get details and print
-          //   getpeername(sd, (struct sockaddr *)&address, (socklen_t *)&addrlen);
-          //   printf("Host disconnected IP: %s, PORT: %d\n",
+          //   getpeername(sd, (struct sockaddr *)&address, (socklen_t
+          //   *)&addrlen); printf("Host disconnected IP: %s, PORT: %d\n",
           //          inet_ntoa(address.sin_addr), ntohs(address.sin_port));
 
           //   // Close the socket and mark as 0 in list for reuse

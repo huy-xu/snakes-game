@@ -61,21 +61,36 @@ int gui(int serverfd) {
 
 void *recv_handler(void *app_widget) {
   int serverfd;
-  char response[MAX];
   app_widgets *widgets = (app_widgets *)app_widget;
-  // Response *res = (Response *)malloc(sizeof(Response));
+  void *tmp;
+  Message *response = (Message *)malloc(sizeof(Message));
 
   pthread_detach(pthread_self());
 
   serverfd = widgets->serverfd;
 
   while (1) {
-    receiveData(widgets->serverfd, response);
-    printf("%s\n", response);
-    // g_idle_add((GSourceFunc)handle_res, widgets);
+    receiveData(widgets->serverfd, tmp);
+    response = (Message *)tmp;
+    printf("Server Code: %d\nServer Data: %s\n", response);
+    g_idle_add((GSourceFunc)handle_res, widgets);
   }
 
   close(serverfd);
+}
+
+gboolean handle_res(app_widgets *widgets) {
+  Message *response = widgets->msg;
+
+  switch (response->code) {
+    case SIGNIN_SUCCESS:
+      printf("%s\n", response->data);
+      break;
+
+    default:
+      printf("Did not handle\n");
+      break;
+  }
 }
 
 // called when window is closed
@@ -117,6 +132,8 @@ void on_btn_log_clicked(GtkButton *button, app_widgets *app_wdgts) {
 // }
 
 void on_btn_logout_clicked(GtkButton *button, app_widgets *app_wdgts) {
+  signOutReq(app_wdgts->serverfd);
+
   gtk_stack_set_visible_child(app_wdgts->w_stack_home,
                               app_wdgts->w_container_menu);
   gtk_stack_set_visible_child(app_wdgts->w_stack_menu,

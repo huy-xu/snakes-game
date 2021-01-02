@@ -50,5 +50,6 @@ GtkWidget *window;
 
 int gui(int serverfd);
 void *recv_handler(void *app_widget);
+gboolean handle_res(app_widgets *widgets);
 
 #endif
