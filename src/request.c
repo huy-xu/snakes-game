@@ -7,7 +7,6 @@
 #include "network.h"
 
 extern int sockfd;
-
 void signInReq(int serverfd, char *user, char *pass) {
   Message *request = (Message *)malloc(sizeof(Message));
 

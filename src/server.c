@@ -11,7 +11,7 @@
 // Initialise all client_socket[] to 0 so not checked
 int client_socket[MAX_CLIENTS] = {0};
 Session sessions[MAX_CLIENTS] = {{NULL, NULL}};
-ListAccountPtr accounts = NULL;
+ListAccountPtr accounts= NULL;
 ListRoomPtr rooms = NULL;
 
 int main(int argc, char *argv[]) {
@@ -19,12 +19,11 @@ int main(int argc, char *argv[]) {
   struct sockaddr_in address;
   fd_set readfds;
   Message *request = (Message *)malloc(sizeof(Message));
-
+  accounts = readData("src/account.txt");
   if (argc != 2) {
     puts("Wrong parameter");
   } else {
     master_socket = initServer(atoi(argv[1]));
-
     while (true) {
       // Clear the socket set
       FD_ZERO(&readfds);
@@ -77,14 +76,8 @@ int main(int argc, char *argv[]) {
           receiveData(sd, request);
           printf("Code: %d\nData: %s\n", request->code, request->data);
           if (request->code == SIGNIN) {
-            // accounts = readData("account.txt");
             signIn(i, request->data);
           }
-          
-          // switch (code) {
-          //   case SIGNIN:              
-          //     signIn(i, data);
-          //     break;
 
           //   case SIGNOUT:
           //     // Somebody disconnected, get details and print

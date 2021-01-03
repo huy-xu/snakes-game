@@ -70,7 +70,7 @@ void *recv_handler(void *app_widget) {
 
   while (1) {
     receiveData(widgets->serverfd, response);
-    printf("Server Code: %d\n", response->code);
+    printf("Server Code: %d \t Server data: %s\n", response->code,response->data);
     widgets->msg = response;
     g_idle_add((GSourceFunc)handle_res, widgets);
   }
@@ -79,15 +79,13 @@ void *recv_handler(void *app_widget) {
 }
 
 gboolean handle_res(app_widgets *widgets) {
-  Message *response = (Message *)malloc(sizeof(Message));
 
-  switch (response->code) {
+  switch (widgets->msg->code) {
     case SIGNIN_SUCCESS:
-      printf("%d\n", response->code);
+      printf("%d\n", widgets->msg->code);
       break;
-
-    default:
-      printf("Did not handle\n");
+    case SIGNIN_FAIL:
+      printf("%d\n",widgets->msg->code);
       break;
   }
 
