@@ -46,190 +46,190 @@ ListRoomPtr findRoom(ListRoomPtr sPtr, int id) {
   }
 }
 
-// void showRoom(int sessionID) {
-//   char temp[MAX];
-//   Message *response;
-//   ListRoomPtr currentRoomPtr = rooms;
-//   response->code = SHOW_ROOM_SUCCESS;
-//   setMessageResponse(response);
-//   while (currentRoomPtr != NULL) {
-//     sprintf(temp, "-%d:%d", currentRoomPtr->room.id,
-//             numOfPlayers(currentRoomPtr->room.players));
-//     strcat(response->data, temp);
-//     currentRoomPtr = currentRoomPtr->nextPtr;
-//   }
+void showRoom(int sessionID) {
+  char temp[MAX];
+  Message *response = (Message *)malloc(sizeof(Message));
+  ListRoomPtr currentRoomPtr = rooms;
+  response->code = SHOW_ROOM_SUCCESS;
+  
+  while (currentRoomPtr != NULL) {
+    sprintf(temp, "%d-%d", currentRoomPtr->room.id,
+            numOfPlayers(currentRoomPtr->room.players));
+    strcat(response->data, temp);
+    currentRoomPtr = currentRoomPtr->nextPtr;
+  }
 
-//   sendData(client_socket[sessionID], response);
-// }
+  sendData(client_socket[sessionID], response);
+}
 
-// void createRoom(int sessionID) {
-//   Room newRoom;
-//   Message *response;
+void createRoom(int sessionID) {
+  Room newRoom;
+  Message *response= (Message *)malloc(sizeof(Message));
 
-//   ID += 1;
-//   newRoom.id = ID;
-//   sprintf(newRoom.port, "%s%d", DEFAULT_PORT, ID);
-//   for (int i = 0; i < MAX_PLAYERS; i++) {
-//     strcpy(newRoom.players[i], "#");
-//   }
+  ID += 1;
+  newRoom.id = ID;
+  sprintf(newRoom.port, "%s%d", DEFAULT_PORT, ID);
+  for (int i = 0; i < MAX_PLAYERS; i++) {
+    strcpy(newRoom.players[i], "#");
+  }
 
-//   strcpy(newRoom.players[0], sessions[sessionID].currentAccount.username);
+  strcpy(newRoom.players[0], sessions[sessionID].currentAccount.username);
 
-//   insertRoom(&rooms, newRoom);
-//   sessions[sessionID].room = newRoom;
-//   response->code = CREATE_ROOM_SUCCESS;
-//   setMessageResponse(response);
-//   sprintf(response->data, "%d", newRoom.id);
-//   sendData(client_socket[sessionID], response);
-// }
+  insertRoom(&rooms, newRoom);
+  sessions[sessionID].room = newRoom;
+  response->code = CREATE_ROOM_SUCCESS;
+  
+  sprintf(response->data, "%d", newRoom.id);
+  sendData(client_socket[sessionID], response);
+}
 
-// void deleteRoom(ListRoomPtr *sPtr, Room room) {
-//   ListRoomPtr tempPtr, currentPtr, prevPtr;
+void deleteRoom(ListRoomPtr *sPtr, Room room) {
+  ListRoomPtr tempPtr, currentPtr, prevPtr;
 
-//   tempPtr = NULL;
-//   prevPtr = NULL;
-//   currentPtr = *sPtr;
+  tempPtr = NULL;
+  prevPtr = NULL;
+  currentPtr = *sPtr;
 
-//   if ((*sPtr)->room.id == room.id) {
-//     tempPtr = *sPtr;
-//     *sPtr = (*sPtr)->nextPtr;
-//     free(tempPtr);
-//   } else {
-//     while (currentPtr != NULL && room.id != currentPtr->room.id) {
-//       prevPtr = currentPtr;
-//       currentPtr = currentPtr->nextPtr;
-//     }
+  if ((*sPtr)->room.id == room.id) {
+    tempPtr = *sPtr;
+    *sPtr = (*sPtr)->nextPtr;
+    free(tempPtr);
+  } else {
+    while (currentPtr != NULL && room.id != currentPtr->room.id) {
+      prevPtr = currentPtr;
+      currentPtr = currentPtr->nextPtr;
+    }
 
-//     if (currentPtr != NULL) {
-//       tempPtr = currentPtr;
-//       prevPtr->nextPtr = currentPtr->nextPtr;
-//       currentPtr = currentPtr->nextPtr;
-//       free(tempPtr);
-//     }
-//   }
-// }
+    if (currentPtr != NULL) {
+      tempPtr = currentPtr;
+      prevPtr->nextPtr = currentPtr->nextPtr;
+      currentPtr = currentPtr->nextPtr;
+      free(tempPtr);
+    }
+  }
+}
 
-// int numOfPlayers(char players[MAX_PLAYERS][MAX]) {
-//   int total = 0;
+int numOfPlayers(char players[MAX_PLAYERS][MAX]) {
+  int total = 0;
 
-//   for (int i = 0; i < MAX_PLAYERS; i++) {
-//     if (strcmp(players[i], "#") != 0) {
-//       total += 1;
-//     }
-//   }
+  for (int i = 0; i < MAX_PLAYERS; i++) {
+    if (strcmp(players[i], "#") != 0) {
+      total += 1;
+    }
+  }
 
-//   return total;
-// }
+  return total;
+}
 
-// void joinRoom(int sessionID, char *data) {
-//   Message *response;
-//   int total;
-//   int roomID = atoi(data);
-//   ListRoomPtr currentRoom = findRoom(rooms, roomID);
+void joinRoom(int sessionID, char *data) {
+  Message *response= (Message *)malloc(sizeof(Message));
+  int total;
+  int roomID = atoi(data);
+  ListRoomPtr currentRoom = findRoom(rooms, roomID);
 
-//   if (currentRoom == NULL) {
-//     response->code = JOIN_ROOM_FAIL;
-//     setMessageResponse(response);
-//     sendData(client_socket[sessionID], response);
-//   } else {
-//     if ((total = numOfPlayers(currentRoom->room.players)) == 4) {
-//       response->code= JOIN_ROOM_FAIL;
-//       setMessageResponse(response);
-//       sendData(client_socket[sessionID], response);
-//     } else {
-//       strcpy(currentRoom->room.players[total],
-//              sessions[sessionID].currentAccount.username);
-//       sessions[sessionID].room = currentRoom->room;
+  if (currentRoom == NULL) {
+    response->code = JOIN_ROOM_FAIL;
+    
+    sendData(client_socket[sessionID], response);
+  } else {
+    if ((total = numOfPlayers(currentRoom->room.players)) == 4) {
+      response->code= JOIN_ROOM_FAIL;
+      
+      sendData(client_socket[sessionID], response);
+    } else {
+      strcpy(currentRoom->room.players[total],
+             sessions[sessionID].currentAccount.username);
+      sessions[sessionID].room = currentRoom->room;
 
-//       response->code = JOIN_ROOM_SUCCESS;
+      response->code = JOIN_ROOM_SUCCESS;
 
-//       for (int i = 0; i < MAX_PLAYERS; i++) {
-//         if (strcmp(currentRoom->room.players[i], "#") != 0) {
-//           strcat(response->data, "-");
-//           strcat(response->data, currentRoom->room.players[i]);
-//         }
-//       }
+      for (int i = 0; i < MAX_PLAYERS; i++) {
+        if (strcmp(currentRoom->room.players[i], "#") != 0) {
+          strcat(response->data, "-");
+          strcat(response->data, currentRoom->room.players[i]);
+        }
+      }
 
-//       for (int i = 0; i < MAX_CLIENTS; i++) {
-//         if (sessions[i].room.id == sessions[sessionID].room.id) {
-//           sendData(client_socket[i], response);
-//         }
-//       }
-//     }
-//   }
-// }
+      for (int i = 0; i < MAX_CLIENTS; i++) {
+        if (sessions[i].room.id == sessions[sessionID].room.id) {
+          sendData(client_socket[i], response);
+        }
+      }
+    }
+  }
+}
 
-// void leaveRoom(int sessionID) {
-//   Message *response;
-//   int roomID = sessions[sessionID].room.id;
-//   ListRoomPtr currentRoomPtr = findRoom(rooms, sessions[sessionID].room.id);
+void leaveRoom(int sessionID) {
+  Message *response=(Message *)malloc(sizeof(Message));
+  int roomID = sessions[sessionID].room.id;
+  ListRoomPtr currentRoomPtr = findRoom(rooms, sessions[sessionID].room.id);
 
-//   for (int i = 0; i < MAX_PLAYERS; i++) {
-//     if (strcmp(currentRoomPtr->room.players[i],
-//                sessions[sessionID].currentAccount.username) == 0) {
-//       strcpy(currentRoomPtr->room.players[i], "#");
-//       break;
-//     }
-//   }
-//   sessions[sessionID].room.id = -1;
-//   response->code = LEAVE_ROOM_SUCCESS;
-//   setMessageResponse(response);
-//   sprintf(response->data, "%s", sessions[sessionID].currentAccount.username);
+  for (int i = 0; i < MAX_PLAYERS; i++) {
+    if (strcmp(currentRoomPtr->room.players[i],
+               sessions[sessionID].currentAccount.username) == 0) {
+      strcpy(currentRoomPtr->room.players[i], "#");
+      break;
+    }
+  }
+  sessions[sessionID].room.id = -1;
+  response->code = LEAVE_ROOM_SUCCESS;
+  
+  sprintf(response->data, "%s", sessions[sessionID].currentAccount.username);
 
-//   if (numOfPlayers(currentRoomPtr->room.players) == 0) {
-//     deleteRoom(&rooms, currentRoomPtr->room);
-//   }
+  if (numOfPlayers(currentRoomPtr->room.players) == 0) {
+    deleteRoom(&rooms, currentRoomPtr->room);
+  }
 
-//   for (int i = 0; i < MAX_CLIENTS; i++) {
-//     if (sessions[i].room.id == roomID) {
-//       sendData(client_socket[i], response);
-//     }
-//   }
+  for (int i = 0; i < MAX_CLIENTS; i++) {
+    if (sessions[i].room.id == roomID) {
+      sendData(client_socket[i], response);
+    }
+  }
 
-//   sendData(client_socket[sessionID], response);
-// }
+  sendData(client_socket[sessionID], response);
+}
 
-// void sendChatMessage(int sessionID, char *data) {
-//   Message *response;
-//   response->code = CHAT_SUCCESS;
-//   setMessageResponse(response);
-//   sprintf(response->data, "%s: %s",
-//   sessions[sessionID].currentAccount.username,
-//           data);
+void sendChatMessage(int sessionID, char *data) {
+  Message *response=(Message *)malloc(sizeof(Message));
+  response->code = CHAT_SUCCESS;
+  
+  sprintf(response->data, "%s: %s",
+  sessions[sessionID].currentAccount.username,
+          data);
 
-//   for (int i = 0; i < MAX_CLIENTS; i++) {
-//     if (sessions[i].room.id == sessions[sessionID].room.id) {
-//       sendData(client_socket[i], response);
-//     }
-//   }
-// }
+  for (int i = 0; i < MAX_CLIENTS; i++) {
+    if (sessions[i].room.id == sessions[sessionID].room.id) {
+      sendData(client_socket[i], response);
+    }
+  }
+}
 
-// void startGame(int sessionID) {
-//   int socket;
-//   pthread_t thread_game;
-//   char startGame[MAX];
-//   Message *response;
+void startGame(int sessionID) {
+  int socket;
+  pthread_t thread_game;
+  char startGame[MAX];
+  Message *response= (Message *)malloc(sizeof(Message));
 
-//   sprintf(startGame, "./startGame %s", sessions[sessionID].room.port);
-//   pthread_create(&thread_game, NULL, &handleStartGame, (void *)startGame);
-//   response->code= START_GAME_SUCCESS;
-//   setMessageResponse(response);
-//   sprintf(response->data, "startGame-%s", sessions[sessionID].room.port);
+  sprintf(startGame, "./startGame %s", sessions[sessionID].room.port);
+  pthread_create(&thread_game, NULL, &handleStartGame, (void *)startGame);
+  response->code= START_GAME_SUCCESS;
+  
+  sprintf(response->data, "startGame-%s", sessions[sessionID].room.port);
 
-//   for (int i = 0; i < MAX_CLIENTS; i++) {
-//     if (sessions[i].room.id == sessions[sessionID].room.id) {
-//       socket = client_socket[i];
-//       sendData(socket, response);
-//     }
-//   }
-// }
+  for (int i = 0; i < MAX_CLIENTS; i++) {
+    if (sessions[i].room.id == sessions[sessionID].room.id) {
+      socket = client_socket[i];
+      sendData(socket, response);
+    }
+  }
+}
 
-// void *handleStartGame(void *arg) {
-//   pthread_detach(pthread_self());
-//   char startGame[MAX];
+void *handleStartGame(void *arg) {
+  pthread_detach(pthread_self());
+  char startGame[MAX];
 
-//   strcpy(startGame, (char *)arg);
-//   printf("%s\n", startGame);
+  strcpy(startGame, (char *)arg);
+  printf("%s\n", startGame);
 
-//   system(startGame);
-// }
+  system(startGame);
+}

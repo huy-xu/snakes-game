@@ -75,60 +75,50 @@ int main(int argc, char *argv[]) {
           // incoming message
           receiveData(sd, request);
           printf("Code: %d\nData: %s\n", request->code, request->data);
-          if (request->code == SIGNIN) {
-            signIn(i, request->data);
+          switch(request->code){
+            case SIGNIN:{
+              signIn(i,request->data);
+              break;
+            }
+            case SIGNUP:{
+              signUp(i,request->data);
+              break;
+            }
+            case CHANGE_PASSWORD:{
+              changePassword(i,request->data);
+              break;
+            }
+            case SHOW_RANK:{
+              showRank(i);
+              break;
+            }
+            case CREATE_ROOM:{
+              createRoom(i);
+              break;
+            }
+            case SHOW_ROOM:{
+              showRoom(i);
+              break;
+            }
+            case JOIN_ROOM:{
+              joinRoom(i,request->data);
+              break;
+            }
+            case LEAVE_ROOM:{
+              leaveRoom(i);
+              break;
+            }
+            case CHAT:{
+              sendChatMessage(i,request->data);
+              break;
+            }
+            case START_GAME:{
+              startGame(i);
+              break;
+            }
+            default:
+              break;
           }
-
-          //   case SIGNOUT:
-          //     // Somebody disconnected, get details and print
-          //     getpeername(sd, (struct sockaddr *)&address,
-          //                 (socklen_t *)&addrlen);
-          //     printf("Host disconnected IP: %s, PORT: %d\n",
-          //            inet_ntoa(address.sin_addr), ntohs(address.sin_port));
-
-          //     // Close the socket and mark as 0 in list for reuse
-          //     close(sd);
-          //     client_socket[i] = 0;
-          //     break;
-
-          //   default:
-          //     break;
-          // }
-          // if (strcmp(request, "signOut") == 0) {
-          //   // Somebody disconnected, get details and print
-          //   getpeername(sd, (struct sockaddr *)&address, (socklen_t
-          //   *)&addrlen); printf("Host disconnected IP: %s, PORT: %d\n",
-          //          inet_ntoa(address.sin_addr), ntohs(address.sin_port));
-
-          //   // Close the socket and mark as 0 in list for reuse
-          //   close(sd);
-          //   client_socket[i] = 0;
-          // } else {
-          //   message = handleRequest(request);
-          //   if (strcmp(message.header, "signIn") == 0) {
-          //     accounts = readData("account.txt");
-          //     signIn(i, message.body);
-          //   } else if (strcmp(message.header, "signUp") == 0) {
-          //     accounts = readData("account.txt");
-          //     signUp(i, message.body);
-          //   } else if (strcmp(message.header, "changePassword") == 0) {
-          //     changePassword(i, message.body);
-          //   } else if (strcmp(message.header, "showRank") == 0) {
-          //     showRank(i);
-          //   } else if (strcmp(message.header, "showRoom") == 0) {
-          //     showRoom(i);
-          //   } else if (strcmp(message.header, "createRoom") == 0) {
-          //     createRoom(i);
-          //   } else if (strcmp(message.header, "joinRoom") == 0) {
-          //     joinRoom(i, message.body);
-          //   } else if (strcmp(message.header, "leaveRoom") == 0) {
-          //     leaveRoom(i);
-          //   } else if (strcmp(message.header, "chat") == 0) {
-          //     sendChatMessage(i, message.body);
-          //   } else if (strcmp(message.header, "startGame") == 0) {
-          //     startGame(i);
-          //   }
-          // }
         }
       }
     }
