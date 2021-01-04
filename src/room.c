@@ -152,8 +152,8 @@ void joinRoom(int sessionID, char *data) {
           strcat(response->data, "-");
         }
       }
-      strcat(response->data, sessions[sessionID].currentAccount.username);     
-      
+      strcat(response->data, sessions[sessionID].currentAccount.username);
+
       strcpy(currentRoom->room.players[total],
              sessions[sessionID].currentAccount.username);
       sessions[sessionID].room = currentRoom->room;
@@ -190,16 +190,33 @@ void leaveRoom(int sessionID) {
     return;
   }
 
+  if (strcmp(currentRoomPtr->room.players[0], "#") == 0) {
+    for (int i = 1; i < MAX_PLAYERS; i++) {
+      if (strcmp(currentRoomPtr->room.players[i], "#") != 0) {
+        strcpy(currentRoomPtr->room.players[0],
+               currentRoomPtr->room.players[i]);
+        strcpy(currentRoomPtr->room.players[i], "#");
+        break;
+      }
+    }
+  }
+
   // Send to other players are in room
   response->code = PLAYER_LEFT_ROOM;
-  strcpy(response->data, sessions[sessionID].currentAccount.username);
+  for (int i = 0; i < MAX_PLAYERS; i++) {
+    if (strcmp(currentRoomPtr->room.players[i], "#") != 0) {
+      strcat(response->data, currentRoomPtr->room.players[i]);
+      strcat(response->data, "-");
+    }
+  }
+  int k = strlen(response->data);
+  response->data[k - 1] = '\0';
+
   for (int i = 0; i < MAX_CLIENTS; i++) {
     if (sessions[i].room.id == roomID) {
       sendData(client_socket[i], response);
     }
   }
-
-  
 }
 
 void sendChatMessage(int sessionID, char *data) {
@@ -223,7 +240,7 @@ void startGame(int sessionID) {
 
   sprintf(startGame, "./startGame %s", sessions[sessionID].room.port);
   pthread_create(&thread_game, NULL, &handleStartGame, (void *)startGame);
-  
+
   response->code = START_GAME_SUCCESS;
   sprintf(response->data, "%s", sessions[sessionID].room.port);
 
