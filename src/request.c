@@ -6,7 +6,6 @@
 #include "message.h"
 #include "network.h"
 
-extern int sockfd;
 void signInReq(int serverfd, char *user, char *pass) {
   Message *request = (Message *)malloc(sizeof(Message));
 
@@ -93,5 +92,12 @@ void startGameReq(int serverfd) {
 
   request->code = START_GAME;
   strcpy(request->data, "#");
+  sendData(serverfd, request);
+}
+
+void quitGameReq(int serverfd) {
+  Message *request = (Message *)malloc(sizeof(Message));
+
+  request->code = QUIT_GAME;
   sendData(serverfd, request);
 }

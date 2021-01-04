@@ -70,7 +70,8 @@ void *recv_handler(void *app_widget) {
 
   while (1) {
     receiveData(widgets->serverfd, response);
-    printf("Server Code: %d \t Server data: %s\n", response->code,response->data);
+    printf("Server Code: %d \t Server data: %s\n", response->code,
+           response->data);
     widgets->msg = response;
     g_idle_add((GSourceFunc)handle_res, widgets);
   }
@@ -79,13 +80,12 @@ void *recv_handler(void *app_widget) {
 }
 
 gboolean handle_res(app_widgets *widgets) {
-
   switch (widgets->msg->code) {
     case SIGNIN_SUCCESS:
       printf("%d\n", widgets->msg->code);
       break;
     case SIGNIN_FAIL:
-      printf("%d\n",widgets->msg->code);
+      printf("%d\n", widgets->msg->code);
       break;
   }
 
@@ -93,7 +93,10 @@ gboolean handle_res(app_widgets *widgets) {
 }
 
 // called when window is closed
-void on_window_main_destroy() { gtk_main_quit(); }
+void on_window_main_destroy(app_widgets *app_wdgts) {
+  quitGameReq(app_wdgts->serverfd);
+  gtk_main_quit();
+}
 
 void on_btn_listroom_clicked(GtkButton *button, app_widgets *app_wdgts) {
   gtk_stack_set_visible_child(app_wdgts->w_stack_home,

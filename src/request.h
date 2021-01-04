@@ -23,5 +23,6 @@ void showRoomReq(int serverfd);
 void joinRoomReq(int serverfd, char *roomID);
 void chatRoomReq(int serverfd, char *message);
 void startGameReq(int serverfd);
+void quitGameReq(int serverfd);
 
 #endif

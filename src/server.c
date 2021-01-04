@@ -11,7 +11,7 @@
 // Initialise all client_socket[] to 0 so not checked
 int client_socket[MAX_CLIENTS] = {0};
 Session sessions[MAX_CLIENTS] = {{NULL, NULL}};
-ListAccountPtr accounts= NULL;
+ListAccountPtr accounts = NULL;
 ListRoomPtr rooms = NULL;
 
 int main(int argc, char *argv[]) {
@@ -75,47 +75,63 @@ int main(int argc, char *argv[]) {
           // incoming message
           receiveData(sd, request);
           printf("Code: %d\nData: %s\n", request->code, request->data);
-          switch(request->code){
-            case SIGNIN:{
-              signIn(i,request->data);
+          switch (request->code) {
+            case SIGNIN:
+              signIn(i, request->data);
               break;
-            }
-            case SIGNUP:{
-              signUp(i,request->data);
+
+            case SIGNUP:
+              signUp(i, request->data);
               break;
-            }
-            case CHANGE_PASSWORD:{
-              changePassword(i,request->data);
+
+            case CHANGE_PASSWORD:
+              changePassword(i, request->data);
               break;
-            }
-            case SHOW_RANK:{
+
+            case SHOW_RANK:
               showRank(i);
               break;
-            }
-            case CREATE_ROOM:{
+
+            case CREATE_ROOM:
               createRoom(i);
               break;
-            }
-            case SHOW_ROOM:{
+
+            case SHOW_ROOM:
               showRoom(i);
               break;
-            }
-            case JOIN_ROOM:{
-              joinRoom(i,request->data);
+
+            case JOIN_ROOM:
+              joinRoom(i, request->data);
               break;
-            }
-            case LEAVE_ROOM:{
+
+            case LEAVE_ROOM:
               leaveRoom(i);
               break;
-            }
-            case CHAT:{
-              sendChatMessage(i,request->data);
+
+            case CHAT:
+              sendChatMessage(i, request->data);
               break;
-            }
-            case START_GAME:{
+
+            case START_GAME:
               startGame(i);
               break;
-            }
+
+            case SIGNOUT:
+              signOut(i);
+              break;
+
+            case QUIT_GAME:
+              // Somebody disconnected, get details and print
+              getpeername(sd, (struct sockaddr *)&address,
+                          (socklen_t *)&addrlen);
+              printf("Host disconnected IP: %s, PORT: %d\n",
+                     inet_ntoa(address.sin_addr), ntohs(address.sin_port));
+
+              // Close the socket and mark as 0 in list for reuse
+              close(sd);
+              client_socket[i] = 0;
+              break;
+
             default:
               break;
           }
