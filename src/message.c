@@ -143,3 +143,13 @@ void splitData(char **argv, char *data) {
     token = strtok(NULL, "-");
   }
 }
+
+void splitData2(char **argv, char *data) {
+  int i = 0;
+  char *token = strtok(data, ":");
+
+  while (token != NULL) {
+    argv[i++] = token;
+    token = strtok(NULL, ":");
+  }
+}

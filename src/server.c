@@ -102,10 +102,12 @@ int main(int argc, char *argv[]) {
                 break;
 
               case CREATE_ROOM:
+                printf("request create room\n");
                 createRoom(i);
                 break;
 
               case SHOW_ROOM:
+                printf("request show room");
                 showRoom(i);
                 break;
 

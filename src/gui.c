@@ -10,6 +10,11 @@
 #include "message.h"
 #include "network.h"
 #include "request.h"
+#include "message.c"
+
+char userName[MAX];
+char listRoom[6][MAX];
+int numberOfRoom = 0;
 
 int gui(int serverfd) {
   pthread_t tid;
@@ -32,6 +37,7 @@ int gui(int serverfd) {
       GTK_WIDGET(gtk_builder_get_object(builder, CONTAINER_MENU_REG));
   widgets->w_container_menu_log =
       GTK_WIDGET(gtk_builder_get_object(builder, CONTAINER_MENU_LOG));
+  widgets->w_roomView = GTK_WIDGET(gtk_builder_get_object(builder, CONTAINER_ROOMVIEW));
 
   // Get stack
   widgets->w_stack_home =
@@ -44,6 +50,29 @@ int gui(int serverfd) {
       GTK_ENTRY(gtk_builder_get_object(builder, ENTRY_MENU_LOG_USER));
   widgets->w_entry_menu_log_pas =
       GTK_ENTRY(gtk_builder_get_object(builder, ENTRY_MENU_LOG_PAS));
+  widgets->w_entry_changepas_currpas =
+      GTK_ENTRY(gtk_builder_get_object(builder, ENTRY_CHANGEPAS_CURPAS));
+  widgets->w_entry_changepas_curpas =
+      GTK_ENTRY(gtk_builder_get_object(builder, ENTRY_CHANGEPAS_NEWPAS));
+  widgets->w_entry_changepas_confirm =
+      GTK_ENTRY(gtk_builder_get_object(builder, ENTRY_CHANGEPAS_CONFIRM));
+
+  // Get label
+  widgets->w_menu_lbl_userName = GTK_LABEL(gtk_builder_get_object(builder,LBL_USER_NAME));
+  widgets->w_player_1 = GTK_LABEL(gtk_builder_get_object(builder,LBL_PLAYER_1));
+  widgets->w_player_2 = GTK_LABEL(gtk_builder_get_object(builder,LBL_PLAYER_2));
+  widgets->w_player_3 = GTK_LABEL(gtk_builder_get_object(builder,LBL_PLAYER_3));
+  widgets->w_player_4 = GTK_LABEL(gtk_builder_get_object(builder,LBL_PLAYER_4));
+
+  // Get button
+  widgets->w_listRoom_btn_room[0] = GTK_BUTTON(gtk_builder_get_object(builder,"btn_enterroom1"));
+  widgets->w_listRoom_btn_room[1] = GTK_BUTTON(gtk_builder_get_object(builder,"btn_enterroom2"));
+  widgets->w_listRoom_btn_room[2] = GTK_BUTTON(gtk_builder_get_object(builder,"btn_enterroom3"));
+  widgets->w_listRoom_btn_room[3] = GTK_BUTTON(gtk_builder_get_object(builder,"btn_enterroom4"));
+  widgets->w_listRoom_btn_room[4] = GTK_BUTTON(gtk_builder_get_object(builder,"btn_enterroom5"));
+  widgets->w_listRoom_btn_room[5] = GTK_BUTTON(gtk_builder_get_object(builder,"btn_enterroom6"));
+  widgets->w_btn_join_game = GTK_BUTTON(gtk_builder_get_object(builder,BTN_JOIN_GAME));
+  widgets->w_btn_leave_room = GTK_BUTTON(gtk_builder_get_object(builder,BTN_LEAVE_ROOM));
 
   widgets->serverfd = serverfd;
   widgets->currentWindow = 0;
@@ -51,6 +80,9 @@ int gui(int serverfd) {
   g_object_unref(builder);
 
   pthread_create(&tid, NULL, &recv_handler, widgets);
+
+  gtk_stack_set_visible_child(widgets->w_stack_home,
+                              widgets->w_container_menu);
 
   gtk_widget_show(window);
   gtk_main();
@@ -82,10 +114,119 @@ void *recv_handler(void *app_widget) {
 gboolean handle_res(app_widgets *widgets) {
   switch (widgets->msg->code) {
     case SIGNIN_SUCCESS:
-      printf("%d\n", widgets->msg->code);
+      printf("signin success\n");
+      char * data[2];
+      splitData(data,widgets->msg->data);
+      strcpy(userName,data[0]);
+      gtk_label_set_text(GTK_LABEL(widgets->w_menu_lbl_userName),userName);
+      gtk_stack_set_visible_child(widgets->w_stack_home,
+                                  widgets->w_container_feature);
       break;
     case SIGNIN_FAIL:
       printf("%d\n", widgets->msg->code);
+      break;
+    case SIGNUP_SUCCESS:
+      break;
+    case SIGNOUT_SUCCESS:
+      gtk_stack_set_visible_child(widgets->w_stack_menu,
+                                  widgets->w_container_menu_log);
+      break;
+    case REPASS_NOT_MATCH:
+      break;
+    case ACCOUNT_EXISTED:
+      break;
+    case CHANGE_PASSWORD_SUCCESS:
+      gtk_stack_set_visible_child(widgets->w_stack_home,
+                                  widgets->w_container_feature);
+      break;
+    case CHANGE_PASSWORD_FAIL:
+      break;
+    case SHOW_RANK_SUCCESS:
+      break;
+    case ROOM_NOT_FOUND:
+      break;
+    case ROOM_IS_FULL:
+      break;
+    
+    case SHOW_ROOM_SUCCESS:
+      numberOfRoom = 0;
+      printf("show room success\n");
+      gtk_stack_set_visible_child(widgets->w_stack_home,
+                                  widgets->w_container_listroom);
+      if (strlen(widgets->msg->data) <= 2) {
+        return FALSE;
+      }
+      char * rooms[6];
+      splitData(rooms,widgets->msg->data);
+      int i=0;
+      for (i=0; i<6; i++) {
+        if (rooms[i]!=NULL) {
+          numberOfRoom ++;
+          strcpy(listRoom[i],rooms[i]);
+          char * roomInfo[2];
+          splitData2(roomInfo,listRoom[i]);
+          char roomString[11] = {'R','o','o','m',' ',i+'0','(',roomInfo[1][0],'/','4',')'};
+          gtk_button_set_label(widgets->w_listRoom_btn_room[i],roomString);
+          gtk_widget_show(widgets->w_listRoom_btn_room[i]);
+          if (roomInfo[1][0] == '4') {
+            gtk_widget_set_sensitive(widgets->w_listRoom_btn_room[i],FALSE);
+          }
+        } else {
+          break;
+        }
+      }
+    case CREATE_ROOM_SUCCESS:
+      printf("create room success\n");
+      gtk_label_set_text(GTK_LABEL(widgets->w_player_1),userName);
+      gtk_label_set_text(GTK_LABEL(widgets->w_player_2),"");
+      gtk_label_set_text(GTK_LABEL(widgets->w_player_3),"");
+      gtk_label_set_text(GTK_LABEL(widgets->w_player_4),"");
+      gtk_widget_show(widgets->w_btn_join_game);
+      gtk_stack_set_visible_child(widgets->w_stack_home,
+                                  widgets->w_roomView);
+      
+      break;
+    case JOIN_ROOM_SUCCESS:
+      printf("join room success\n");
+      char * player[4];
+      splitData(player,widgets->msg->data);
+      if (player[0] != NULL) {
+        gtk_label_set_text(GTK_LABEL(widgets->w_player_1),player[0]);
+      }
+      if (player[1] != NULL) {
+        gtk_label_set_text(GTK_LABEL(widgets->w_player_2),player[1]);
+      }
+      if (player[2] != NULL) {
+        gtk_label_set_text(GTK_LABEL(widgets->w_player_3),player[2]);
+      }
+      if (player[3] != NULL) {
+        gtk_label_set_text(GTK_LABEL(widgets->w_player_4),player[3]);
+      }
+      gtk_widget_hide(widgets->w_btn_join_game);
+      gtk_stack_set_visible_child(widgets->w_stack_home,
+                                  widgets->w_roomView);
+      break;
+    case LEAVE_ROOM_SUCCESS:
+      gtk_stack_set_visible_child(widgets->w_stack_home,
+                                  widgets->w_container_listroom);
+      break;
+    case PLAYER_LEFT_ROOM:
+      if (strcmp(player[0],widgets->msg->data) == 0) {
+        gtk_label_set_text(GTK_LABEL(widgets->w_player_1),"");
+      } else if (strcmp(player[1],widgets->msg->data) == 0) {
+        gtk_label_set_text(GTK_LABEL(widgets->w_player_2),"");
+      } else if (strcmp(player[2],widgets->msg->data) == 0) {
+        gtk_label_set_text(GTK_LABEL(widgets->w_player_3),"");
+      } else if (strcmp(player[3],widgets->msg->data) == 0) {
+        gtk_label_set_text(GTK_LABEL(widgets->w_player_4),"");
+      }
+      break;
+    case SIGNIN_OTHER_PC:
+      break;
+    case CHAT_SUCCESS:
+
+      break;
+    case START_GAME_SUCCESS:
       break;
   }
 
@@ -93,15 +234,14 @@ gboolean handle_res(app_widgets *widgets) {
 }
 
 // called when window is closed
-void on_window_main_destroy(GtkWidget *widget, app_widgets *app_wdgts) {
+void on_window_main_destroy(app_widgets *app_wdgts) {
   quitGameReq(app_wdgts->serverfd);
   gtk_main_quit();
 }
 
 void on_btn_listroom_clicked(GtkButton *button, app_widgets *app_wdgts) {
+  printf("Show room\n");
   showRoomReq(app_wdgts->serverfd);
-  gtk_stack_set_visible_child(app_wdgts->w_stack_home,
-                              app_wdgts->w_container_listroom);
   return;
 }
 
@@ -119,14 +259,9 @@ void on_btn_reg_clicked(GtkButton *button, app_widgets *app_wdgts) {
 
 void on_btn_log_clicked(GtkButton *button, app_widgets *app_wdgts) {
   char user[MAX], pass[MAX];
-
   strcpy(user, gtk_entry_get_text(app_wdgts->w_entry_menu_log_user));
   strcpy(pass, gtk_entry_get_text(app_wdgts->w_entry_menu_log_pas));
-
   signInReq(app_wdgts->serverfd, user, pass);
-
-  gtk_stack_set_visible_child(app_wdgts->w_stack_home,
-                              app_wdgts->w_container_feature);
   return;
 }
 // void on_btn_log_clicked(GtkButton *button, app_widgets *app_wdgts){
@@ -136,11 +271,6 @@ void on_btn_log_clicked(GtkButton *button, app_widgets *app_wdgts) {
 
 void on_btn_logout_clicked(GtkButton *button, app_widgets *app_wdgts) {
   signOutReq(app_wdgts->serverfd);
-
-  gtk_stack_set_visible_child(app_wdgts->w_stack_home,
-                              app_wdgts->w_container_menu);
-  gtk_stack_set_visible_child(app_wdgts->w_stack_menu,
-                              app_wdgts->w_container_menu_log);
   return;
 }
 
@@ -151,10 +281,12 @@ void on_btn_viewchangepas_clicked(GtkButton *button, app_widgets *app_wdgts) {
 }
 
 void on_btn_changepas_clicked(GtkButton *button, app_widgets *app_wdgts) {
-  gtk_stack_set_visible_child(app_wdgts->w_stack_home,
-                              app_wdgts->w_container_menu);
-  gtk_stack_set_visible_child(app_wdgts->w_stack_menu,
-                              app_wdgts->w_container_menu_log);
+  char curPas[MAX], newPas[MAX], confirm[MAX];
+
+  strcpy(curPas, gtk_entry_get_text(app_wdgts->w_entry_changepas_currpas));
+  strcpy(newPas, gtk_entry_get_text(app_wdgts->w_entry_changepas_curpas));
+  strcpy(confirm, gtk_entry_get_text(app_wdgts->w_entry_changepas_confirm));
+  changePasswordReq(app_wdgts->serverfd,newPas,confirm);
   return;
 }
 
@@ -163,3 +295,50 @@ void on_btn_changepas_back_clicked(GtkButton *button, app_widgets *app_wdgts) {
                               app_wdgts->w_container_feature);
   return;
 }
+
+void on_btn_createroom_clicked(GtkButton *button, app_widgets *app_wdgts) {
+  printf("on_btn_createroom_clicked");
+  createRoomReq(app_wdgts->serverfd);
+  return;
+}
+
+void joinRoom1(GtkButton *button, app_widgets *app_wdgts) {
+  char * roomInfo[2];
+  splitData2(roomInfo,listRoom[0]);
+  joinRoomReq(app_wdgts->serverfd,roomInfo[0]);
+}
+
+void joinRoom2(GtkButton *button, app_widgets *app_wdgts) {
+  char * roomInfo[2];
+  splitData2(roomInfo,listRoom[1]);
+  joinRoomReq(app_wdgts->serverfd,roomInfo[0]);
+}
+
+void joinRoom3(GtkButton *button, app_widgets *app_wdgts) {
+  char * roomInfo[2];
+  splitData2(roomInfo,listRoom[2]);
+  joinRoomReq(app_wdgts->serverfd,roomInfo[0]);
+}
+
+void joinRoom4(GtkButton *button, app_widgets *app_wdgts) {
+  char * roomInfo[2];
+  splitData2(roomInfo,listRoom[3]);
+  joinRoomReq(app_wdgts->serverfd,roomInfo[0]);
+}
+
+void joinRoom5(GtkButton *button, app_widgets *app_wdgts) {
+  char * roomInfo[2];
+  splitData2(roomInfo,listRoom[4]);
+  joinRoomReq(app_wdgts->serverfd,roomInfo[0]);
+}
+
+void joinRoom6(GtkButton *button, app_widgets *app_wdgts) {
+  char * roomInfo[2];
+  splitData2(roomInfo,listRoom[5]);
+  joinRoomReq(app_wdgts->serverfd,roomInfo[0]);
+}
+
+void on_btn_leave_room_clicked(GtkButton *button, app_widgets *app_wdgts) {
+  leaveRoomReq(app_wdgts->serverfd);
+}
+

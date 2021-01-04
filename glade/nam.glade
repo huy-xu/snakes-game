@@ -1,14 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
+<!-- Generated with glade 3.36.0 -->
 <interface>
   <requires lib="gtk+" version="3.20"/>
   <object class="GtkWindow" id="window_main">
     <property name="can_focus">False</property>
     <property name="default_width">440</property>
     <property name="default_height">250</property>
-    <signal name="destroy" handler="on_window_main_destroy" swapped="no"/>
-    <child type="titlebar">
-      <placeholder/>
-    </child>
     <child>
       <object class="GtkStack" id="stack_home">
         <property name="visible">True</property>
@@ -21,23 +18,11 @@
             <property name="can_focus">False</property>
             <property name="margin_top">70</property>
             <property name="orientation">vertical</property>
-          <object class="GtkBox" id="container_changepas">
-            <property name="width_request">800</property>
-            <property name="height_request">600</property>
-            <property name="visible">True</property>
-            <property name="can_focus">False</property>
-            <property name="margin_left">10</property>
-            <property name="margin_right">10</property>
-            <property name="margin_top">10</property>
-            <property name="margin_bottom">10</property>
-            <property name="orientation">vertical</property>
-            <property name="spacing">10</property>
             <child>
               <object class="GtkLabel">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
                 <property name="label" translatable="yes">Room 1</property>
-                <property name="label" translatable="yes">SNAKES GAME</property>
               </object>
               <packing>
                 <property name="expand">False</property>
@@ -56,31 +41,6 @@
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
                     <property name="label" translatable="yes">Player 1: nam</property>
-                <property name="orientation">vertical</property>
-                <child>
-                  <object class="GtkBox">
-                    <property name="visible">True</property>
-                    <property name="can_focus">False</property>
-                    <child>
-                      <object class="GtkButton" id="btn_changepas_back">
-                        <property name="label" translatable="yes">Back</property>
-                        <property name="visible">True</property>
-                        <property name="can_focus">True</property>
-                        <property name="receives_default">True</property>
-                        <signal name="clicked" handler="on_btn_changepas_back_clicked" swapped="no"/>
-                      </object>
-                      <packing>
-                        <property name="expand">False</property>
-                        <property name="fill">True</property>
-                        <property name="position">0</property>
-                      </packing>
-                    </child>
-                    <child>
-                      <placeholder/>
-                    </child>
-                    <child>
-                      <placeholder/>
-                    </child>
                   </object>
                   <packing>
                     <property name="expand">False</property>
@@ -93,10 +53,6 @@
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
                     <property name="label" translatable="yes">Player 2: tan</property>
-                  <object class="GtkLabel">
-                    <property name="visible">True</property>
-                    <property name="can_focus">False</property>
-                    <property name="label" translatable="yes">Change password</property>
                   </object>
                   <packing>
                     <property name="expand">False</property>
@@ -168,21 +124,6 @@
                       <object class="GtkEntry">
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
-                  <object class="GtkBox">
-                    <property name="width_request">300</property>
-                    <property name="visible">True</property>
-                    <property name="can_focus">False</property>
-                    <property name="halign">center</property>
-                    <property name="valign">center</property>
-                    <property name="margin_top">10</property>
-                    <property name="orientation">vertical</property>
-                    <property name="spacing">10</property>
-                    <child>
-                      <object class="GtkLabel" id="lbl_changepas_user">
-                        <property name="visible">True</property>
-                        <property name="can_focus">False</property>
-                        <property name="halign">start</property>
-                        <property name="label" translatable="yes">Username:</property>
                       </object>
                       <packing>
                         <property name="expand">False</property>
@@ -197,11 +138,6 @@
                         <property name="can_focus">True</property>
                         <property name="receives_default">True</property>
                         <signal name="clicked" handler="on_btn_send_mess_clicked" swapped="no"/>
-                      <object class="GtkEntry" id="entry_changepas_user">
-                        <property name="width_request">300</property>
-                        <property name="visible">True</property>
-                        <property name="can_focus">True</property>
-                        <property name="placeholder_text" translatable="yes">Username</property>
                       </object>
                       <packing>
                         <property name="expand">False</property>
@@ -417,79 +353,6 @@
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
                 <property name="label" translatable="yes">You lose!!!</property>
-                    <child>
-                      <object class="GtkLabel" id="lbl_changepas_curpas">
-                        <property name="visible">True</property>
-                        <property name="can_focus">False</property>
-                        <property name="halign">start</property>
-                        <property name="label" translatable="yes">Password:</property>
-                      </object>
-                      <packing>
-                        <property name="expand">False</property>
-                        <property name="fill">True</property>
-                        <property name="position">2</property>
-                      </packing>
-                    </child>
-                    <child>
-                      <object class="GtkEntry" id="entry_changepas_curpas">
-                        <property name="visible">True</property>
-                        <property name="can_focus">True</property>
-                        <property name="visibility">False</property>
-                        <property name="invisible_char">●</property>
-                        <property name="placeholder_text" translatable="yes">Password</property>
-                      </object>
-                      <packing>
-                        <property name="expand">False</property>
-                        <property name="fill">True</property>
-                        <property name="position">3</property>
-                      </packing>
-                    </child>
-                    <child>
-                      <object class="GtkLabel" id="lbl_changepas_confirm">
-                        <property name="visible">True</property>
-                        <property name="can_focus">False</property>
-                        <property name="halign">start</property>
-                        <property name="label" translatable="yes">Confirm Password:</property>
-                      </object>
-                      <packing>
-                        <property name="expand">False</property>
-                        <property name="fill">True</property>
-                        <property name="position">4</property>
-                      </packing>
-                    </child>
-                    <child>
-                      <object class="GtkEntry" id="entry_changepas_confirm">
-                        <property name="visible">True</property>
-                        <property name="can_focus">True</property>
-                        <property name="placeholder_text" translatable="yes">Confirm Password</property>
-                      </object>
-                      <packing>
-                        <property name="expand">False</property>
-                        <property name="fill">True</property>
-                        <property name="position">5</property>
-                      </packing>
-                    </child>
-                    <child>
-                      <object class="GtkButton" id="btn_changepas">
-                        <property name="label" translatable="yes">Change pasword</property>
-                        <property name="visible">True</property>
-                        <property name="can_focus">True</property>
-                        <property name="receives_default">True</property>
-                        <signal name="clicked" handler="on_btn_changepas_clicked" swapped="no"/>
-                      </object>
-                      <packing>
-                        <property name="expand">False</property>
-                        <property name="fill">True</property>
-                        <property name="position">6</property>
-                      </packing>
-                    </child>
-                  </object>
-                  <packing>
-                    <property name="expand">False</property>
-                    <property name="fill">True</property>
-                    <property name="position">2</property>
-                  </packing>
-                </child>
               </object>
               <packing>
                 <property name="expand">False</property>
@@ -537,10 +400,6 @@
             <property name="name">page2</property>
             <property name="title" translatable="yes">page2</property>
             <property name="position">3</property>
-          </object>
-          <packing>
-            <property name="name">page4</property>
-            <property name="title" translatable="yes">page4</property>
           </packing>
         </child>
         <child>
@@ -914,26 +773,6 @@
                         <property name="can_focus">False</property>
                         <property name="halign">start</property>
                         <property name="label" translatable="yes">Current Password:</property>
-                        <property name="position">1</property>
-                      </packing>
-                    </child>
-                  </object>
-                  <packing>
-                    <property name="name">page0</property>
-                    <property name="title" translatable="yes">page0</property>
-                  </packing>
-                </child>
-                <child>
-                  <object class="GtkBox" id="container_menu_log">
-                    <property name="visible">True</property>
-                    <property name="can_focus">False</property>
-                    <property name="margin_top">85</property>
-                    <property name="orientation">vertical</property>
-                    <child>
-                      <object class="GtkLabel" id="lbl_menu_log1">
-                        <property name="visible">True</property>
-                        <property name="can_focus">False</property>
-                        <property name="label" translatable="yes">Login</property>
                       </object>
                       <packing>
                         <property name="expand">False</property>
@@ -1013,88 +852,11 @@
                         <property name="can_focus">True</property>
                         <property name="receives_default">True</property>
                         <signal name="clicked" handler="on_btn_changepas_clicked" swapped="no"/>
-                      <object class="GtkBox">
-                        <property name="width_request">300</property>
-                        <property name="visible">True</property>
-                        <property name="can_focus">False</property>
-                        <property name="halign">center</property>
-                        <property name="valign">center</property>
-                        <property name="margin_top">10</property>
-                        <property name="orientation">vertical</property>
-                        <property name="spacing">10</property>
-                        <child>
-                          <object class="GtkLabel" id="lbl_menu_log_user">
-                            <property name="visible">True</property>
-                            <property name="can_focus">False</property>
-                            <property name="halign">start</property>
-                            <property name="label" translatable="yes">Username:</property>
-                          </object>
-                          <packing>
-                            <property name="expand">False</property>
-                            <property name="fill">True</property>
-                            <property name="position">0</property>
-                          </packing>
-                        </child>
-                        <child>
-                          <object class="GtkEntry" id="entry_menu_log_user">
-                            <property name="width_request">300</property>
-                            <property name="visible">True</property>
-                            <property name="can_focus">True</property>
-                            <property name="placeholder_text" translatable="yes">Username</property>
-                          </object>
-                          <packing>
-                            <property name="expand">False</property>
-                            <property name="fill">True</property>
-                            <property name="position">1</property>
-                          </packing>
-                        </child>
-                        <child>
-                          <object class="GtkLabel" id="lbl_menu_log_pas">
-                            <property name="visible">True</property>
-                            <property name="can_focus">False</property>
-                            <property name="halign">start</property>
-                            <property name="label" translatable="yes">Password:</property>
-                          </object>
-                          <packing>
-                            <property name="expand">False</property>
-                            <property name="fill">True</property>
-                            <property name="position">2</property>
-                          </packing>
-                        </child>
-                        <child>
-                          <object class="GtkEntry" id="entry_menu_log_pas">
-                            <property name="visible">True</property>
-                            <property name="can_focus">True</property>
-                            <property name="visibility">False</property>
-                            <property name="invisible_char">●</property>
-                            <property name="placeholder_text" translatable="yes">Password</property>
-                          </object>
-                          <packing>
-                            <property name="expand">False</property>
-                            <property name="fill">True</property>
-                            <property name="position">3</property>
-                          </packing>
-                        </child>
-                        <child>
-                          <object class="GtkButton" id="btn_log">
-                            <property name="label" translatable="yes">Login</property>
-                            <property name="visible">True</property>
-                            <property name="can_focus">True</property>
-                            <property name="receives_default">True</property>
-                            <signal name="clicked" handler="on_btn_log_clicked" swapped="no"/>
-                          </object>
-                          <packing>
-                            <property name="expand">False</property>
-                            <property name="fill">True</property>
-                            <property name="position">6</property>
-                          </packing>
-                        </child>
                       </object>
                       <packing>
                         <property name="expand">False</property>
                         <property name="fill">True</property>
                         <property name="position">6</property>
-                        <property name="position">1</property>
                       </packing>
                     </child>
                   </object>
@@ -1102,9 +864,6 @@
                     <property name="expand">False</property>
                     <property name="fill">True</property>
                     <property name="position">2</property>
-                    <property name="name">page1</property>
-                    <property name="title" translatable="yes">page1</property>
-                    <property name="position">1</property>
                   </packing>
                 </child>
               </object>
@@ -1119,9 +878,6 @@
             <property name="name">page4</property>
             <property name="title" translatable="yes">page4</property>
             <property name="position">5</property>
-            <property name="name">page3</property>
-            <property name="title" translatable="yes">page3</property>
-            <property name="position">1</property>
           </packing>
         </child>
         <child>
@@ -1135,7 +891,7 @@
             <property name="orientation">vertical</property>
             <property name="spacing">8</property>
             <child>
-              <object class="GtkLabel">
+              <object class="GtkLabel" id="lbl_user_name">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
                 <property name="valign">start</property>
@@ -1148,7 +904,7 @@
               </packing>
             </child>
             <child>
-              <object class="GtkLabel">
+              <object class="GtkLabel" id="lbl_score">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
                 <property name="valign">start</property>
@@ -1226,26 +982,11 @@
                     <property name="position">2</property>
                   </packing>
                 </child>
-                <child>
-                  <object class="GtkButton" id="btn_logout">
-                    <property name="label" translatable="yes">Log out</property>
-                    <property name="visible">True</property>
-                    <property name="can_focus">True</property>
-                    <property name="receives_default">True</property>
-                    <signal name="clicked" handler="on_btn_logout_clicked" swapped="no"/>
-                  </object>
-                  <packing>
-                    <property name="expand">False</property>
-                    <property name="fill">True</property>
-                    <property name="position">3</property>
-                  </packing>
-                </child>
               </object>
               <packing>
                 <property name="expand">False</property>
                 <property name="fill">True</property>
                 <property name="position">3</property>
-                <property name="position">2</property>
               </packing>
             </child>
           </object>
@@ -1253,7 +994,6 @@
             <property name="name">page0</property>
             <property name="title" translatable="yes">page0</property>
             <property name="position">6</property>
-            <property name="position">2</property>
           </packing>
         </child>
         <child>
@@ -1319,9 +1059,9 @@
                 <child>
                   <object class="GtkButton" id="btn_enterroom1">
                     <property name="label" translatable="yes">Room 1 (1/2)</property>
-                    <property name="visible">True</property>
-                    <property name="can_focus">True</property>
+                    <property name="can_focus">False</property>
                     <property name="receives_default">True</property>
+                    <signal name="clicked" handler="joinRoom1" swapped="no"/>
                   </object>
                   <packing>
                     <property name="expand">False</property>
@@ -1332,9 +1072,9 @@
                 <child>
                   <object class="GtkButton" id="btn_enterroom2">
                     <property name="label" translatable="yes">Room 1 (1/2)</property>
-                    <property name="visible">True</property>
-                    <property name="can_focus">True</property>
+                    <property name="can_focus">False</property>
                     <property name="receives_default">True</property>
+                    <signal name="clicked" handler="joinRoom2" swapped="no"/>
                   </object>
                   <packing>
                     <property name="expand">False</property>
@@ -1345,9 +1085,9 @@
                 <child>
                   <object class="GtkButton" id="btn_enterroom3">
                     <property name="label" translatable="yes">Room 1 (1/2)</property>
-                    <property name="visible">True</property>
-                    <property name="can_focus">True</property>
+                    <property name="can_focus">False</property>
                     <property name="receives_default">True</property>
+                    <signal name="clicked" handler="joinRoom3" swapped="no"/>
                   </object>
                   <packing>
                     <property name="expand">False</property>
@@ -1358,9 +1098,9 @@
                 <child>
                   <object class="GtkButton" id="btn_enterroom4">
                     <property name="label" translatable="yes">Room 1 (1/2)</property>
-                    <property name="visible">True</property>
-                    <property name="can_focus">True</property>
+                    <property name="can_focus">False</property>
                     <property name="receives_default">True</property>
+                    <signal name="clicked" handler="joinRoom4" swapped="no"/>
                   </object>
                   <packing>
                     <property name="expand">False</property>
@@ -1371,9 +1111,9 @@
                 <child>
                   <object class="GtkButton" id="btn_enterroom5">
                     <property name="label" translatable="yes">Room 1 (1/2)</property>
-                    <property name="visible">True</property>
-                    <property name="can_focus">True</property>
+                    <property name="can_focus">False</property>
                     <property name="receives_default">True</property>
+                    <signal name="clicked" handler="joinRoom5" swapped="no"/>
                   </object>
                   <packing>
                     <property name="expand">False</property>
@@ -1384,9 +1124,9 @@
                 <child>
                   <object class="GtkButton" id="btn_enterroom6">
                     <property name="label" translatable="yes">Room 1 (1/2)</property>
-                    <property name="visible">True</property>
-                    <property name="can_focus">True</property>
+                    <property name="can_focus">False</property>
                     <property name="receives_default">True</property>
+                    <signal name="clicked" handler="joinRoom6" swapped="no"/>
                   </object>
                   <packing>
                     <property name="expand">False</property>
@@ -1440,8 +1180,34 @@
             <property name="name">page1</property>
             <property name="title" translatable="yes">page1</property>
             <property name="position">7</property>
-            <property name="position">3</property>
           </packing>
+        </child>
+      </object>
+    </child>
+    <child type="titlebar">
+      <object class="GtkBox">
+        <property name="visible">True</property>
+        <property name="can_focus">False</property>
+        <property name="orientation">vertical</property>
+        <child>
+          <placeholder/>
+        </child>
+        <child>
+          <object class="GtkButton" id="btn_leave_room">
+            <property name="label" translatable="yes">Leave Room</property>
+            <property name="visible">True</property>
+            <property name="can_focus">True</property>
+            <property name="receives_default">True</property>
+            <signal name="clicked" handler="on_btn_leave_room_clicked" swapped="no"/>
+          </object>
+          <packing>
+            <property name="expand">False</property>
+            <property name="fill">True</property>
+            <property name="position">1</property>
+          </packing>
+        </child>
+        <child>
+          <placeholder/>
         </child>
       </object>
     </child>
