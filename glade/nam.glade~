@@ -19,16 +19,7 @@
             <property name="can_focus">False</property>
             <property name="orientation">vertical</property>
             <child>
-              <object class="GtkImage">
-                <property name="visible">True</property>
-                <property name="can_focus">False</property>
-                <property name="pixbuf">../img/wrong_pas.png</property>
-              </object>
-              <packing>
-                <property name="expand">False</property>
-                <property name="fill">True</property>
-                <property name="position">0</property>
-              </packing>
+              <placeholder/>
             </child>
             <child>
               <object class="GtkLabel">
@@ -36,7 +27,6 @@
                 <property name="can_focus">False</property>
                 <property name="halign">center</property>
                 <property name="valign">center</property>
-                <property name="margin_top">15</property>
                 <property name="label" translatable="yes">Your password or username was wrong!</property>
               </object>
               <packing>
@@ -51,8 +41,6 @@
                 <property name="can_focus">False</property>
                 <property name="halign">center</property>
                 <property name="valign">center</property>
-                <property name="margin_top">20</property>
-                <property name="margin_bottom">30</property>
                 <child>
                   <placeholder/>
                 </child>

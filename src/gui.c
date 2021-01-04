@@ -116,8 +116,7 @@ void on_btn_viewchangepas_clicked(GtkButton *button, app_widgets *app_wdgts){
 }
 
 void on_btn_changepas_clicked(GtkButton *button, app_widgets *app_wdgts){
-    gtk_stack_set_visible_child(app_wdgts->w_stack_home, app_wdgts->w_container_menu);
-    gtk_stack_set_visible_child(app_wdgts->w_stack_menu, app_wdgts->w_container_menu_log);
+    gtk_stack_set_visible_child(app_wdgts->w_stack_home, app_wdgts->w_container_feature);
     return;
 }
 
