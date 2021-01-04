@@ -99,6 +99,7 @@ void on_window_main_destroy(GtkWidget *widget, app_widgets *app_wdgts) {
 }
 
 void on_btn_listroom_clicked(GtkButton *button, app_widgets *app_wdgts) {
+  showRoomReq(app_wdgts->serverfd);
   gtk_stack_set_visible_child(app_wdgts->w_stack_home,
                               app_wdgts->w_container_listroom);
   return;

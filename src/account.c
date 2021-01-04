@@ -127,6 +127,15 @@ void signIn(int sessionID, char *data) {
     response->code = SIGNIN_FAIL;
     strcpy(response->data, "Wrong username or password");
   } else {
+    // Check if account is signed in
+    for (int i = 0; i < MAX_CLIENTS; i++) {
+      if (strcmp(sessions[i].currentAccount.username, user) == 0) {
+        strcpy(sessions[i].currentAccount.username, "#");
+        sessions[i].currentAccount.scores = 0;
+        sessions[i].room.id = -1;
+      }
+    }
+
     sessions[sessionID].currentAccount = findAccount(accounts, user)->acc;
     sessions[sessionID].room.id = -1;
     response->code = SIGNIN_SUCCESS;

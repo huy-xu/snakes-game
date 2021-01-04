@@ -61,7 +61,10 @@ typedef enum OPCODE {
   PLAYER_LEFT_ROOM,
 
   // Quit game
-  QUIT_GAME
+  QUIT_GAME,
+
+  // Sign in from other PC
+  SIGNIN_OTHER_PC
 } OPCODE;
 
 #endif

@@ -19,6 +19,8 @@ int main(int argc, char *argv[]) {
   struct sockaddr_in address;
   fd_set readfds;
   Message *request = (Message *)malloc(sizeof(Message));
+  Message *response = (Message *)malloc(sizeof(Message));
+
   accounts = readData("src/account.txt");
   if (argc != 2) {
     puts("Wrong parameter");
@@ -71,69 +73,77 @@ int main(int argc, char *argv[]) {
       for (i = 0; i < MAX_CLIENTS; i++) {
         sd = client_socket[i];
         if (FD_ISSET(sd, &readfds)) {
-          // Check if it was for closing , and also read the
-          // incoming message
+          // Check if it was for closing , and also read the incoming message
           receiveData(sd, request);
-          printf("Code: %d\nData: %s\n", request->code, request->data);
-          switch (request->code) {
-            case SIGNIN:
-              signIn(i, request->data);
-              break;
+          if (strcmp(sessions[i].currentAccount.username, "#") == 0 &&
+              request->code != SIGNIN && request->code != SIGNUP &&
+              request->code != QUIT_GAME) {
+            response->code = SIGNIN_OTHER_PC;
+            strcpy(response->data,
+                   "Your account has been signed in from other computer");
+            sendData(client_socket[i], response);
+          } else {
+            printf("Code: %d\nData: %s\n", request->code, request->data);
+            switch (request->code) {
+              case SIGNIN:
+                signIn(i, request->data);
+                break;
 
-            case SIGNUP:
-              signUp(i, request->data);
-              break;
+              case SIGNUP:
+                signUp(i, request->data);
+                break;
 
-            case CHANGE_PASSWORD:
-              changePassword(i, request->data);
-              break;
+              case CHANGE_PASSWORD:
+                changePassword(i, request->data);
+                break;
 
-            case SHOW_RANK:
-              showRank(i);
-              break;
+              case SHOW_RANK:
+                showRank(i);
+                break;
 
-            case CREATE_ROOM:
-              createRoom(i);
-              break;
+              case CREATE_ROOM:
+                createRoom(i);
+                break;
 
-            case SHOW_ROOM:
-              showRoom(i);
-              break;
+              case SHOW_ROOM:
+                showRoom(i);
+                break;
 
-            case JOIN_ROOM:
-              joinRoom(i, request->data);
-              break;
+              case JOIN_ROOM:
+                joinRoom(i, request->data);
+                break;
 
-            case LEAVE_ROOM:
-              leaveRoom(i);
-              break;
+              case LEAVE_ROOM:
+                leaveRoom(i);
+                break;
 
-            case CHAT:
-              sendChatMessage(i, request->data);
-              break;
+              case CHAT:
+                sendChatMessage(i, request->data);
+                break;
 
-            case START_GAME:
-              startGame(i);
-              break;
+              case START_GAME:
+                startGame(i);
+                break;
 
-            case SIGNOUT:
-              signOut(i);
-              break;
+              case SIGNOUT:
+                signOut(i);
+                break;
 
-            case QUIT_GAME:
-              // Somebody disconnected, get details and print
-              getpeername(sd, (struct sockaddr *)&address,
-                          (socklen_t *)&addrlen);
-              printf("Host disconnected IP: %s, PORT: %d\n",
-                     inet_ntoa(address.sin_addr), ntohs(address.sin_port));
+              case QUIT_GAME:
+                // Somebody disconnected, get details and print
+                getpeername(sd, (struct sockaddr *)&address,
+                            (socklen_t *)&addrlen);
+                printf("Host disconnected IP: %s, PORT: %d\n",
+                       inet_ntoa(address.sin_addr), ntohs(address.sin_port));
 
-              // Close the socket and mark as 0 in list for reuse
-              close(sd);
-              client_socket[i] = 0;
-              break;
+                // Close the socket and mark as 0 in list for reuse
+                close(sd);
+                client_socket[i] = 0;
+                break;
 
-            default:
-              break;
+              default:
+                break;
+            }
           }
         }
       }
