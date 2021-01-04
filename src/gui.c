@@ -93,7 +93,7 @@ gboolean handle_res(app_widgets *widgets) {
 }
 
 // called when window is closed
-void on_window_main_destroy(app_widgets *app_wdgts) {
+void on_window_main_destroy(GtkWidget *widget, app_widgets *app_wdgts) {
   quitGameReq(app_wdgts->serverfd);
   gtk_main_quit();
 }

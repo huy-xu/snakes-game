@@ -3,8 +3,8 @@
 
 #include "constant.h"
 typedef struct message {
-  OPCODE code;     // opcode
-  char data[MAX];  // save data field
+  OPCODE code;
+  char data[MAX]; 
 } Message;
 
 void splitData(char **argv, char *data);
