@@ -125,6 +125,7 @@ void signIn(int sessionID, char *data) {
   strcpy(pass, argv[1]);
   if (!isAuthenticated(user, pass)) {
     response->code = SIGNIN_FAIL;
+    strcpy(response->data, "Wrong username or password");
   } else {
     sessions[sessionID].currentAccount = findAccount(accounts, user)->acc;
     sessions[sessionID].room.id = -1;
@@ -148,12 +149,14 @@ void changePassword(int sessionID, char *data) {
 
   if (strcmp(newPass, confirmPass) != 0) {
     response->code = CHANGE_PASSWORD_FAIL;
+    strcpy(response->data, "Confirm password did not match");
   } else {
     ListAccountPtr current =
         findAccount(accounts, sessions[sessionID].currentAccount.username);
     strcpy(current->acc.password, newPass);
     writeData("src/account.txt", accounts);
     response->code = CHANGE_PASSWORD_SUCCESS;
+    strcpy(response->data, "Change password successfully");
   }
 
   sendData(client_socket[sessionID], response);
@@ -172,9 +175,11 @@ void signUp(int sessionID, char *data) {
 
   if (findAccount(accounts, user) != NULL) {
     response->code = ACCOUNT_EXISTED;
+    strcpy(response->data, "Username has been existed");
   } else {
     if (strcmp(pass, confirmPass) != 0) {
-      response->code = PASS_NOT_MATCH;
+      response->code = REPASS_NOT_MATCH;
+      strcpy(response->data, "Confirm password did not matched");
     } else {
       strcpy(acc.username, user);
       strcpy(acc.password, pass);
@@ -182,6 +187,7 @@ void signUp(int sessionID, char *data) {
       insertAccount(&accounts, acc);
       writeData("src/account.txt", accounts);
       response->code = SIGNUP_SUCCESS;
+      strcpy(response->data, "Sign up successfully");
     }
   }
 
