@@ -105,7 +105,7 @@ int gui(int serverfd) {
 }
 
 void *recv_handler(void *app_widget) {
-  int serverfd;
+  int serverfd, receiveBytes;
   app_widgets *widgets = (app_widgets *)app_widget;
   Message *response = (Message *)malloc(sizeof(Message));
 
@@ -114,11 +114,19 @@ void *recv_handler(void *app_widget) {
   serverfd = widgets->serverfd;
 
   while (1) {
-    receiveData(widgets->serverfd, response);
+    receiveBytes = receiveData(widgets->serverfd, response);
+    if (receiveBytes == 0) {
+      break;
+    }
     printf("Server Code: %d \t Server data: %s\n", response->code,
            response->data);
     widgets->msg = response;
     g_idle_add((GSourceFunc)handle_res, widgets);
+  }
+
+  if (receiveBytes == 0) {
+    printf("SERVER IS DOWN\n");
+    exit(0);
   }
 
   close(serverfd);
