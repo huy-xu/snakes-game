@@ -79,14 +79,18 @@ void showRoom(int sessionID) {
 
   response->code = SHOW_ROOM_SUCCESS;
 
-  while (currentRoomPtr != NULL) {
-    sprintf(temp, "%d:%d", currentRoomPtr->room.id,
-            numOfPlayers(currentRoomPtr->room.players));
-    strcat(response->data, temp);
-    if (currentRoomPtr->nextPtr != NULL) {
-      strcat(response->data, "-");
+  if (currentRoomPtr == NULL) {
+    strcpy(response->data, "#");
+  } else {
+    while (currentRoomPtr != NULL) {
+      sprintf(temp, "%d:%d", currentRoomPtr->room.id,
+              numOfPlayers(currentRoomPtr->room.players));
+      strcat(response->data, temp);
+      if (currentRoomPtr->nextPtr != NULL) {
+        strcat(response->data, "-");
+      }
+      currentRoomPtr = currentRoomPtr->nextPtr;
     }
-    currentRoomPtr = currentRoomPtr->nextPtr;
   }
 
   sendData(client_socket[sessionID], response);
