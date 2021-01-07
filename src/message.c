@@ -153,3 +153,16 @@ void splitData2(char **argv, char *data) {
     token = strtok(NULL, ":");
   }
 }
+
+int numOfArgv(char *data) {
+  int total = 0;
+
+  for (int i = 0; data[i] != '\0'; i++) {
+    if (data[i] == '-') {
+      total++;
+    }
+  }
+  total++;
+
+  return total;
+}

@@ -264,3 +264,9 @@ void *handleStartGame(void *arg) {
 
   system(startGame);
 }
+
+void quitGame(int sessionID) {
+  if (sessions[sessionID].room.id != -1) {
+    leaveRoom(sessionID);
+  }
+}

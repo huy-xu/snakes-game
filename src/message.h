@@ -8,5 +8,7 @@ typedef struct message {
 } Message;
 
 void splitData(char **argv, char *data);
+void splitData2(char **argv, char *data);
+int numOfArgv(char *data);
 
 #endif

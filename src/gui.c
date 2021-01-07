@@ -182,11 +182,7 @@ gboolean handle_res(app_widgets *widgets) {
 
       char temp[MAX];
       strcpy(temp, widgets->msg->data);
-      for (int i = 0; temp[i] != '\0'; i++) {
-        if (temp[i] == ':') {
-          numberOfRoom++;
-        }
-      }
+      numberOfRoom = numOfArgv(temp);
 
       char *rooms[MAX_ROOMS];
       splitData(rooms, temp);

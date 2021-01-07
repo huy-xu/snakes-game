@@ -33,5 +33,6 @@ void leaveRoom(int sessionID);
 void sendChatMessage(int sessionID, char *data);
 void startGame(int sessionID);
 void *handleStartGame(void *arg);
+void quitGame(int sessionID);
 
 #endif

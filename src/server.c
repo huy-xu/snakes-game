@@ -130,6 +130,7 @@ int main(int argc, char *argv[]) {
                 break;
 
               case QUIT_GAME:
+                quitGame(i);
                 // Somebody disconnected, get details and print
                 getpeername(sd, (struct sockaddr *)&address,
                             (socklen_t *)&addrlen);
