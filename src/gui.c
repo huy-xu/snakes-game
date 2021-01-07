@@ -65,7 +65,7 @@ int gui(int serverfd) {
       GTK_ENTRY(gtk_builder_get_object(builder, ENTRY_CHANGEPAS_NEWPAS));
   widgets->w_entry_changepas_confirm =
       GTK_ENTRY(gtk_builder_get_object(builder, ENTRY_CHANGEPAS_CONFIRM));
-  widgets->w_entry_chat = 
+  widgets->w_entry_chat =
       GTK_ENTRY(gtk_builder_get_object(builder, ENTRY_CHAT));
 
   // Get label
@@ -79,8 +79,7 @@ int gui(int serverfd) {
       GTK_LABEL(gtk_builder_get_object(builder, LBL_PLAYER_3));
   widgets->w_player_4 =
       GTK_LABEL(gtk_builder_get_object(builder, LBL_PLAYER_4));
-  widgets->a_lbl_error =
-      GTK_LABEL(gtk_builder_get_object(builder, LBL_ERROR));
+  widgets->a_lbl_error = GTK_LABEL(gtk_builder_get_object(builder, LBL_ERROR));
   widgets->w_lbl_rank[0] =
       GTK_LABEL(gtk_builder_get_object(builder, LBL_RANK_USER1));
   widgets->w_lbl_rank[1] =
@@ -125,8 +124,8 @@ int gui(int serverfd) {
       GTK_BUTTON(gtk_builder_get_object(builder, BTN_LEAVE_ROOM));
   widgets->w_btn_send_mess =
       GTK_BUTTON(gtk_builder_get_object(builder, BTN_SEND_MESS));
-  widgets->w_chat_view = 
-      GTK_TEXT_VIEW(gtk_builder_get_object(builder, TXT_CHAT_VIEW));      
+  widgets->w_chat_view =
+      GTK_TEXT_VIEW(gtk_builder_get_object(builder, TXT_CHAT_VIEW));
 
   widgets->serverfd = serverfd;
   widgets->currentWindow = 0;
@@ -136,7 +135,8 @@ int gui(int serverfd) {
   pthread_create(&tid, NULL, &recv_handler, widgets);
 
   gtk_stack_set_visible_child(widgets->w_stack_home, widgets->w_container_menu);
-  gtk_stack_set_visible_child(widgets->a_stack_alert, widgets->a_room_not_found);
+  gtk_stack_set_visible_child(widgets->a_stack_alert,
+                              widgets->a_room_not_found);
 
   gtk_widget_show(window);
   gtk_main();
@@ -175,8 +175,7 @@ void *recv_handler(void *app_widget) {
 
 gboolean handle_res(app_widgets *widgets) {
   switch (widgets->msg->code) {
-    case SIGNIN_SUCCESS:
-      printf("signin success\n");
+    case SIGNIN_SUCCESS: {
       char *data[2];
       splitData(data, widgets->msg->data);
       strcpy(userName, data[0]);
@@ -184,78 +183,85 @@ gboolean handle_res(app_widgets *widgets) {
       gtk_stack_set_visible_child(widgets->w_stack_home,
                                   widgets->w_container_feature);
       break;
+    }
 
-    case SIGNIN_FAIL:
-      printf("%d\n", widgets->msg->code);
-      gtk_label_set_text(widgets->a_lbl_error,widgets->msg->data);
+    case SIGNIN_FAIL: {
+      gtk_label_set_text(widgets->a_lbl_error, widgets->msg->data);
       gtk_widget_show(alert);
       break;
+    }
 
     case SIGNUP_SUCCESS:
       break;
 
-    case SIGNOUT_SUCCESS:
+    case SIGNOUT_SUCCESS: {
       gtk_stack_set_visible_child(widgets->w_stack_menu,
                                   widgets->w_container_menu_log);
       break;
+    }
 
-    case REPASS_NOT_MATCH:
-      gtk_label_set_text(widgets->a_lbl_error,widgets->msg->data);
+    case REPASS_NOT_MATCH: {
+      gtk_label_set_text(widgets->a_lbl_error, widgets->msg->data);
       gtk_widget_show(alert);
       break;
+    }
 
-    case ACCOUNT_EXISTED:
-      gtk_label_set_text(widgets->a_lbl_error,widgets->msg->data);
+    case ACCOUNT_EXISTED: {
+      gtk_label_set_text(widgets->a_lbl_error, widgets->msg->data);
       gtk_widget_show(alert);
       break;
+    }
 
-    case CHANGE_PASSWORD_SUCCESS:
+    case CHANGE_PASSWORD_SUCCESS: {
       gtk_stack_set_visible_child(widgets->w_stack_home,
                                   widgets->w_container_feature);
       break;
+    }
 
-    case CHANGE_PASSWORD_FAIL:
-      gtk_label_set_text(widgets->a_lbl_error,widgets->msg->data);
+    case CHANGE_PASSWORD_FAIL: {
+      gtk_label_set_text(widgets->a_lbl_error, widgets->msg->data);
       gtk_widget_show(alert);
       break;
+    }
 
-    case SHOW_RANK_SUCCESS:
-      {char tempRank[MAX];
-      strcpy(tempRank,widgets->msg->data);
+    case SHOW_RANK_SUCCESS: {
+      char tempRank[MAX];
+      strcpy(tempRank, widgets->msg->data);
       int numberRank = numOfArgv(tempRank);
 
       char *rank[6];
-      splitData(rank,tempRank);
+      splitData(rank, tempRank);
       char *myScore[2];
-      splitData2(myScore,rank[numberRank-1]);
+      splitData2(myScore, rank[numberRank - 1]);
       char tmpMyRank[MAX] = "#";
       strcat(tmpMyRank, myScore[0]);
-      gtk_label_set_text(widgets->w_lbl_my_rank,tmpMyRank);  
-      gtk_label_set_text(widgets->w_lbl_my_score,myScore[1]);  
+      gtk_label_set_text(widgets->w_lbl_my_rank, tmpMyRank);
+      gtk_label_set_text(widgets->w_lbl_my_score, myScore[1]);
 
       for (int i = 0; i < numberRank - 1; i++) {
         char *score[2];
         splitData2(score, rank[i]);
-        gtk_label_set_text(widgets->w_lbl_rank[i],score[0]);
-        gtk_label_set_text(widgets->w_lbl_score[i],score[1]);
+        gtk_label_set_text(widgets->w_lbl_rank[i], score[0]);
+        gtk_label_set_text(widgets->w_lbl_score[i], score[1]);
       }
-      gtk_stack_set_visible_child(widgets->w_stack_home,
-                                  widgets->w_rank);
-      break;}
+      gtk_stack_set_visible_child(widgets->w_stack_home, widgets->w_rank);
+      break;
+    }
 
-    case ROOM_NOT_FOUND:
-      gtk_label_set_text(widgets->a_lbl_error,widgets->msg->data);
+    case ROOM_NOT_FOUND: {
+      gtk_label_set_text(widgets->a_lbl_error, widgets->msg->data);
       gtk_widget_show(alert);
       break;
+    }
 
-    case ROOM_IS_FULL:
-      gtk_label_set_text(widgets->a_lbl_error,widgets->msg->data);
+    case ROOM_IS_FULL: {
+      gtk_label_set_text(widgets->a_lbl_error, widgets->msg->data);
       gtk_widget_show(alert);
       break;
+    }
 
-    case SHOW_ROOM_SUCCESS:
+    case SHOW_ROOM_SUCCESS: {
       numberOfRoom = 0;
-      printf("show room success\n");
       gtk_stack_set_visible_child(widgets->w_stack_home,
                                   widgets->w_container_listroom);
       if (strcmp(widgets->msg->data, "#") == 0) {
@@ -283,9 +289,9 @@ gboolean handle_res(app_widgets *widgets) {
         }
       }
       break;
+    }
 
-    case CREATE_ROOM_SUCCESS:
-      printf("create room success\n");
+    case CREATE_ROOM_SUCCESS: {
       gtk_label_set_text(GTK_LABEL(widgets->w_player_1), userName);
       gtk_label_set_text(GTK_LABEL(widgets->w_player_2), "");
       gtk_label_set_text(GTK_LABEL(widgets->w_player_3), "");
@@ -293,9 +299,9 @@ gboolean handle_res(app_widgets *widgets) {
       gtk_widget_show(widgets->w_btn_join_game);
       gtk_stack_set_visible_child(widgets->w_stack_home, widgets->w_roomView);
       break;
+    }
 
-    case JOIN_ROOM_SUCCESS:
-      printf("join room success\n");
+    case JOIN_ROOM_SUCCESS: {
       char tempRoom[MAX];
       strcpy(tempRoom, widgets->msg->data);
       splitData(player, tempRoom);
@@ -315,14 +321,15 @@ gboolean handle_res(app_widgets *widgets) {
       gtk_widget_hide(widgets->w_btn_join_game);
       gtk_stack_set_visible_child(widgets->w_stack_home, widgets->w_roomView);
       break;
+    }
 
-    case LEAVE_ROOM_SUCCESS:
+    case LEAVE_ROOM_SUCCESS: {
       gtk_stack_set_visible_child(widgets->w_stack_home,
                                   widgets->w_container_listroom);
       break;
+    }
 
-    case PLAYER_LEFT_ROOM:
-      printf("Left room: %s\n",widgets->msg->data);
+    case PLAYER_LEFT_ROOM: {
       char tempLeftRoom[MAX];
       strcpy(tempLeftRoom, widgets->msg->data);
       if (strcmp(player[0], tempLeftRoom) == 0) {
@@ -335,26 +342,28 @@ gboolean handle_res(app_widgets *widgets) {
         gtk_label_set_text(GTK_LABEL(widgets->w_player_4), "");
       }
       break;
+    }
 
-    case SIGNIN_OTHER_PC:
-      gtk_label_set_text(widgets->a_lbl_error,widgets->msg->data);
+    case SIGNIN_OTHER_PC: {
+      gtk_label_set_text(widgets->a_lbl_error, widgets->msg->data);
       gtk_widget_show(alert);
       break;
+    }
 
-    case CHAT_SUCCESS:
-      printf("Chat\n");
+    case CHAT_SUCCESS: {
       char tempChat[MAX];
       strcpy(tempChat, widgets->msg->data);
       GtkTextBuffer *buffer;
       GtkTextMark *mark;
       GtkTextIter iter;
       buffer = gtk_text_view_get_buffer(widgets->w_chat_view);
-      mark = gtk_text_buffer_get_insert (buffer);
-      gtk_text_buffer_get_iter_at_mark (buffer, &iter, mark);
+      mark = gtk_text_buffer_get_insert(buffer);
+      gtk_text_buffer_get_iter_at_mark(buffer, &iter, mark);
       if (gtk_text_buffer_get_char_count(buffer))
-          gtk_text_buffer_insert (buffer, &iter, "\n", 1);
-      gtk_text_buffer_insert (buffer, &iter, tempChat, -1);
+        gtk_text_buffer_insert(buffer, &iter, "\n", 1);
+      gtk_text_buffer_insert(buffer, &iter, tempChat, -1);
       break;
+    }
     case START_GAME_SUCCESS:
       break;
   }
@@ -363,13 +372,13 @@ gboolean handle_res(app_widgets *widgets) {
 }
 
 // called when window is closed
-void on_window_main_destroy(app_widgets *app_wdgts) {
+void on_window_main_destroy(GtkWidget *widget, app_widgets *app_wdgts) {
   quitGameReq(app_wdgts->serverfd);
   gtk_main_quit();
+  return;
 }
 
 void on_btn_listroom_clicked(GtkButton *button, app_widgets *app_wdgts) {
-  printf("Show room\n");
   showRoomReq(app_wdgts->serverfd);
   return;
 }
@@ -393,10 +402,6 @@ void on_btn_log_clicked(GtkButton *button, app_widgets *app_wdgts) {
   signInReq(app_wdgts->serverfd, user, pass);
   return;
 }
-// void on_btn_log_clicked(GtkButton *button, app_widgets *app_wdgts){
-//     gtk_stack_set_visible_child(app_wdgts->w_stack_home,
-//     app_wdgts->w_container_feature); return;
-// }
 
 void on_btn_logout_clicked(GtkButton *button, app_widgets *app_wdgts) {
   signOutReq(app_wdgts->serverfd);
@@ -426,7 +431,6 @@ void on_btn_changepas_back_clicked(GtkButton *button, app_widgets *app_wdgts) {
 }
 
 void on_btn_createroom_clicked(GtkButton *button, app_widgets *app_wdgts) {
-  printf("on_btn_createroom_clicked");
   createRoomReq(app_wdgts->serverfd);
   return;
 }
@@ -474,7 +478,7 @@ void on_btn_leave_room_clicked(GtkButton *button, app_widgets *app_wdgts) {
 void on_btn_send_mess_clicked(GtkButton *button, app_widgets *app_wdgts) {
   char chat[MAX];
   strcpy(chat, gtk_entry_get_text(app_wdgts->w_entry_chat));
-  chatRoomReq(app_wdgts->serverfd,chat);
+  chatRoomReq(app_wdgts->serverfd, chat);
 }
 
 void on_btn_ok_1_clicked(GtkButton *button, app_widgets *app_wdgts) {
@@ -482,6 +486,5 @@ void on_btn_ok_1_clicked(GtkButton *button, app_widgets *app_wdgts) {
 }
 
 void on_btn_see_rank_clicked(GtkButton *button, app_widgets *app_wdgts) {
-  printf("43999\n");
   showRankReq(app_wdgts->serverfd);
 }
