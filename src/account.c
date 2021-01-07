@@ -241,7 +241,7 @@ void showRank(int sessionID) {
       findAccount(accounts, sessions[sessionID].currentAccount.username);
   for (i = 0; i < count; i++) {
     if (strcmp(arr[i].username, current->acc.username) == 0) {
-      sprintf(str, "%s:%d", arr[i].username, arr[i].scores);
+      sprintf(str, "%d:%d", i + 1, arr[i].scores);
       strcat(response->data, str);
     }
   }

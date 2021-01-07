@@ -220,8 +220,7 @@ gboolean handle_res(app_widgets *widgets) {
       break;
 
     case SHOW_RANK_SUCCESS:
-      printf("%s\n",widgets->msg->data);
-      char tempRank[MAX];
+      {char tempRank[MAX];
       strcpy(tempRank,widgets->msg->data);
       int numberRank = numOfArgv(tempRank);
 
@@ -229,7 +228,9 @@ gboolean handle_res(app_widgets *widgets) {
       splitData(rank,tempRank);
       char *myScore[2];
       splitData2(myScore,rank[numberRank-1]);
-      gtk_label_set_text(widgets->w_lbl_my_rank,myScore[0]);  
+      char tmpMyRank[MAX] = "#";
+      strcat(tmpMyRank, myScore[0]);
+      gtk_label_set_text(widgets->w_lbl_my_rank,tmpMyRank);  
       gtk_label_set_text(widgets->w_lbl_my_score,myScore[1]);  
 
       for (int i = 0; i < numberRank - 1; i++) {
@@ -240,7 +241,7 @@ gboolean handle_res(app_widgets *widgets) {
       }
       gtk_stack_set_visible_child(widgets->w_stack_home,
                                   widgets->w_rank);
-      break;
+      break;}
 
     case ROOM_NOT_FOUND:
       gtk_label_set_text(widgets->a_lbl_error,widgets->msg->data);
