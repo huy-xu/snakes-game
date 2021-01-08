@@ -203,19 +203,15 @@
               <object class="GtkBox">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
+                <property name="margin_left">10</property>
                 <child>
-                  <placeholder/>
-                </child>
-                <child>
-                  <placeholder/>
-                </child>
-                <child>
-                  <object class="GtkButton">
+                  <object class="GtkButton" id="btn_back">
                     <property name="label" translatable="yes">Back</property>
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
                     <property name="receives_default">True</property>
-                    <signal name="clicked" handler="on_btn_backhome_clicked" swapped="no"/>
+                    <property name="margin_top">10</property>
+                    <signal name="clicked" handler="on_btn_back_clicked" swapped="no"/>
                   </object>
                   <packing>
                     <property name="expand">False</property>
@@ -1317,7 +1313,7 @@
                   </packing>
                 </child>
                 <child>
-                  <object class="GtkBox" id="container_menu_req">
+                  <object class="GtkBox" id="container_menu_reg">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
                     <property name="margin_top">85</property>
@@ -1523,18 +1519,6 @@
             <property name="orientation">vertical</property>
             <property name="spacing">10</property>
             <child>
-              <object class="GtkLabel">
-                <property name="visible">True</property>
-                <property name="can_focus">False</property>
-                <property name="label" translatable="yes">SNAKES GAME</property>
-              </object>
-              <packing>
-                <property name="expand">False</property>
-                <property name="fill">True</property>
-                <property name="position">0</property>
-              </packing>
-            </child>
-            <child>
               <object class="GtkBox">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
@@ -1545,24 +1529,18 @@
                     <property name="can_focus">False</property>
                     <property name="margin_bottom">60</property>
                     <child>
-                      <object class="GtkButton" id="btn_changepas_back">
+                      <object class="GtkButton" id="btn_bac">
                         <property name="label" translatable="yes">Back</property>
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
                         <property name="receives_default">True</property>
-                        <signal name="clicked" handler="on_btn_changepas_back_clicked" swapped="no"/>
+                        <signal name="clicked" handler="on_btn_back_clicked" swapped="no"/>
                       </object>
                       <packing>
                         <property name="expand">False</property>
                         <property name="fill">True</property>
                         <property name="position">0</property>
                       </packing>
-                    </child>
-                    <child>
-                      <placeholder/>
-                    </child>
-                    <child>
-                      <placeholder/>
                     </child>
                   </object>
                   <packing>
@@ -1608,7 +1586,7 @@
                       </packing>
                     </child>
                     <child>
-                      <object class="GtkEntry" id="entry_changepas_curpas">
+                      <object class="GtkEntry" id="entry_changepas_new">
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
                         <property name="visibility">False</property>
@@ -1846,15 +1824,16 @@
               <object class="GtkBox">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
-                <property name="margin_bottom">15</property>
+                <property name="homogeneous">True</property>
                 <child>
-                  <object class="GtkButton" id="btn_backhome">
+                  <object class="GtkButton" id="btn_backh">
                     <property name="label" translatable="yes">Back</property>
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
                     <property name="receives_default">True</property>
-                    <property name="border_width">0</property>
-                    <signal name="clicked" handler="on_btn_backhome_clicked" swapped="no"/>
+                    <property name="halign">start</property>
+                    <property name="valign">center</property>
+                    <signal name="clicked" handler="on_btn_back_clicked" swapped="no"/>
                   </object>
                   <packing>
                     <property name="expand">False</property>
@@ -1863,10 +1842,41 @@
                   </packing>
                 </child>
                 <child>
-                  <placeholder/>
+                  <object class="GtkBox">
+                    <property name="visible">True</property>
+                    <property name="can_focus">False</property>
+                    <property name="orientation">vertical</property>
+                    <child>
+                      <placeholder/>
+                    </child>
+                    <child>
+                      <placeholder/>
+                    </child>
+                    <child>
+                      <placeholder/>
+                    </child>
+                  </object>
+                  <packing>
+                    <property name="expand">False</property>
+                    <property name="fill">True</property>
+                    <property name="position">1</property>
+                  </packing>
                 </child>
                 <child>
-                  <placeholder/>
+                  <object class="GtkButton" id="btn_refresh">
+                    <property name="label" translatable="yes">Refresh</property>
+                    <property name="visible">True</property>
+                    <property name="can_focus">True</property>
+                    <property name="receives_default">True</property>
+                    <property name="halign">end</property>
+                    <property name="valign">center</property>
+                    <signal name="clicked" handler="on_btn_refresh_clicked" swapped="no"/>
+                  </object>
+                  <packing>
+                    <property name="expand">False</property>
+                    <property name="fill">True</property>
+                    <property name="position">2</property>
+                  </packing>
                 </child>
               </object>
               <packing>

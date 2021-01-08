@@ -255,8 +255,12 @@ void signOut(int sessionID) {
   Message *response = (Message *)malloc(sizeof(Message));
 
   response->code = SIGNOUT_SUCCESS;
+  strcpy(response->data, "Sign out successfully");
+  
   strcpy(sessions[sessionID].currentAccount.username, "#");
+  strcpy(sessions[sessionID].currentAccount.password, "#");
   sessions[sessionID].currentAccount.scores = 0;
   sessions[sessionID].room.id = -1;
+
   sendData(client_socket[sessionID], response);
 }

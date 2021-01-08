@@ -59,10 +59,8 @@ int gui(int serverfd) {
       GTK_ENTRY(gtk_builder_get_object(builder, ENTRY_MENU_LOG_USER));
   widgets->w_entry_menu_log_pas =
       GTK_ENTRY(gtk_builder_get_object(builder, ENTRY_MENU_LOG_PAS));
-  widgets->w_entry_changepas_currpas =
-      GTK_ENTRY(gtk_builder_get_object(builder, ENTRY_CHANGEPAS_CURPAS));
-  widgets->w_entry_changepas_curpas =
-      GTK_ENTRY(gtk_builder_get_object(builder, ENTRY_CHANGEPAS_NEWPAS));
+  widgets->w_entry_changepas_new =
+      GTK_ENTRY(gtk_builder_get_object(builder, ENTRY_CHANGEPAS_NEW));
   widgets->w_entry_changepas_confirm =
       GTK_ENTRY(gtk_builder_get_object(builder, ENTRY_CHANGEPAS_CONFIRM));
   widgets->w_entry_chat =
@@ -71,6 +69,8 @@ int gui(int serverfd) {
   // Get label
   widgets->w_menu_lbl_userName =
       GTK_LABEL(gtk_builder_get_object(builder, LBL_USER_NAME));
+  widgets->w_menu_lbl_score =
+      GTK_LABEL(gtk_builder_get_object(builder, LBL_SCORE));
   widgets->w_player_1 =
       GTK_LABEL(gtk_builder_get_object(builder, LBL_PLAYER_1));
   widgets->w_player_2 =
@@ -159,7 +159,7 @@ void *recv_handler(void *app_widget) {
     if (receiveBytes == 0) {
       break;
     }
-    printf("Server Code: %d \t Server data: %s\n", response->code,
+    printf("Server Code: %d\nServer data: %s\n\n", response->code,
            response->data);
     widgets->msg = response;
     g_idle_add((GSourceFunc)handle_res, widgets);
@@ -176,10 +176,18 @@ void *recv_handler(void *app_widget) {
 gboolean handle_res(app_widgets *widgets) {
   switch (widgets->msg->code) {
     case SIGNIN_SUCCESS: {
-      char *data[2];
-      splitData(data, widgets->msg->data);
-      strcpy(userName, data[0]);
-      gtk_label_set_text(GTK_LABEL(widgets->w_menu_lbl_userName), userName);
+      char *argv[2];
+      char user[MAX] = "Welcome ";
+      char score[MAX] = "Your scores: ";
+
+      splitData(argv, widgets->msg->data);
+
+      strcat(user, argv[0]);
+      strcat(user, "!");
+      strcat(score, argv[1]);
+
+      gtk_label_set_text(GTK_LABEL(widgets->w_menu_lbl_userName), user);
+      gtk_label_set_text(GTK_LABEL(widgets->w_menu_lbl_score), score);
       gtk_stack_set_visible_child(widgets->w_stack_home,
                                   widgets->w_container_feature);
       break;
@@ -192,6 +200,8 @@ gboolean handle_res(app_widgets *widgets) {
     }
 
     case SIGNUP_SUCCESS:
+      gtk_stack_set_visible_child(widgets->w_stack_menu,
+                                  widgets->w_container_menu_log);
       break;
 
     case SIGNOUT_SUCCESS: {
@@ -383,7 +393,12 @@ void on_btn_listroom_clicked(GtkButton *button, app_widgets *app_wdgts) {
   return;
 }
 
-void on_btn_backhome_clicked(GtkButton *button, app_widgets *app_wdgts) {
+void on_btn_refresh_clicked(GtkButton *button, app_widgets *app_wdgts) {
+  showRoomReq(app_wdgts->serverfd);
+  return;
+}
+
+void on_btn_back_clicked(GtkButton *button, app_widgets *app_wdgts) {
   gtk_stack_set_visible_child(app_wdgts->w_stack_home,
                               app_wdgts->w_container_feature);
   return;
@@ -417,16 +432,9 @@ void on_btn_viewchangepas_clicked(GtkButton *button, app_widgets *app_wdgts) {
 void on_btn_changepas_clicked(GtkButton *button, app_widgets *app_wdgts) {
   char curPas[MAX], newPas[MAX], confirm[MAX];
 
-  strcpy(curPas, gtk_entry_get_text(app_wdgts->w_entry_changepas_currpas));
-  strcpy(newPas, gtk_entry_get_text(app_wdgts->w_entry_changepas_curpas));
+  strcpy(newPas, gtk_entry_get_text(app_wdgts->w_entry_changepas_new));
   strcpy(confirm, gtk_entry_get_text(app_wdgts->w_entry_changepas_confirm));
   changePasswordReq(app_wdgts->serverfd, newPas, confirm);
-  return;
-}
-
-void on_btn_changepas_back_clicked(GtkButton *button, app_widgets *app_wdgts) {
-  gtk_stack_set_visible_child(app_wdgts->w_stack_home,
-                              app_wdgts->w_container_feature);
   return;
 }
 
@@ -473,6 +481,16 @@ void joinRoom6(GtkButton *button, app_widgets *app_wdgts) {
 
 void on_btn_leave_room_clicked(GtkButton *button, app_widgets *app_wdgts) {
   leaveRoomReq(app_wdgts->serverfd);
+}
+
+void on_btn_goto_signup_clicked(GtkButton *button, app_widgets *app_wdgts) {
+  gtk_stack_set_visible_child(app_wdgts->w_stack_menu,
+                              app_wdgts->w_container_menu_reg);
+}
+
+void on_btn_goto_signin_clicked(GtkButton *button, app_widgets *app_wdgts) {
+  gtk_stack_set_visible_child(app_wdgts->w_stack_menu,
+                              app_wdgts->w_container_menu_log);
 }
 
 void on_btn_send_mess_clicked(GtkButton *button, app_widgets *app_wdgts) {

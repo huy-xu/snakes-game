@@ -35,8 +35,7 @@
 // ID Entry
 #define ENTRY_MENU_LOG_USER "entry_menu_log_user"
 #define ENTRY_MENU_LOG_PAS "entry_menu_log_pas"
-#define ENTRY_CHANGEPAS_CURPAS "entry_changepas_currpas"
-#define ENTRY_CHANGEPAS_NEWPAS "entry_changepas_curpas"
+#define ENTRY_CHANGEPAS_NEW "entry_changepas_new"
 #define ENTRY_CHANGEPAS_CONFIRM "entry_changepas_confirm"
 #define ENTRY_CHAT "entry_chat"
 
@@ -46,6 +45,8 @@
 #define BTN_JOIN_GAME "btn_join_game"
 #define BTN_LEAVE_ROOM "btn_leave_room"
 #define BTN_SEND_MESS "btn_send_mess"
+#define BTN_LOGOUT "btn_logout"
+#define BTN_REFRESH "btn_refresh"
 
 // ID label
 #define LBL_USER_NAME "lbl_user_name"
@@ -78,8 +79,7 @@ typedef struct {
 
   GtkEntry  *w_entry_menu_log_user, 
             *w_entry_menu_log_pas,
-            *w_entry_changepas_currpas,
-            *w_entry_changepas_curpas,
+            *w_entry_changepas_new,
             *w_entry_changepas_confirm,
             *w_entry_chat;
   GtkStack  *w_stack_home, *w_stack_menu, *a_stack_alert;
