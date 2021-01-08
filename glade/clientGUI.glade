@@ -1295,6 +1295,7 @@
                             <property name="receives_default">True</property>
                             <property name="relief">none</property>
                             <property name="use_underline">True</property>
+                            <signal name="clicked" handler="on_btn_goto_signup_clicked" swapped="no"/>
                           </object>
                           <packing>
                             <property name="expand">False</property>
@@ -1473,6 +1474,7 @@
                             <property name="receives_default">True</property>
                             <property name="relief">none</property>
                             <property name="use_underline">True</property>
+                            <signal name="clicked" handler="on_btn_goto_signin_clicked" swapped="no"/>
                           </object>
                           <packing>
                             <property name="expand">False</property>
