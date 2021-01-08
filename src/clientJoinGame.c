@@ -16,6 +16,8 @@
 #include <netinet/in.h>
 #include <netdb.h> 
 
+#include "helper.h"
+
 #define PORT        7070
 #define HEIGHT      24
 #define WIDTH       80
@@ -230,15 +232,17 @@ int main(int argc, char *argv[]){
     WINDOW* announcement = newwin(7, 35, (HEIGHT - 7)/2, (WIDTH - 35)/2);
     box(announcement, 0, 0);
     if (game_result == WINNER){
-        mvwaddstr(announcement, 2, (35-21)/2, "Game Over - You WIN!");
-        mvwaddstr(announcement, 4, (35-21)/2, "Press any key to quit.");
-        wbkgd(announcement,COLOR_PAIR(2));
+      writeScore("src/account.txt", argv[3]);
+      mvwaddstr(announcement, 2, (35 - 21) / 2, "Game Over - You WIN!");
+      mvwaddstr(announcement, 4, (35 - 21) / 2, "Press any key to quit.");
+      wbkgd(announcement, COLOR_PAIR(2));
     } else{
-        mvwaddstr(announcement, 2, (35-21)/2, "Game Over - you lose!");
-        if(game_result > 0)
-            mvwprintw(announcement, 3, (35-13)/2, "Player %d won.", game_result);
-        mvwaddstr(announcement, 4, (35-21)/2, "Press any key to quit.");
-        wbkgd(announcement,COLOR_PAIR(1));
+      mvwaddstr(announcement, 2, (35 - 21) / 2, "Game Over - you lose!");
+      if (game_result > 0)
+        mvwprintw(announcement, 3, (35 - 13) / 2, "Player %d won.",
+                  game_result);
+      mvwaddstr(announcement, 4, (35 - 21) / 2, "Press any key to quit.");
+      wbkgd(announcement, COLOR_PAIR(1));
     }
     mvwin(announcement, (HEIGHT - 7)/2, (WIDTH - 35)/2);
     wnoutrefresh(announcement);

@@ -890,7 +890,7 @@
               </packing>
             </child>
             <child>
-              <object class="GtkButton" id="btn_join_game">
+              <object class="GtkButton" id="btn_start_game">
                 <property name="label" translatable="yes">Start game</property>
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
@@ -898,7 +898,7 @@
                 <property name="halign">center</property>
                 <property name="valign">center</property>
                 <property name="margin_top">20</property>
-                <signal name="clicked" handler="on_btn_join_game_clicked" swapped="no"/>
+                <signal name="clicked" handler="on_btn_start_game_clicked" swapped="no"/>
               </object>
               <packing>
                 <property name="expand">False</property>

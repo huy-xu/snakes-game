@@ -224,7 +224,6 @@ void error(const char* msg) {
 
 // Handle ctrl+c signal
 void ctrl_c_handler() {
-  printf("\nIs-server ġie maqtul.\n");
   exit(0);
 }
 
@@ -233,8 +232,6 @@ void* gameplay(void* arg) {
   // Determine player number from file descriptor argument
   int fd = *(int*)arg;
   int player_no = fd - 3;
-  printf("Dahal plejer numru %d!\n", player_no);
-
   // Find three consecutive zeros in map for starting snake position
   int head_y, head_x;
   srand(time(NULL));
@@ -297,13 +294,11 @@ void* gameplay(void* arg) {
             !(game_map[player_snake->head.y - 1][player_snake->head.x + 1] ==
               FRUIT)) {
           move_snake(player_snake, UP);
-          printf("Plejer %d mexa 'l fuq!\n", player_no);
         } else if ((game_map[player_snake->head.y - 1][player_snake->head.x] ==
                     FRUIT) ||
                    (game_map[player_snake->head.y - 1]
                             [player_snake->head.x + 1] == FRUIT)) {
           eat_fruit(player_snake, UP);
-          printf("Plejer %d kiel frotta!\n", player_no);
         } else {
           move_snake(player_snake, LEFT);
           success = 0;
@@ -316,13 +311,11 @@ void* gameplay(void* arg) {
             !(game_map[player_snake->head.y + 1][player_snake->head.x + 1] ==
               FRUIT)) {
           move_snake(player_snake, DOWN);
-          printf("Plejer %d mexa 'l isfel!\n", player_no);
         } else if ((game_map[player_snake->head.y + 1][player_snake->head.x] ==
                     FRUIT) ||
                    (game_map[player_snake->head.y + 1]
                             [player_snake->head.x + 1] == FRUIT)) {
           eat_fruit(player_snake, DOWN);
-          printf("Plejer %d kiel frotta!\n", player_no);
         } else {
           move_snake(player_snake, DOWN);
           success = 0;
@@ -333,11 +326,9 @@ void* gameplay(void* arg) {
       case LEFT: {
         if (game_map[player_snake->head.y][player_snake->head.x - 1] == 0) {
           move_snake(player_snake, LEFT);
-          printf("Plejer %d mexa lejn ix-xellug!\n", player_no);
         } else if (game_map[player_snake->head.y][player_snake->head.x - 1] ==
                    FRUIT) {
           eat_fruit(player_snake, LEFT);
-          printf("Plejer %d kiel frotta!\n", player_no);
         } else {
           move_snake(player_snake, LEFT);
           success = 0;
@@ -348,11 +339,9 @@ void* gameplay(void* arg) {
       case RIGHT: {
         if (game_map[player_snake->head.y][player_snake->head.x + 1] == 0) {
           move_snake(player_snake, RIGHT);
-          printf("Plejer %d mexa lejn il-lemin!\n", player_no);
         } else if (game_map[player_snake->head.y][player_snake->head.x + 1] ==
                    FRUIT) {
           eat_fruit(player_snake, RIGHT);
-          printf("Plejer %d kiel frotta!\n", player_no);
         } else {
           move_snake(player_snake, RIGHT);
           success = 0;
@@ -366,14 +355,13 @@ void* gameplay(void* arg) {
   }
 
   if (player_snake->length == WINNER_LENGTH) {
-    fprintf(stderr, "Plejer %d rebaħ!\n", player_no);
     kill_snake(player_snake);
     close(fd);
+    exit(0);
     return 0;
   }
 
   else {
-    fprintf(stderr, "Plejer %d telaq mil-logħba.\n", player_no);
     kill_snake(player_snake);
     close(fd);
     return 0;
@@ -437,7 +425,7 @@ int main(int argc, char* argv[]) {
 
     // Reset game if someone won
     if (someone_won) {
-      printf("Il-logħba ġiet irrisettjata!\n");
+      exit(0);
       someone_won = 0;
     }
 

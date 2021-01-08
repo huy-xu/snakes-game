@@ -12,7 +12,7 @@
 #include "network.h"
 #include "request.h"
 
-char userName[MAX];
+char currentUser[MAX];
 char listRoom[6][MAX];
 char *player[4];
 int numberOfRoom = 0;
@@ -118,8 +118,8 @@ int gui(int serverfd) {
       GTK_BUTTON(gtk_builder_get_object(builder, "btn_enterroom5"));
   widgets->w_listRoom_btn_room[5] =
       GTK_BUTTON(gtk_builder_get_object(builder, "btn_enterroom6"));
-  widgets->w_btn_join_game =
-      GTK_BUTTON(gtk_builder_get_object(builder, BTN_JOIN_GAME));
+  widgets->w_btn_start_game =
+      GTK_BUTTON(gtk_builder_get_object(builder, BTN_START_GAME));
   widgets->w_btn_leave_room =
       GTK_BUTTON(gtk_builder_get_object(builder, BTN_LEAVE_ROOM));
   widgets->w_btn_send_mess =
@@ -181,6 +181,8 @@ gboolean handle_res(app_widgets *widgets) {
       char score[MAX] = "Your scores: ";
 
       splitData(argv, widgets->msg->data);
+
+      strcpy(currentUser, argv[0]);
 
       strcat(user, argv[0]);
       strcat(user, "!");
@@ -302,11 +304,11 @@ gboolean handle_res(app_widgets *widgets) {
     }
 
     case CREATE_ROOM_SUCCESS: {
-      gtk_label_set_text(GTK_LABEL(widgets->w_player_1), userName);
+      gtk_label_set_text(GTK_LABEL(widgets->w_player_1), currentUser);
       gtk_label_set_text(GTK_LABEL(widgets->w_player_2), "");
       gtk_label_set_text(GTK_LABEL(widgets->w_player_3), "");
       gtk_label_set_text(GTK_LABEL(widgets->w_player_4), "");
-      gtk_widget_show(widgets->w_btn_join_game);
+      gtk_widget_show(widgets->w_btn_start_game);
       gtk_stack_set_visible_child(widgets->w_stack_home, widgets->w_roomView);
       break;
     }
@@ -328,7 +330,7 @@ gboolean handle_res(app_widgets *widgets) {
       if (player[3] != NULL) {
         gtk_label_set_text(GTK_LABEL(widgets->w_player_4), player[3]);
       }
-      gtk_widget_hide(widgets->w_btn_join_game);
+      gtk_widget_hide(widgets->w_btn_start_game);
       gtk_stack_set_visible_child(widgets->w_stack_home, widgets->w_roomView);
       break;
     }
@@ -374,8 +376,17 @@ gboolean handle_res(app_widgets *widgets) {
       gtk_text_buffer_insert(buffer, &iter, tempChat, -1);
       break;
     }
-    case START_GAME_SUCCESS:
+    case START_GAME_SUCCESS: {
+      char clientJoinGame[MAX];
+      char serverPort[MAX];
+
+      strcpy(serverPort, widgets->msg->data);
+
+      sprintf(clientJoinGame, "./clientJoinGame %s %s %s", SERVER_IP, serverPort, currentUser);
+      system(clientJoinGame);
+
       break;
+    }
   }
 
   return FALSE;
@@ -505,4 +516,8 @@ void on_btn_ok_1_clicked(GtkButton *button, app_widgets *app_wdgts) {
 
 void on_btn_see_rank_clicked(GtkButton *button, app_widgets *app_wdgts) {
   showRankReq(app_wdgts->serverfd);
+}
+
+void on_btn_start_game_clicked(GtkButton *button, app_widgets *app_wdgts) {
+  startGameReq(app_wdgts->serverfd);
 }

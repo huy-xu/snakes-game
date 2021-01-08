@@ -21,7 +21,7 @@ startGame: src/startGame.c
 	$(CC) -Wall src/startGame.c -o startGame $(LFLAGS)
 
 clientJoinGame: src/clientJoinGame.c
-	$(CC) -Wall src/clientJoinGame.c -o clientJoinGame $(LFLAGS)
+	$(CC) $(CFLAGS) -Wall src/helper.c src/clientJoinGame.c -o clientJoinGame $(LFLAGS)
 
 clean: 
 	rm server client clientJoinGame startGame 

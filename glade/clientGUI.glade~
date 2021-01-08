@@ -1586,7 +1586,7 @@
                       </packing>
                     </child>
                     <child>
-                      <object class="GtkEntry" id="entry_changepas_curpas">
+                      <object class="GtkEntry" id="entry_changepas_new">
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
                         <property name="visibility">False</property>

@@ -42,7 +42,7 @@
 // ID Clickable Button
 #define BTN_MENU_REG "btn_menu_log_reg"
 #define BTN_LISTROOM_CREATE_ROOM "btn_create_room"
-#define BTN_JOIN_GAME "btn_join_game"
+#define BTN_START_GAME "btn_start_game"
 #define BTN_LEAVE_ROOM "btn_leave_room"
 #define BTN_SEND_MESS "btn_send_mess"
 #define BTN_LOGOUT "btn_logout"
@@ -105,7 +105,7 @@ typedef struct {
             *w_lbl_my_score;
   GtkButton *w_listRoom_btn_createRoom, 
             *w_listRoom_btn_room[10],
-            *w_btn_join_game,
+            *w_btn_start_game,
             *w_btn_leave_room,
             *w_btn_send_mess;
   GtkTextView *w_chat_view;
