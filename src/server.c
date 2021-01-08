@@ -10,7 +10,7 @@
 
 // Initialise all client_socket[] to 0 so not checked
 int client_socket[MAX_CLIENTS] = {0};
-Session sessions[MAX_CLIENTS] = {{NULL, NULL}};
+Session sessions[MAX_CLIENTS];
 ListAccountPtr accounts = NULL;
 ListRoomPtr rooms = NULL;
 
@@ -20,6 +20,15 @@ int main(int argc, char *argv[]) {
   fd_set readfds;
   Message *request = (Message *)malloc(sizeof(Message));
   Message *response = (Message *)malloc(sizeof(Message));
+
+  for (i = 0; i < MAX_CLIENTS; i++) {
+    strcpy(sessions[i].currentAccount.username, "#");
+    strcpy(sessions[i].currentAccount.password, "#");
+    sessions[i].currentAccount.scores = -1;
+    sessions[i].room.id = -1;
+    strcpy(sessions[i].room.players, "#");
+    strcpy(sessions[i].room.port, "#");
+  }
 
   accounts = readData("src/account.txt");
   if (argc != 2) {
@@ -129,14 +138,13 @@ int main(int argc, char *argv[]) {
                 signOut(i);
                 break;
 
-              case QUIT_GAME:
-                quitGame(i);
+              case QUIT_GAME:                
                 // Somebody disconnected, get details and print
                 getpeername(sd, (struct sockaddr *)&address,
                             (socklen_t *)&addrlen);
                 printf("Host disconnected IP: %s, PORT: %d\n",
                        inet_ntoa(address.sin_addr), ntohs(address.sin_port));
-
+                quitGame(i);
                 // Close the socket and mark as 0 in list for reuse
                 close(sd);
                 client_socket[i] = 0;
