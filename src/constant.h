@@ -10,61 +10,61 @@
 #define DEFAULT_PORT "900"
 typedef enum OPCODE {
   // Sign in
-  SIGNIN,
-  SIGNIN_SUCCESS,
-  SIGNIN_FAIL,
+  SIGNIN,          // 0
+  SIGNIN_SUCCESS,  // 1
+  SIGNIN_FAIL,     // 2
 
   // Sign up
-  SIGNUP,
-  SIGNUP_SUCCESS,
-  ACCOUNT_EXISTED,
-  REPASS_NOT_MATCH,
+  SIGNUP,            // 3
+  SIGNUP_SUCCESS,    // 4
+  ACCOUNT_EXISTED,   // 5
+  REPASS_NOT_MATCH,  // 6
 
   // Change password
-  CHANGE_PASSWORD,
-  CHANGE_PASSWORD_SUCCESS,
-  CHANGE_PASSWORD_FAIL,
+  CHANGE_PASSWORD,          // 7
+  CHANGE_PASSWORD_SUCCESS,  // 8
+  CHANGE_PASSWORD_FAIL,     // 9
 
   // Sign out
-  SIGNOUT,
-  SIGNOUT_SUCCESS,
+  SIGNOUT,          // 10
+  SIGNOUT_SUCCESS,  // 11
 
   // Show rank
-  SHOW_RANK,
-  SHOW_RANK_SUCCESS,
+  SHOW_RANK,          // 12
+  SHOW_RANK_SUCCESS,  // 13
 
   // Show list room
-  SHOW_ROOM,
-  SHOW_ROOM_SUCCESS,
+  SHOW_ROOM,          // 14
+  SHOW_ROOM_SUCCESS,  // 15
 
   // Create room
-  CREATE_ROOM,
-  CREATE_ROOM_SUCCESS,
+  CREATE_ROOM,          // 16
+  CREATE_ROOM_SUCCESS,  // 17
 
   // Join room
-  JOIN_ROOM,
-  JOIN_ROOM_SUCCESS,
-  ROOM_NOT_FOUND,
-  ROOM_IS_FULL,
+  JOIN_ROOM,          // 18
+  JOIN_ROOM_SUCCESS,  // 19
+  ROOM_NOT_FOUND,     // 20
+  ROOM_IS_FULL,       // 21
 
   // Chat
-  CHAT,
-  CHAT_SUCCESS,
+  CHAT,          // 22
+  CHAT_SUCCESS,  // 23
 
   // Start game
-  START_GAME,
-  START_GAME_SUCCESS,
+  START_GAME,          // 24
+  START_GAME_SUCCESS,  // 25
 
   // Leave room
-  LEAVE_ROOM,
-  LEAVE_ROOM_SUCCESS,
-  PLAYER_LEFT_ROOM,
+  LEAVE_ROOM,          // 26
+  LEAVE_ROOM_SUCCESS,  // 27
+  PLAYER_LEFT_ROOM,    // 28
 
   // Quit game
-  QUIT_GAME,
+  QUIT_GAME,  // 29
 
   // Sign in from other PC
-  SIGNIN_OTHER_PC
+  SIGNIN_OTHER_PC  // 30
 } OPCODE;
 
 #endif
