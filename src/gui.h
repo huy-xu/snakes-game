@@ -6,8 +6,7 @@
 #include "constant.h"
 #include "message.h"
 
-// #define GLADE_FILE_NAME "glade/clientGUI.glade"
-#define GLADE_FILE_NAME "glade/nam.glade"
+#define GLADE_FILE_NAME "glade/clientGUI.glade"
 #define GLADE_CSS "glade/style.css"
 
 // ID Window
