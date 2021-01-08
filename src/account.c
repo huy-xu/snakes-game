@@ -232,6 +232,7 @@ void showRank(int sessionID) {
 
   char str[MAX];
   response->code = SHOW_RANK_SUCCESS;
+  strcpy(response->data, "");
   for (i = 0; i < 5; i++) {
     sprintf(str, "%s:%d-", arr[i].username, arr[i].scores);
     strcat(response->data, str);
