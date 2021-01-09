@@ -206,8 +206,8 @@ gboolean handle_res(app_widgets *widgets) {
       break;
 
     case SIGNOUT_SUCCESS: {
-      gtk_stack_set_visible_child(widgets->w_stack_menu,
-                                  widgets->w_container_menu_log);
+      gtk_stack_set_visible_child(widgets->w_stack_home,
+                                  widgets->w_container_menu);
       break;
     }
 
