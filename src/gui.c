@@ -507,7 +507,7 @@ void on_btn_send_mess_clicked(GtkButton *button, app_widgets *app_wdgts) {
   chatRoomReq(app_wdgts->serverfd, chat);
 }
 
-void on_btn_ok_1_clicked(GtkButton *button, app_widgets *app_wdgts) {
+void on_btn_ok_clicked(GtkButton *button, app_widgets *app_wdgts) {
   gtk_widget_hide(alert);
 }
 
