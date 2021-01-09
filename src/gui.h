@@ -12,6 +12,7 @@
 // ID Window
 #define WINDOW_MAIN "window_main"
 #define WINDOW_ALERT "window_alert"
+#define WINDOW_SIGN_UP "window_sign_up"
 
 // ID Stack
 // #define STACK_CONTAINER "stack_container"
@@ -19,6 +20,7 @@
 #define STACK_HOME "stack_home"
 #define STACK_MENU "stack_menu"
 #define STACK_ALERT "stack_alert"
+#define STACK_SIGN_UP "stack_sign_up"
 
 // ID Container
 #define CONTAINER_MENU "container_menu"
@@ -29,8 +31,10 @@
 #define CONTAINER_MENU_REG "container_menu_reg"
 #define CONTAINER_ROOMVIEW "container_roomview"
 #define CONTAINER_SHOWRANK "container_rank"
-#define NUMBER_OF_CONTAINER 6
+#define NUMBER_OF_CONTAINER 9
 #define ALERT_ROOM_NOT_FOUND "alert_room_not_found"
+#define CONTAINER_SIGNUP "container_menu_reg"
+#define ALERT_SIGNUP_SUCCESS "alert_signup_success"
 
 // ID Entry
 #define ENTRY_MENU_LOG_USER "entry_menu_log_user"
@@ -38,6 +42,9 @@
 #define ENTRY_CHANGEPAS_NEW "entry_changepas_new"
 #define ENTRY_CHANGEPAS_CONFIRM "entry_changepas_confirm"
 #define ENTRY_CHAT "entry_chat"
+#define ENTRY_SIGNUP_USER "entry_menu_reg_user"
+#define ENTRY_SIGNUP_PASS "entry_menu_reg_pas"
+#define ENTRY_SIGNUP_CONFIRM "entry_menu_reg_confirm"
 
 // ID Clickable Button
 #define BTN_MENU_REG "btn_menu_log_reg"
@@ -47,6 +54,7 @@
 #define BTN_SEND_MESS "btn_send_mess"
 #define BTN_LOGOUT "btn_logout"
 #define BTN_REFRESH "btn_refresh"
+#define BTN_SIGNUP "btn_goto_signup"
 
 // ID label
 #define LBL_USER_NAME "lbl_user_name"
@@ -81,8 +89,11 @@ typedef struct {
             *w_entry_menu_log_pas,
             *w_entry_changepas_new,
             *w_entry_changepas_confirm,
-            *w_entry_chat;
-  GtkStack  *w_stack_home, *w_stack_menu, *a_stack_alert;
+            *w_entry_chat,
+            *w_entry_signUp_user,
+            *w_entry_signUp_password,
+            *w_entry_signUp_confirm;
+  GtkStack  *w_stack_home, *w_stack_menu, *a_stack_alert, *w_stack_sign_up;
   GtkWidget *w_container_feature, 
             *w_container_listroom, 
             *w_container_menu, 
@@ -91,7 +102,9 @@ typedef struct {
             *w_container_changepas,
             *w_roomView,
             *a_room_not_found,
-            *w_rank;
+            *w_rank,
+            *w_container_signUp,
+            *a_signUp_success;
   GtkLabel  *w_menu_lbl_userName,
             *w_menu_lbl_score,
             *w_player_1,
@@ -107,7 +120,8 @@ typedef struct {
             *w_listRoom_btn_room[10],
             *w_btn_start_game,
             *w_btn_leave_room,
-            *w_btn_send_mess;
+            *w_btn_send_mess,
+            *w_btn_goto_signUp;
   GtkTextView *w_chat_view;
 } app_widgets;
 
@@ -119,6 +133,7 @@ typedef struct {
 GtkBuilder *builder;
 GtkWidget *window;
 GtkWidget *alert;
+GtkWidget *signUp;
 
 int gui(int serverfd);
 void *recv_handler(void *app_widget);

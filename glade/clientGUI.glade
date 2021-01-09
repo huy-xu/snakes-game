@@ -1,14 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- Generated with glade 3.22.1 -->
+<!-- Generated with glade 3.36.0 -->
 <interface>
   <requires lib="gtk+" version="3.20"/>
   <object class="GtkWindow" id="window_alert">
     <property name="can_focus">False</property>
     <property name="default_width">440</property>
     <property name="default_height">130</property>
-    <child type="titlebar">
-      <placeholder/>
-    </child>
     <child>
       <object class="GtkStack" id="stack_alert">
         <property name="visible">True</property>
@@ -97,7 +94,7 @@
           </packing>
         </child>
         <child>
-          <object class="GtkBox" id="alert_username_existed">
+          <object class="GtkBox" id="alert_signup_success">
             <property name="visible">True</property>
             <property name="can_focus">False</property>
             <property name="orientation">vertical</property>
@@ -106,7 +103,7 @@
               <object class="GtkLabel">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
-                <property name="label" translatable="yes">Username has been existed</property>
+                <property name="label" translatable="yes">Sign up successfully</property>
               </object>
               <packing>
                 <property name="expand">False</property>
@@ -116,14 +113,14 @@
             </child>
             <child>
               <object class="GtkButton" id="btn_try_again_user_existed">
-                <property name="label" translatable="yes">Try again</property>
+                <property name="label" translatable="yes">Sign In</property>
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
                 <property name="receives_default">True</property>
                 <property name="halign">center</property>
                 <property name="valign">center</property>
                 <property name="margin_top">11</property>
-                <signal name="clicked" handler="on_btn_ok_clicked" swapped="no"/>
+                <signal name="clicked" handler="on_btn_back_to_login_clicked" swapped="no"/>
               </object>
               <packing>
                 <property name="expand">False</property>
@@ -181,15 +178,15 @@
         </child>
       </object>
     </child>
+    <child type="titlebar">
+      <placeholder/>
+    </child>
   </object>
   <object class="GtkWindow" id="window_main">
     <property name="can_focus">False</property>
     <property name="default_width">440</property>
     <property name="default_height">100</property>
     <signal name="destroy" handler="on_window_main_destroy" swapped="no"/>
-    <child type="titlebar">
-      <placeholder/>
-    </child>
     <child>
       <object class="GtkStack" id="stack_home">
         <property name="visible">True</property>
@@ -914,79 +911,6 @@
           </packing>
         </child>
         <child>
-          <object class="GtkBox" id="container_alert_wrongpas">
-            <property name="visible">True</property>
-            <property name="can_focus">False</property>
-            <property name="orientation">vertical</property>
-            <child>
-              <object class="GtkImage">
-                <property name="visible">True</property>
-                <property name="can_focus">False</property>
-                <property name="pixbuf">../img/wrong_pas.png</property>
-              </object>
-              <packing>
-                <property name="expand">False</property>
-                <property name="fill">True</property>
-                <property name="position">0</property>
-              </packing>
-            </child>
-            <child>
-              <object class="GtkLabel">
-                <property name="visible">True</property>
-                <property name="can_focus">False</property>
-                <property name="halign">center</property>
-                <property name="valign">center</property>
-                <property name="margin_top">15</property>
-                <property name="label" translatable="yes">Your password or username was wrong!</property>
-              </object>
-              <packing>
-                <property name="expand">True</property>
-                <property name="fill">True</property>
-                <property name="position">1</property>
-              </packing>
-            </child>
-            <child>
-              <object class="GtkBox">
-                <property name="visible">True</property>
-                <property name="can_focus">False</property>
-                <property name="halign">center</property>
-                <property name="valign">center</property>
-                <property name="margin_top">20</property>
-                <property name="margin_bottom">30</property>
-                <child>
-                  <placeholder/>
-                </child>
-                <child>
-                  <object class="GtkButton" id="btn_loginagain">
-                    <property name="label" translatable="yes">Login Again</property>
-                    <property name="visible">True</property>
-                    <property name="can_focus">True</property>
-                    <property name="receives_default">True</property>
-                  </object>
-                  <packing>
-                    <property name="expand">False</property>
-                    <property name="fill">True</property>
-                    <property name="position">1</property>
-                  </packing>
-                </child>
-                <child>
-                  <placeholder/>
-                </child>
-              </object>
-              <packing>
-                <property name="expand">True</property>
-                <property name="fill">True</property>
-                <property name="position">2</property>
-              </packing>
-            </child>
-          </object>
-          <packing>
-            <property name="name">page6</property>
-            <property name="title" translatable="yes">page6</property>
-            <property name="position">2</property>
-          </packing>
-        </child>
-        <child>
           <object class="GtkBox" id="container_alert_win">
             <property name="visible">True</property>
             <property name="can_focus">False</property>
@@ -1056,7 +980,7 @@
           <packing>
             <property name="name">page5</property>
             <property name="title" translatable="yes">page5</property>
-            <property name="position">3</property>
+            <property name="position">2</property>
           </packing>
         </child>
         <child>
@@ -1129,7 +1053,7 @@
           <packing>
             <property name="name">page2</property>
             <property name="title" translatable="yes">page2</property>
-            <property name="position">4</property>
+            <property name="position">3</property>
           </packing>
         </child>
         <child>
@@ -1502,7 +1426,7 @@
           <packing>
             <property name="name">page3</property>
             <property name="title" translatable="yes">page3</property>
-            <property name="position">5</property>
+            <property name="position">4</property>
           </packing>
         </child>
         <child>
@@ -1657,7 +1581,7 @@
           <packing>
             <property name="name">page4</property>
             <property name="title" translatable="yes">page4</property>
-            <property name="position">6</property>
+            <property name="position">5</property>
           </packing>
         </child>
         <child>
@@ -1807,7 +1731,7 @@
           <packing>
             <property name="name">page0</property>
             <property name="title" translatable="yes">page0</property>
-            <property name="position">7</property>
+            <property name="position">6</property>
           </packing>
         </child>
         <child>
@@ -2029,10 +1953,13 @@
           <packing>
             <property name="name">page1</property>
             <property name="title" translatable="yes">page1</property>
-            <property name="position">8</property>
+            <property name="position">7</property>
           </packing>
         </child>
       </object>
+    </child>
+    <child type="titlebar">
+      <placeholder/>
     </child>
   </object>
 </interface>
