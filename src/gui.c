@@ -14,7 +14,6 @@
 
 char currentUser[MAX];
 char listRoom[6][MAX];
-char *player[4];
 int numberOfRoom = 0;
 
 int gui(int serverfd) {
@@ -316,24 +315,33 @@ gboolean handle_res(app_widgets *widgets) {
       break;
     }
 
+    case PLAYER_LEFT_ROOM:
     case JOIN_ROOM_SUCCESS: {
-      char tempRoom[MAX];
-      strcpy(tempRoom, widgets->msg->data);
-      splitData(player, tempRoom);
+      char temp[MAX];
+      char *argv[4];
+      char player[4][MAX];
+      strcpy(temp, widgets->msg->data);
 
-      if (player[0] != NULL) {
-        gtk_label_set_text(GTK_LABEL(widgets->w_player_1), player[0]);
+      int numOfPlayer = numOfArgv(temp);
+
+      for (int i = 0; i < 4; i++) {
+        strcpy(player[i], "");
       }
-      if (player[1] != NULL) {
-        gtk_label_set_text(GTK_LABEL(widgets->w_player_2), player[1]);
+
+      splitData(argv, temp);
+
+      for (int i = 0; i < numOfPlayer; i++) {
+        strcpy(player[i], argv[i]);
       }
-      if (player[2] != NULL) {
-        gtk_label_set_text(GTK_LABEL(widgets->w_player_3), player[2]);
+
+      gtk_label_set_text(GTK_LABEL(widgets->w_player_1), player[0]);
+      gtk_label_set_text(GTK_LABEL(widgets->w_player_2), player[1]);
+      gtk_label_set_text(GTK_LABEL(widgets->w_player_3), player[2]);
+      gtk_label_set_text(GTK_LABEL(widgets->w_player_4), player[3]);
+
+      if (strcmp(currentUser, player[0]) != 0) {
+        gtk_widget_hide(widgets->w_btn_start_game);
       }
-      if (player[3] != NULL) {
-        gtk_label_set_text(GTK_LABEL(widgets->w_player_4), player[3]);
-      }
-      gtk_widget_hide(widgets->w_btn_start_game);
       gtk_stack_set_visible_child(widgets->w_stack_home, widgets->w_roomView);
       break;
     }
@@ -341,21 +349,6 @@ gboolean handle_res(app_widgets *widgets) {
     case LEAVE_ROOM_SUCCESS: {
       gtk_stack_set_visible_child(widgets->w_stack_home,
                                   widgets->w_container_listroom);
-      break;
-    }
-
-    case PLAYER_LEFT_ROOM: {
-      char tempLeftRoom[MAX];
-      strcpy(tempLeftRoom, widgets->msg->data);
-      if (strcmp(player[0], tempLeftRoom) == 0) {
-        gtk_label_set_text(GTK_LABEL(widgets->w_player_1), "");
-      } else if (strcmp(player[1], tempLeftRoom) == 0) {
-        gtk_label_set_text(GTK_LABEL(widgets->w_player_2), "");
-      } else if (strcmp(player[2], tempLeftRoom) == 0) {
-        gtk_label_set_text(GTK_LABEL(widgets->w_player_3), "");
-      } else if (strcmp(player[3], tempLeftRoom) == 0) {
-        gtk_label_set_text(GTK_LABEL(widgets->w_player_4), "");
-      }
       break;
     }
 
@@ -385,7 +378,8 @@ gboolean handle_res(app_widgets *widgets) {
 
       strcpy(serverPort, widgets->msg->data);
 
-      sprintf(clientJoinGame, "./clientJoinGame %s %s %s", SERVER_IP, serverPort, currentUser);
+      sprintf(clientJoinGame, "./clientJoinGame %s %s %s", SERVER_IP,
+              serverPort, currentUser);
       system(clientJoinGame);
 
       break;

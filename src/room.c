@@ -149,6 +149,7 @@ void joinRoom(int sessionID, char *data) {
       sendData(client_socket[sessionID], response);
     } else {
       response->code = JOIN_ROOM_SUCCESS;
+      strcpy(response->data, "");
 
       for (int i = 0; i < MAX_PLAYERS; i++) {
         if (strcmp(currentRoom->room.players[i], "#") != 0) {
@@ -187,6 +188,7 @@ void leaveRoom(int sessionID) {
 
   // Send to leave room request user
   response->code = LEAVE_ROOM_SUCCESS;
+  strcpy(response->data, "#");
   sendData(client_socket[sessionID], response);
 
   if (numOfPlayers(currentRoomPtr->room.players) == 0) {
@@ -194,19 +196,22 @@ void leaveRoom(int sessionID) {
     return;
   }
 
-  if (strcmp(currentRoomPtr->room.players[0], "#") == 0) {
-    for (int i = 1; i < MAX_PLAYERS; i++) {
-      if (strcmp(currentRoomPtr->room.players[i], "#") != 0) {
-        strcpy(currentRoomPtr->room.players[0],
-               currentRoomPtr->room.players[i]);
-        strcpy(currentRoomPtr->room.players[i], "#");
-        break;
+  for (int i = 0; i < MAX_PLAYERS; i++) {
+    if (strcmp(currentRoomPtr->room.players[i], "#") == 0) {
+      for (int j = i + 1; j < MAX_PLAYERS; j++) {
+        if (strcmp(currentRoomPtr->room.players[j], "#") != 0) {
+          strcpy(currentRoomPtr->room.players[i],
+                 currentRoomPtr->room.players[j]);
+          strcpy(currentRoomPtr->room.players[j], "#");
+          break;
+        }
       }
     }
   }
 
   // Send to other players are in room
   response->code = PLAYER_LEFT_ROOM;
+  strcpy(response->data, "");
   for (int i = 0; i < MAX_PLAYERS; i++) {
     if (strcmp(currentRoomPtr->room.players[i], "#") != 0) {
       strcat(response->data, currentRoomPtr->room.players[i]);
