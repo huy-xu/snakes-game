@@ -289,14 +289,17 @@ gboolean handle_res(app_widgets *widgets) {
 
       for (int i = 0; i < numberOfRoom; i++) {
         strcpy(listRoom[i], rooms[i]);
-        char *roomInfo[2];
-        splitData2(roomInfo, listRoom[i]);
-        char roomString[11] = {'R', 'o',     'o', 'm',
-                               ' ', i + '0', '(', roomInfo[1][0],
-                               '/', '4',     ')'};
-        gtk_button_set_label(widgets->w_listRoom_btn_room[i], roomString);
+        char *argv[2];
+
+        splitData2(argv, listRoom[i]);
+
+        char roomName[MAX];
+
+        sprintf(roomName, "Room %s (%s/4)", argv[0], argv[1]);
+
+        gtk_button_set_label(widgets->w_listRoom_btn_room[i], roomName);
         gtk_widget_show(widgets->w_listRoom_btn_room[i]);
-        if (roomInfo[1][0] == '4') {
+        if (roomName[8] == '4') {
           gtk_widget_set_sensitive(widgets->w_listRoom_btn_room[i], FALSE);
         }
       }
