@@ -12,3 +12,4 @@ hust3 1 0
 thuxinhgai 1 0
 hihi 1 0
 huhu 1 0
+tan2 1 0

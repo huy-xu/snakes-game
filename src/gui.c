@@ -502,6 +502,11 @@ void joinRoom6(GtkButton *button, app_widgets *app_wdgts) {
 
 void on_btn_leave_room_clicked(GtkButton *button, app_widgets *app_wdgts) {
   leaveRoomReq(app_wdgts->serverfd);
+  GtkTextBuffer *buffer;
+  GtkTextMark *mark;
+  GtkTextIter iter;
+  buffer = gtk_text_view_get_buffer(app_wdgts->w_chat_view);
+  gtk_text_buffer_set_text(buffer,"",-1);
 }
 
 void on_btn_goto_signin_clicked(GtkButton *button, app_widgets *app_wdgts) {
