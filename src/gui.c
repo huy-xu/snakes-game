@@ -358,6 +358,8 @@ gboolean handle_res(app_widgets *widgets) {
 
       if (strcmp(currentUser, player[0]) != 0) {
         gtk_widget_hide(widgets->w_btn_start_game);
+      } else {
+        gtk_widget_show(widgets->w_btn_start_game);
       }
       gtk_stack_set_visible_child(widgets->w_stack_home, widgets->w_roomView);
       break;
