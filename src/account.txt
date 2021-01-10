@@ -1,0 +1,15 @@
+hust 1 1
+soict soict123 0
+huy 1 1
+a 2 10
+b 1 9
+c 1 8
+new 1 0
+new1 123 0
+tan new 0
+hust2 1 0
+hust3 1 0
+thuxinhgai 1 0
+hihi 1 0
+huhu 1 0
+tan2 1 0

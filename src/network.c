@@ -3,10 +3,12 @@
 #include <arpa/inet.h>
 #include <netinet/in.h>
 #include <stdbool.h>
+#include <string.h>
 #include <sys/socket.h>
 #include <sys/types.h>
 #include <unistd.h>
-#include <string.h>
+
+#include "message.h"
 
 int initClient(int port, char *ip) {
   int sock, count = 0;
@@ -111,23 +113,19 @@ int acceptConnection(int sock) {
   return new_socket;
 }
 
-char *receiveData(int sock, char *buff) {
+int receiveData(int sock, Message *msg) {
   int recvBytes;
-  char response[MAX];
 
-  recvBytes = recv(sock, buff, BUFF_SIZE - 1, 0);
-  buff[recvBytes] = '\0';
+  recvBytes = recv(sock, msg, sizeof(Message), 0);
   if (recvBytes < 0) {
     perror("Recv failed");
     exit(0);
   }
-  strcpy(response, buff);
-
-  return response;
+  return recvBytes;
 }
 
-void sendData(int sock, char *buff) {
-  if (send(sock, buff, strlen(buff), 0) < 0) {
+void sendData(int sock, Message *msg) {
+  if (send(sock, msg, sizeof(Message), 0) < 0) {
     perror("Send failed");
     exit(0);
   }

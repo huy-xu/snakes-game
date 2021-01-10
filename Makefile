@@ -1,23 +1,30 @@
 CC = gcc
-CFLAGS=-Wall
-LFLAGS=-lncurses -lpthread
+DEBUG = -g
+WARN = -w
+PTHREAD = -pthread
+CFLAGS = $(DEBUG) $(WARN)
+LFLAGS = -lncurses -lpthread
+GTKLIB = `pkg-config --cflags --libs gtk+-3.0`
+
+LD = gcc
+LDFLAGS = $(PTHREAD) $(GTKLIB) -export-dynamic
 
 all: server client clientJoinGame startGame
 
-server: server.c
-	$(CC) -w -pthread server.c account.c message.c room.c network.c -o server
+server: src/server.c
+	$(CC) $(CFLAGS) $(PTHREAD) src/server.c src/account.c src/message.c src/room.c src/network.c -o server
 
-client: client.c
-	$(CC) -w -pthread network.c client.c -o client
+client: src/client.c
+	$(CC) $(CFLAGS) src/network.c src/gui.c src/client.c src/request.c -o client $(LDFLAGS)
 
-startGame: startGame.c
-	$(CC) $(CFLAGS) startGame.c -o startGame $(LFLAGS)
+startGame: src/startGame.c
+	$(CC) -Wall src/startGame.c -o startGame $(LFLAGS)
 
-clientJoinGame: clientJoinGame.c
-	$(CC) $(CFLAGS) clientJoinGame.c -o clientJoinGame $(LFLAGS)
+clientJoinGame: src/clientJoinGame.c
+	$(CC) $(CFLAGS) -Wall src/helper.c src/clientJoinGame.c -o clientJoinGame $(LFLAGS)
 
 clean: 
-	rm server client
+	rm server client clientJoinGame startGame 
 
 build: 
 	make clean && make all

@@ -28,10 +28,11 @@ void deleteRoom(ListRoomPtr *sPtr, Room room);
 void showRoom(int sessionID);
 void createRoom(int sessionID);
 int numOfPlayers(char players[MAX_PLAYERS][MAX]);
-void joinRoom(int sessionID, char *body);
+void joinRoom(int sessionID, char *data);
 void leaveRoom(int sessionID);
-void sendChatMessage(int sessionID, char *body);
+void sendChatMessage(int sessionID, char *data);
 void startGame(int sessionID);
 void *handleStartGame(void *arg);
+void quitGame(int sessionID);
 
 #endif
