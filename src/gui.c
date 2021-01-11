@@ -26,6 +26,8 @@ int gui(int serverfd) {
   // Get window
   window = GTK_WIDGET(gtk_builder_get_object(builder, WINDOW_MAIN));
   alert = GTK_WIDGET(gtk_builder_get_object(builder, WINDOW_ALERT));
+  alert_other_PC =
+      GTK_WIDGET(gtk_builder_get_object(builder, WINDOW_ALERT_OTHER_PC));
   signUp = GTK_WIDGET(gtk_builder_get_object(builder, WINDOW_SIGN_UP));
 
   widgets->w_container_feature =
@@ -77,7 +79,7 @@ int gui(int serverfd) {
   widgets->w_entry_signUp_password =
       GTK_ENTRY(gtk_builder_get_object(builder, ENTRY_SIGNUP_PASS));
   widgets->w_entry_signUp_confirm =
-      GTK_ENTRY(gtk_builder_get_object(builder, ENTRY_SIGNUP_CONFIRM));  
+      GTK_ENTRY(gtk_builder_get_object(builder, ENTRY_SIGNUP_CONFIRM));
 
   // Get label
   widgets->w_menu_lbl_userName =
@@ -139,7 +141,7 @@ int gui(int serverfd) {
       GTK_BUTTON(gtk_builder_get_object(builder, BTN_SEND_MESS));
   widgets->w_chat_view =
       GTK_TEXT_VIEW(gtk_builder_get_object(builder, TXT_CHAT_VIEW));
-  widgets->w_btn_goto_signUp = 
+  widgets->w_btn_goto_signUp =
       GTK_BUTTON(gtk_builder_get_object(builder, BTN_SIGNUP));
 
   widgets->serverfd = serverfd;
@@ -372,8 +374,9 @@ gboolean handle_res(app_widgets *widgets) {
     }
 
     case SIGNIN_OTHER_PC: {
-      gtk_label_set_text(widgets->a_lbl_error, widgets->msg->data);
-      gtk_widget_show(alert);
+      gtk_widget_show(alert_other_PC);
+      gtk_stack_set_visible_child(widgets->w_stack_home,
+                                  widgets->w_container_menu);
       break;
     }
 
@@ -506,7 +509,7 @@ void on_btn_leave_room_clicked(GtkButton *button, app_widgets *app_wdgts) {
   GtkTextMark *mark;
   GtkTextIter iter;
   buffer = gtk_text_view_get_buffer(app_wdgts->w_chat_view);
-  gtk_text_buffer_set_text(buffer,"",-1);
+  gtk_text_buffer_set_text(buffer, "", -1);
 }
 
 void on_btn_goto_signin_clicked(GtkButton *button, app_widgets *app_wdgts) {
@@ -529,6 +532,10 @@ void on_btn_ok_clicked(GtkButton *button, app_widgets *app_wdgts) {
   gtk_widget_hide(alert);
 }
 
+void on_btn_ok_other_PC_clicked(GtkButton *button, app_widgets *app_wdgts) {
+  gtk_widget_hide(alert_other_PC);
+}
+
 void on_btn_see_rank_clicked(GtkButton *button, app_widgets *app_wdgts) {
   showRankReq(app_wdgts->serverfd);
 }
@@ -542,7 +549,7 @@ void on_btn_back_to_login_clicked(GtkButton *button, app_widgets *app_wdgts) {
   gtk_widget_show(window);
   gtk_stack_set_visible_child(app_wdgts->a_stack_alert,
                               app_wdgts->a_room_not_found);
-  gtk_stack_set_visible_child(app_wdgts->w_stack_menu, 
+  gtk_stack_set_visible_child(app_wdgts->w_stack_menu,
                               app_wdgts->w_container_menu_log);
 }
 
@@ -553,5 +560,5 @@ void on_btn_reg_clicked(GtkButton *button, app_widgets *app_wdgts) {
   strcpy(pass, gtk_entry_get_text(app_wdgts->w_entry_signUp_password));
   strcpy(confirm, gtk_entry_get_text(app_wdgts->w_entry_signUp_confirm));
 
-  signUpReq(app_wdgts->serverfd,user,pass,confirm);
+  signUpReq(app_wdgts->serverfd, user, pass, confirm);
 }

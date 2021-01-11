@@ -12,6 +12,7 @@
 // ID Window
 #define WINDOW_MAIN "window_main"
 #define WINDOW_ALERT "window_alert"
+#define WINDOW_ALERT_OTHER_PC "window_alert_other_PC"
 #define WINDOW_SIGN_UP "window_sign_up"
 
 // ID Stack
@@ -133,6 +134,7 @@ typedef struct {
 GtkBuilder *builder;
 GtkWidget *window;
 GtkWidget *alert;
+GtkWidget *alert_other_PC;
 GtkWidget *signUp;
 
 int gui(int serverfd);
