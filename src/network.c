@@ -77,7 +77,8 @@ int initServer(int port) {
   // Filling server information
   server.sin_family = AF_INET;
   server.sin_port = htons(port);
-  server.sin_addr.s_addr = htonl(INADDR_ANY);
+  // server.sin_addr.s_addr = htonl(INADDR_ANY);
+  server.sin_addr.s_addr = inet_addr(SERVER_IP);
   bzero(&(server.sin_zero), sizeof(server));
 
   // Bind address to socket
