@@ -6,7 +6,7 @@
 #define MAX_CLIENTS 5
 #define MAX_ROOMS 5
 #define MAX_PLAYERS 4
-#define SERVER_IP "192.168.43.79"
+#define SERVER_IP "192.168.43.92"
 #define DEFAULT_PORT "900"
 typedef enum OPCODE {
   // Sign in
